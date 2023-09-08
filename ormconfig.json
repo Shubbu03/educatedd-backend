@@ -1,0 +1,12 @@
+{
+  "name": "default",
+  "type": "postgres",
+  "host": "localhost",
+  "port": "5432",
+  "username": "shubbu",
+  "password": "VBjwjKuKQ!i!w3Z",
+  "database": "shubbu",
+  "cli": {
+    "migrationsDir": "src/infrastructure/adapter/persistence/typeorm/migration"
+  }
+}

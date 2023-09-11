@@ -9,12 +9,12 @@ import { FileMetadata } from '@core/domain/media/value-object/FileMetadata';
 export class CreateCourseService implements CreateCourseUseCase {
   
   constructor(
-    private readonly mediaRepository: CourseRepositoryPort,
-    private readonly mediaFileStorage: CourseFileStoragePort,
+    private readonly courseRepository: CourseRepositoryPort,
+    private readonly courseFileStorage: CourseFileStoragePort,
   ) {}
   
   public async execute(payload: CreateCoursePort): Promise<CourseUseCaseDto> {
-    const fileMetaData: FileMetadata = await this.mediaFileStorage.upload(payload.file, {type: payload.type});
+    const fileMetaData: FileMetadata = await this.courseFileStorage.upload(payload.file, {type: payload.type});
     
     const course: Course = await Course.new({
       ownerId: payload.executorId,
@@ -27,7 +27,7 @@ export class CreateCourseService implements CreateCourseUseCase {
       metadata: fileMetaData,
     });
     
-    await this.mediaRepository.addCourse(course);
+    await this.courseRepository.addCourse(course);
     
     return CourseUseCaseDto.newFromCourse(course);
   }

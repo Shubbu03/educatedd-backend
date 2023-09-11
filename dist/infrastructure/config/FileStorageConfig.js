@@ -14,4 +14,7 @@ FileStorageConfig.BASE_PATH = (0, env_var_1.get)('FILE_STORAGE_BASE_PATH').requi
 FileStorageConfig.IMAGE_BUCKET = (0, env_var_1.get)('FILE_STORAGE_IMAGE_BUCKET').required().asString();
 FileStorageConfig.IMAGE_EXT = (0, env_var_1.get)('FILE_STORAGE_IMAGE_EXT').required().asString();
 FileStorageConfig.IMAGE_MIMETYPE = (0, env_var_1.get)('FILE_STORAGE_IMAGE_MIMETYPE').required().asString();
+FileStorageConfig.PDF_BUCKET = (0, env_var_1.get)('FILE_STORAGE_PDF_BUCKET').required().asString();
+FileStorageConfig.PDF_EXT = (0, env_var_1.get)('FILE_STORAGE_PDF_EXT').required().asString();
+FileStorageConfig.PDF_MIMETYPE = (0, env_var_1.get)('FILE_STORAGE_PDF_MIMETYPE').required().asString();
 //# sourceMappingURL=FileStorageConfig.js.map

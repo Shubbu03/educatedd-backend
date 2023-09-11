@@ -21,4 +21,10 @@ export class FileStorageConfig {
   
   public static readonly IMAGE_MIMETYPE: string = get('FILE_STORAGE_IMAGE_MIMETYPE').required().asString();
 
+  public static readonly PDF_BUCKET: string = get('FILE_STORAGE_PDF_BUCKET').required().asString();
+
+  public static readonly PDF_EXT: string = get('FILE_STORAGE_PDF_EXT').required().asString();
+
+  public static readonly PDF_MIMETYPE: string = get('FILE_STORAGE_PDF_MIMETYPE').required().asString();
+
 }

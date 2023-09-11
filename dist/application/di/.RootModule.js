@@ -10,6 +10,7 @@ exports.RootModule = void 0;
 const AuthModule_1 = require("@application/di/AuthModule");
 const InfrastructureModule_1 = require("@application/di/InfrastructureModule");
 const MediaModule_1 = require("@application/di/MediaModule");
+const CourseModule_1 = require("./CourseModule");
 const PostModule_1 = require("@application/di/PostModule");
 const UserModule_1 = require("@application/di/UserModule");
 const common_1 = require("@nestjs/common");
@@ -21,6 +22,7 @@ RootModule = __decorate([
             InfrastructureModule_1.InfrastructureModule,
             AuthModule_1.AuthModule,
             UserModule_1.UserModule,
+            CourseModule_1.CourseModule,
             MediaModule_1.MediaModule,
             PostModule_1.PostModule,
         ]

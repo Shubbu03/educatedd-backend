@@ -29,8 +29,8 @@ export class ServerApplication {
   }
   
   private buildAPIDocumentation(app: NestExpressApplication): void {
-    const title: string = 'IPoster';
-    const description: string = 'IPoster API documentation';
+    const title: string = 'Educatedd';
+    const description: string = 'Educatedd API documentation';
     const version: string = '1.0.0';
     
     const options: Omit<OpenAPIObject, 'paths'> = new DocumentBuilder()

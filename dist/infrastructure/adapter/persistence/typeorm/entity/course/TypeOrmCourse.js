@@ -39,7 +39,7 @@ __decorate([
     __metadata("design:type", String)
 ], TypeOrmCourse.prototype, "pdfDetails", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)('jsonb', { nullable: true }),
     __metadata("design:type", Array)
 ], TypeOrmCourse.prototype, "keywords", void 0);
 __decorate([

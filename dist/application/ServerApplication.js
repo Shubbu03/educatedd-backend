@@ -25,8 +25,8 @@ class ServerApplication {
         await app.listen(this.port, this.host);
     }
     buildAPIDocumentation(app) {
-        const title = 'IPoster';
-        const description = 'IPoster API documentation';
+        const title = 'Educatedd';
+        const description = 'Educatedd API documentation';
         const version = '1.0.0';
         const options = new swagger_1.DocumentBuilder()
             .setTitle(title)

@@ -21,7 +21,7 @@ export class TypeOrmCourse {
   @Column()
   public pdfDetails: string;
 
-  @Column()
+  @Column('jsonb', { nullable: true })
   public keywords: string[];
 
   @Column()

@@ -1,13 +1,12 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
-
-export class CreateCourseTable1694427272887 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-       await queryRunner.query(`
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CreateCourseTable1694427272887 = void 0;
+class CreateCourseTable1694427272887 {
+    async up(queryRunner) {
+        await queryRunner.query(`
        CREATE TYPE COURSE_TYPE_ENUM AS ENUM('PDF')
        `);
-       
-       await queryRunner.query(`
+        await queryRunner.query(`
        CREATE TABLE public."course"(
         "id"            UUID NULL,
         "ownerId"       UUID NULL,
@@ -27,10 +26,10 @@ export class CreateCourseTable1694427272887 implements MigrationInterface {
          );
        `);
     }
-
-    public async down(queryRunner: QueryRunner): Promise<void> {
+    async down(queryRunner) {
         await queryRunner.query('DROP TABLE public."course";');
         await queryRunner.query('DROP TYPE COURSE_TYPE_ENUM;');
     }
-
 }
+exports.CreateCourseTable1694427272887 = CreateCourseTable1694427272887;
+//# sourceMappingURL=1694427272887-CreateCourseTable.js.map

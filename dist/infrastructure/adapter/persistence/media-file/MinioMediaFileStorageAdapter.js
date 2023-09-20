@@ -41,6 +41,7 @@ class MinioMediaFileStorageAdapter {
         });
     }
     async upload(uploadFile, options) {
+        console.log("uploadfile is", uploadFile);
         const uploadDetails = this.defineFileUploadDetails(options.type);
         const bucket = uploadDetails.bucket;
         const key = `${(0, uuid_1.v4)()}.${uploadDetails.ext}`;

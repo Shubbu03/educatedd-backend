@@ -20,4 +20,4 @@ __decorate([
     __metadata("design:type", HttpRestApiModelCourse_1.HttpRestApiModelCourse)
 ], HttpRestApiResponseCourse.prototype, "data", void 0);
 exports.HttpRestApiResponseCourse = HttpRestApiResponseCourse;
-//# sourceMappingURL=HttpRestApiResponseCOurse.js.map
+//# sourceMappingURL=HttpRestApiResponseCourse.js.map

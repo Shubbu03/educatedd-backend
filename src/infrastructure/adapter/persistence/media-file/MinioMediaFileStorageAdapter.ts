@@ -20,6 +20,8 @@ export class MinioMediaFileStorageAdapter implements MediaFileStoragePort {
   });
   
   public async upload(uploadFile: Buffer | Readable, options: MediaFileStorageOptions): Promise<FileMetadata> {
+
+    console.log("uploadfile is", uploadFile)
     const uploadDetails: FileUploadDetails = this.defineFileUploadDetails(options.type);
     
     const bucket: string = uploadDetails.bucket;

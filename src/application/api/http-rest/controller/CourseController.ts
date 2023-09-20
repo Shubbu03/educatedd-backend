@@ -19,6 +19,7 @@ import { EditCourseUseCase } from "@core/domain/course/usecase/EditCourseUseCase
 import { GetCourseListUseCase } from "@core/domain/course/usecase/GetCourseListUseCase";
 import { GetCourseUseCase } from "@core/domain/course/usecase/GetCourseUseCase";
 import { RemoveCourseUseCase } from "@core/domain/course/usecase/RemoveCourseUseCase";
+import { UploadFileUseCase } from "@core/domain/course/usecase/UploadFileUseCase";
 import { CreateCourseAdapter } from "@infrastructure/adapter/usecase/course/CreateCourseAdapter";
 import { EditCourseAdapter } from "@infrastructure/adapter/usecase/course/EditCourseAdapter";
 import { GetCourseAdapter } from "@infrastructure/adapter/usecase/course/GetCourseAdapter";
@@ -50,9 +51,15 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { request } from "express";
+import { query, request } from "express";
 import { parse } from "path";
 import { resolve } from "url";
+import { HttpRestApiModelUploadFile } from "./documentation/course/HttpRestApiModelUploadFile";
+import {
+  NewUploadFileAdapter,
+  UploadFileAdapter,
+} from "@infrastructure/adapter/usecase/course/UploadFileAdapter";
+import { NewUploadFilePort } from "@core/domain/course/port/usecase/NewUploadFilePort";
 
 @Controller("courses")
 @ApiTags("courses")
@@ -60,6 +67,9 @@ export class CourseController {
   constructor(
     @Inject(CourseDITokens.CreateCourseUseCase)
     private readonly createCourseUseCase: CreateCourseUseCase,
+
+    @Inject(CourseDITokens.UploadFileUseCase)
+    private readonly uploadFileUseCase: UploadFileUseCase,
 
     @Inject(CourseDITokens.EditCourseUseCase)
     private readonly editCourseUseCase: EditCourseUseCase,
@@ -77,12 +87,14 @@ export class CourseController {
   @Post()
   @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR)
   @HttpCode(HttpStatus.OK)
-  @UseInterceptors(FileInterceptor("file"))
+  // @UseInterceptors(FileInterceptor("file"))
   @ApiBearerAuth()
   @ApiConsumes("multipart/form-data")
   @ApiBody({ type: HttpRestApiModelCreateCourseBody })
-  @ApiQuery({ name: "name", type: "string", required: false })
-  @ApiQuery({ name: "type", enum: CourseType })
+  @ApiQuery({ name: "Keywords", type: "string", required: true })
+  @ApiQuery({ name: "Title", type: "string", required: true })
+  @ApiQuery({ name: "Description", type: "string", required: true })
+  @ApiQuery({ name: "PDF Details", type: "string", required: true })
   @ApiResponse({ status: HttpStatus.OK, type: HttpRestApiResponseCourse })
   public async createCourse(
     @Req() request: HttpRequestWithUser,
@@ -102,6 +114,52 @@ export class CourseController {
     this.setFileStorageBasePath([createdCourse]);
 
     return CoreApiResponse.success(createdCourse);
+  }
+
+  @Post("/upload")
+  // @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR)
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(FileInterceptor("file"))
+  @ApiBearerAuth()
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({ type: HttpRestApiModelUploadFile })
+  @ApiQuery({ name: "file", type: "string", required: false })
+  @ApiResponse({ status: HttpStatus.OK, type: HttpRestApiModelUploadFile })
+  public async uploadFile(
+    @Req() request: HttpRequestWithUser,
+    @UploadedFile() file: MulterFile
+    // @Query() query: HttpRestApiModelUploadFile
+  ): Promise<CoreApiResponse<CourseUseCaseDto>> {
+    // ?var uploadNew = Buffer.from(file,'base64');
+    console.log("Complete request from CourseController.ts is:", request);
+
+    // const adapter1: UploadFileAdapter = await UploadFileAdapter.new({
+    //   // courseId: request.user.id,
+    //   // name: query.name || parse(file.originalname).name,
+    //   // type: query.type,
+    //   file: file.buffer,
+    // });
+
+    const upload_adapter: NewUploadFileAdapter = await NewUploadFileAdapter.new(
+      {
+        name: parse(file.originalname).name,
+        url: request.route.path,
+        file: file.buffer,
+      }
+    );
+
+    // console.log("file name from CourseController.ts is::",upload_adapter.name);
+
+    const uploadedFile: CourseUseCaseDto = await this.uploadFileUseCase.execute(
+      upload_adapter
+    );
+
+    // this.setUploadedFilePath([uploadedFile]);
+
+    return CoreApiResponse.success(uploadedFile);
+
+    // return CoreApiResponse.success(upload_adapter.url);
+    // return CoreApiResponse.success();
   }
 
   @Put(":courseId")
@@ -194,6 +252,13 @@ export class CourseController {
         (course.url = resolve(FileStorageConfig.BASE_PATH, course.url))
     );
   }
+
+  private setUploadedFilePath(newfile: NewUploadFilePort[]): void {
+    newfile.forEach(
+      (file: NewUploadFilePort) =>
+        (file.url = resolve(FileStorageConfig.BASE_PATH, file.url))
+    );
+  }
 }
 
 type MulterFile = {
@@ -202,3 +267,10 @@ type MulterFile = {
   size: number;
   buffer: Buffer;
 };
+
+// type MulterFileNew = {
+//   originalname: string;
+//   mimetype: string;
+//   size: number;
+//   buffer: Buffer
+// };

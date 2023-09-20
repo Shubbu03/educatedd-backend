@@ -12,9 +12,10 @@ export class TransactionalUseCaseWrapper<TUseCasePort, TUseCaseResult> implement
   public async execute(port: TUseCasePort): Promise<TUseCaseResult> {
     runOnTransactionRollback(async (error: Error) => this.useCase.onRollback?.(error, port));
     
+    console.log("port is:",port)
     const result: TUseCaseResult = await this.useCase.execute(port);
     runOnTransactionCommit(async () => this.useCase.onCommit?.(result, port));
-    
+    console.log("result is:",result);
     return result;
   }
   

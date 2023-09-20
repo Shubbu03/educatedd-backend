@@ -21,8 +21,15 @@ let CourseUseCaseDto = CourseUseCaseDto_1 = class CourseUseCaseDto {
         dto.editedAt = course.getEditedAt()?.getTime() || null;
         return dto;
     }
+    static upload_new(file) {
+        const dto = (0, class_transformer_1.plainToClass)(CourseUseCaseDto_1, file);
+        dto.url = file.getMetadata().relativePath;
+        dto.createdAt = file.getCreatedAt().getTime();
+        dto.editedAt = file.getEditedAt()?.getTime() || null;
+        return dto;
+    }
     static newListFromCourses(courses) {
-        return courses.map(courses => this.newFromCourse(courses));
+        return courses.map((courses) => this.newFromCourse(courses));
     }
 };
 __decorate([
@@ -57,6 +64,10 @@ __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
 ], CourseUseCaseDto.prototype, "type", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", String)
+], CourseUseCaseDto.prototype, "url", void 0);
 CourseUseCaseDto = CourseUseCaseDto_1 = __decorate([
     (0, class_transformer_1.Exclude)()
 ], CourseUseCaseDto);

@@ -1,11 +1,14 @@
 import { RepositoryFindOptions, RepositoryRemoveOptions } from '@core/common/persistence/RepositoryOptions';
 import { Optional } from '@core/common/type/CommonTypes';
 import { Course } from '@core/domain/course/entity/Course';
-import { CourseRepositoryPort } from '@core/domain/course/port/persistence/CourseRepositoryPort';
+import { UploadFile } from '@core/domain/course/entity/UploadFile';
+import { CourseRepositoryPort, UploadNewFileRepositoryPort } from '@core/domain/course/port/persistence/CourseRepositoryPort';
 import { TypeOrmCourseMapper } from '@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmCourseMapper';
 import { TypeOrmCourse } from '@infrastructure/adapter/persistence/typeorm/entity/course/TypeOrmCourse';
 import { EntityRepository, InsertResult, SelectQueryBuilder } from 'typeorm';
 import { BaseRepository } from 'typeorm-transactional-cls-hooked';
+import { TypeOrmFile } from '../../entity/course/TypeOrmFile';
+import { TypeOrmFileMapper } from '@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmFileMapper';
 
 @EntityRepository(TypeOrmCourse)
 export class TypeOrmCourseRepositoryAdapter extends BaseRepository<TypeOrmCourse> implements CourseRepositoryPort {
@@ -81,6 +84,8 @@ export class TypeOrmCourseRepositoryAdapter extends BaseRepository<TypeOrmCourse
       id: insertResult.identifiers[0].id
     };
   }
+
+  
   
   public async updateCourse(course: Course): Promise<void>{
     const ormCourse: TypeOrmCourse = TypeOrmCourseMapper.toOrmEntity(course);
@@ -114,4 +119,27 @@ export class TypeOrmCourseRepositoryAdapter extends BaseRepository<TypeOrmCourse
     }
   }
   
+}
+
+export class  TypeOrmUploadRepositoryAdapter extends BaseRepository<TypeOrmFile> implements UploadNewFileRepositoryPort{
+
+  private readonly courseAlias: string = 'course';
+
+  public async uploadFile(file: UploadFile): Promise<{ url: string; }> {
+    const ormCourse: TypeOrmFile = TypeOrmFileMapper.toOrmEntity(file);
+
+    const uploadDoc: InsertResult = await this
+    .createQueryBuilder(this.courseAlias)
+    .insert()
+    .into(TypeOrmCourse)
+    .values([ormCourse])
+    .execute();
+
+    return{
+      url: uploadDoc.identifiers[0].id
+    };
+    
+  }
+
+
 }

@@ -1,6 +1,7 @@
 import { CourseController } from '@application/api/http-rest/controller/CourseController';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import { CourseDITokens } from '@core/domain/course/di/CourseDITokens';
+import { UploadFileUseCase } from '@core/domain/course/usecase/UploadFileUseCase';
 import { CreateCourseUseCase } from '@core/domain/course/usecase/CreateCourseUseCase';
 import { EditCourseUseCase } from '@core/domain/course/usecase/EditCourseUseCase';
 import { RemoveCourseUseCase } from '@core/domain/course/usecase/RemoveCourseUseCase';
@@ -19,6 +20,8 @@ import { TransactionalUseCaseWrapper } from '@infrastructure/transaction/Transac
 import { Module } from '@nestjs/common';
 import { Provider } from '@nestjs/common/interfaces/modules/provider.interface';
 import { Connection } from 'typeorm';
+import { UploadCourseService } from '@core/service/course/usecase/UploadCourseService';
+import { NewUploadFileUseCase } from '@core/domain/course/usecase/NewUploadFileUseCase';
 
 const persistenceProviders: Provider[] = [
     {
@@ -37,6 +40,14 @@ const persistenceProviders: Provider[] = [
       provide   : CourseDITokens.CreateCourseUseCase,
       useFactory: (courseRepository, courseFileStorage) => {
         const service: CreateCourseUseCase = new CreateCourseService(courseRepository, courseFileStorage);
+        return new TransactionalUseCaseWrapper(service);
+      },
+      inject    : [CourseDITokens.CourseRepository, CourseDITokens.CourseFileStorage]
+    },
+    {
+      provide   : CourseDITokens.UploadFileUseCase,
+      useFactory: (courseRepository, fileRepository,courseFileStorage) => {
+        const service: NewUploadFileUseCase = new UploadCourseService(courseRepository,fileRepository, courseFileStorage);
         return new TransactionalUseCaseWrapper(service);
       },
       inject    : [CourseDITokens.CourseRepository, CourseDITokens.CourseFileStorage]

@@ -2,5 +2,6 @@ import { CourseFileStorageOptions } from "@core/common/persistence/CourseFileSto
 import { FileMetadata } from '@core/domain/media/value-object/FileMetadata';
 
 export interface CourseFileStoragePort {
-    upload(file: Buffer|NodeJS.ReadableStream, options: CourseFileStorageOptions): Promise<FileMetadata>;
+
+    upload(file: Buffer|NodeJS.ReadableStream, options?: CourseFileStorageOptions): Promise<FileMetadata>;
   }

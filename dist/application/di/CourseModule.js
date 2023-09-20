@@ -24,6 +24,7 @@ const NestWrapperGetCoursePreviewQueryHandler_1 = require("@infrastructure/handl
 const TransactionalUseCaseWrapper_1 = require("@infrastructure/transaction/TransactionalUseCaseWrapper");
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
+const UploadCourseService_1 = require("@core/service/course/usecase/UploadCourseService");
 const persistenceProviders = [
     {
         provide: CourseDITokens_1.CourseDITokens.CourseFileStorage,
@@ -40,6 +41,14 @@ const useCaseProviders = [
         provide: CourseDITokens_1.CourseDITokens.CreateCourseUseCase,
         useFactory: (courseRepository, courseFileStorage) => {
             const service = new CreateCourseService_1.CreateCourseService(courseRepository, courseFileStorage);
+            return new TransactionalUseCaseWrapper_1.TransactionalUseCaseWrapper(service);
+        },
+        inject: [CourseDITokens_1.CourseDITokens.CourseRepository, CourseDITokens_1.CourseDITokens.CourseFileStorage]
+    },
+    {
+        provide: CourseDITokens_1.CourseDITokens.UploadFileUseCase,
+        useFactory: (courseRepository, fileRepository, courseFileStorage) => {
+            const service = new UploadCourseService_1.UploadCourseService(courseRepository, fileRepository, courseFileStorage);
             return new TransactionalUseCaseWrapper_1.TransactionalUseCaseWrapper(service);
         },
         inject: [CourseDITokens_1.CourseDITokens.CourseRepository, CourseDITokens_1.CourseDITokens.CourseFileStorage]

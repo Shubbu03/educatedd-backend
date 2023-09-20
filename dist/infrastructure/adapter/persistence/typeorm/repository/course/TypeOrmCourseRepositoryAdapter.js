@@ -6,11 +6,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TypeOrmCourseRepositoryAdapter = void 0;
+exports.TypeOrmUploadRepositoryAdapter = exports.TypeOrmCourseRepositoryAdapter = void 0;
 const TypeOrmCourseMapper_1 = require("@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmCourseMapper");
 const TypeOrmCourse_1 = require("@infrastructure/adapter/persistence/typeorm/entity/course/TypeOrmCourse");
 const typeorm_1 = require("typeorm");
 const typeorm_transactional_cls_hooked_1 = require("typeorm-transactional-cls-hooked");
+const TypeOrmFileMapper_1 = require("@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmFileMapper");
 let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extends typeorm_transactional_cls_hooked_1.BaseRepository {
     constructor() {
         super(...arguments);
@@ -98,4 +99,23 @@ TypeOrmCourseRepositoryAdapter = __decorate([
     (0, typeorm_1.EntityRepository)(TypeOrmCourse_1.TypeOrmCourse)
 ], TypeOrmCourseRepositoryAdapter);
 exports.TypeOrmCourseRepositoryAdapter = TypeOrmCourseRepositoryAdapter;
+class TypeOrmUploadRepositoryAdapter extends typeorm_transactional_cls_hooked_1.BaseRepository {
+    constructor() {
+        super(...arguments);
+        this.courseAlias = 'course';
+    }
+    async uploadFile(file) {
+        const ormCourse = TypeOrmFileMapper_1.TypeOrmFileMapper.toOrmEntity(file);
+        const uploadDoc = await this
+            .createQueryBuilder(this.courseAlias)
+            .insert()
+            .into(TypeOrmCourse_1.TypeOrmCourse)
+            .values([ormCourse])
+            .execute();
+        return {
+            url: uploadDoc.identifiers[0].id
+        };
+    }
+}
+exports.TypeOrmUploadRepositoryAdapter = TypeOrmUploadRepositoryAdapter;
 //# sourceMappingURL=TypeOrmCourseRepositoryAdapter.js.map

@@ -18,10 +18,9 @@ const HttpUser_1 = require("@application/api/http-rest/auth/decorator/HttpUser")
 const HttpRestApiModelCreateCourseBody_1 = require("@application/api/http-rest/controller/documentation/course/HttpRestApiModelCreateCourseBody");
 const HttpRestApiModelCreateCourseQuery_1 = require("@application/api/http-rest/controller/documentation/course/HttpRestApiModelCreateCourseQuery");
 const HttpRestApiModelEditCourseBody_1 = require("@application/api/http-rest/controller/documentation/course/HttpRestApiModelEditCourseBody");
-const HttpRestApiResponseCOurse_1 = require("@application/api/http-rest/controller/documentation/course/HttpRestApiResponseCOurse");
+const HttpRestApiResponseCourse_1 = require("@application/api/http-rest/controller/documentation/course/HttpRestApiResponseCourse");
 const HttpRestApiResponseCourseList_1 = require("@application/api/http-rest/controller/documentation/course/HttpRestApiResponseCourseList");
 const CoreApiResponse_1 = require("@core/common/api/CoreApiResponse");
-const CourseEnums_1 = require("@core/common/enums/CourseEnums");
 const UserEnums_1 = require("@core/common/enums/UserEnums");
 const CourseDITokens_1 = require("@core/domain/course/di/CourseDITokens");
 const CreateCourseAdapter_1 = require("@infrastructure/adapter/usecase/course/CreateCourseAdapter");
@@ -35,9 +34,12 @@ const platform_express_1 = require("@nestjs/platform-express");
 const swagger_1 = require("@nestjs/swagger");
 const path_1 = require("path");
 const url_1 = require("url");
+const HttpRestApiModelUploadFile_1 = require("./documentation/course/HttpRestApiModelUploadFile");
+const UploadFileAdapter_1 = require("@infrastructure/adapter/usecase/course/UploadFileAdapter");
 let CourseController = class CourseController {
-    constructor(createCourseUseCase, editCourseUseCase, getCourseListUseCase, getCourseUseCase, removeCourseUseCase) {
+    constructor(createCourseUseCase, uploadFileUseCase, editCourseUseCase, getCourseListUseCase, getCourseUseCase, removeCourseUseCase) {
         this.createCourseUseCase = createCourseUseCase;
+        this.uploadFileUseCase = uploadFileUseCase;
         this.editCourseUseCase = editCourseUseCase;
         this.getCourseListUseCase = getCourseListUseCase;
         this.getCourseUseCase = getCourseUseCase;
@@ -54,6 +56,16 @@ let CourseController = class CourseController {
         const createdCourse = await this.createCourseUseCase.execute(adapter);
         this.setFileStorageBasePath([createdCourse]);
         return CoreApiResponse_1.CoreApiResponse.success(createdCourse);
+    }
+    async uploadFile(request, file) {
+        console.log("Complete request from CourseController.ts is:", request);
+        const upload_adapter = await UploadFileAdapter_1.NewUploadFileAdapter.new({
+            name: (0, path_1.parse)(file.originalname).name,
+            url: request.route.path,
+            file: file.buffer,
+        });
+        const uploadedFile = await this.uploadFileUseCase.execute(upload_adapter);
+        return CoreApiResponse_1.CoreApiResponse.success(uploadedFile);
     }
     async editCourse(user, body, courseId) {
         const adapter = await EditCourseAdapter_1.EditCourseAdapter.new({
@@ -93,18 +105,22 @@ let CourseController = class CourseController {
     setFileStorageBasePath(courses) {
         courses.forEach((course) => (course.url = (0, url_1.resolve)(FileStorageConfig_1.FileStorageConfig.BASE_PATH, course.url)));
     }
+    setUploadedFilePath(newfile) {
+        newfile.forEach((file) => (file.url = (0, url_1.resolve)(FileStorageConfig_1.FileStorageConfig.BASE_PATH, file.url)));
+    }
 };
 __decorate([
     (0, common_1.Post)(),
     (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)("file")),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiConsumes)("multipart/form-data"),
     (0, swagger_1.ApiBody)({ type: HttpRestApiModelCreateCourseBody_1.HttpRestApiModelCreateCourseBody }),
-    (0, swagger_1.ApiQuery)({ name: "name", type: "string", required: false }),
-    (0, swagger_1.ApiQuery)({ name: "type", enum: CourseEnums_1.CourseType }),
-    (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCOurse_1.HttpRestApiResponseCourse }),
+    (0, swagger_1.ApiQuery)({ name: "Keywords", type: "string", required: true }),
+    (0, swagger_1.ApiQuery)({ name: "Title", type: "string", required: true }),
+    (0, swagger_1.ApiQuery)({ name: "Description", type: "string", required: true }),
+    (0, swagger_1.ApiQuery)({ name: "PDF Details", type: "string", required: true }),
+    (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCourse_1.HttpRestApiResponseCourse }),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.UploadedFile)()),
     __param(2, (0, common_1.Query)()),
@@ -113,12 +129,27 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CourseController.prototype, "createCourse", null);
 __decorate([
+    (0, common_1.Post)("/upload"),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)("file")),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiConsumes)("multipart/form-data"),
+    (0, swagger_1.ApiBody)({ type: HttpRestApiModelUploadFile_1.HttpRestApiModelUploadFile }),
+    (0, swagger_1.ApiQuery)({ name: "file", type: "string", required: false }),
+    (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiModelUploadFile_1.HttpRestApiModelUploadFile }),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], CourseController.prototype, "uploadFile", null);
+__decorate([
     (0, common_1.Put)(":courseId"),
     (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiBody)({ type: HttpRestApiModelEditCourseBody_1.HttpRestApiModelEditCourseBody }),
-    (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCOurse_1.HttpRestApiResponseCourse }),
+    (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCourse_1.HttpRestApiResponseCourse }),
     __param(0, (0, HttpUser_1.HttpUser)()),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.Param)("courseId")),
@@ -142,7 +173,7 @@ __decorate([
     (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
-    (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCOurse_1.HttpRestApiResponseCourse }),
+    (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCourse_1.HttpRestApiResponseCourse }),
     __param(0, (0, HttpUser_1.HttpUser)()),
     __param(1, (0, common_1.Param)("courseId")),
     __metadata("design:type", Function),
@@ -154,7 +185,7 @@ __decorate([
     (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
-    (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCOurse_1.HttpRestApiResponseCourse }),
+    (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCourse_1.HttpRestApiResponseCourse }),
     __param(0, (0, HttpUser_1.HttpUser)()),
     __param(1, (0, common_1.Param)("courseId")),
     __metadata("design:type", Function),
@@ -165,11 +196,12 @@ CourseController = __decorate([
     (0, common_1.Controller)("courses"),
     (0, swagger_1.ApiTags)("courses"),
     __param(0, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.CreateCourseUseCase)),
-    __param(1, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.EditCourseUseCase)),
-    __param(2, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseListUseCase)),
-    __param(3, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseUseCase)),
-    __param(4, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.RemoveCourseUseCase)),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object])
+    __param(1, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.UploadFileUseCase)),
+    __param(2, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.EditCourseUseCase)),
+    __param(3, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseListUseCase)),
+    __param(4, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseUseCase)),
+    __param(5, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.RemoveCourseUseCase)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object])
 ], CourseController);
 exports.CourseController = CourseController;
 //# sourceMappingURL=CourseController.js.map

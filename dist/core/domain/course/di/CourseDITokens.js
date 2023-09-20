@@ -5,6 +5,7 @@ class CourseDITokens {
 }
 exports.CourseDITokens = CourseDITokens;
 CourseDITokens.CreateCourseUseCase = Symbol('CreateCourseUseCase');
+CourseDITokens.UploadFileUseCase = Symbol('UploadFileUseCase');
 CourseDITokens.EditCourseUseCase = Symbol('EditCourseUseCase');
 CourseDITokens.GetCourseListUseCase = Symbol('GetCourseListUseCase');
 CourseDITokens.GetCourseUseCase = Symbol('GetCourseUseCase');

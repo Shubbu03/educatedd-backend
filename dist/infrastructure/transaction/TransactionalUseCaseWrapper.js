@@ -17,8 +17,10 @@ class TransactionalUseCaseWrapper {
     }
     async execute(port) {
         (0, typeorm_transactional_cls_hooked_1.runOnTransactionRollback)(async (error) => this.useCase.onRollback?.(error, port));
+        console.log("port is:", port);
         const result = await this.useCase.execute(port);
         (0, typeorm_transactional_cls_hooked_1.runOnTransactionCommit)(async () => this.useCase.onCommit?.(result, port));
+        console.log("result is:", result);
         return result;
     }
 }

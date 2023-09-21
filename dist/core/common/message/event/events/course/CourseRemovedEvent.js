@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseRemovedEvent = void 0;
 class CourseRemovedEvent {
-    constructor(courseId, ownerId) {
-        this.courseId = courseId;
+    constructor(id, ownerId) {
+        this.id = id;
         this.ownerId = ownerId;
     }
-    static new(courseId, ownerId) {
-        return new CourseRemovedEvent(courseId, ownerId);
+    static new(id, ownerId) {
+        return new CourseRemovedEvent(id, ownerId);
     }
 }
 exports.CourseRemovedEvent = CourseRemovedEvent;

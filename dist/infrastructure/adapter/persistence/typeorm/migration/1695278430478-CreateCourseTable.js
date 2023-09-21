@@ -9,7 +9,7 @@ class CreateCourseTable1695278430478 {
         await queryRunner.query(`
         CREATE TABLE public."course_new"(
          "ownerId"       UUID NULL,
-         "courseId"      UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+         "id"      UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
          "title"         VARCHAR(100) NULL,
          "description"   VARCHAR(200) NULL,
          "pdfDetails"    VARCHAR(200) NULL,

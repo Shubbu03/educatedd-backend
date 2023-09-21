@@ -15,7 +15,7 @@ export class TransactionalUseCaseWrapper<TUseCasePort, TUseCaseResult> implement
     console.log("port is:",port)
     const result: TUseCaseResult = await this.useCase.execute(port);
     runOnTransactionCommit(async () => this.useCase.onCommit?.(result, port));
-    console.log("result is:",result);
+    console.log("result from TransactionalUseCaseWrapper:",result);
     return result;
   }
   

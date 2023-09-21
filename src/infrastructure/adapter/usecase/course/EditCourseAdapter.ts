@@ -12,7 +12,7 @@ export class EditCourseAdapter extends UseCaseValidatableAdapter implements Edit
   
   @Expose()
   @IsUUID()
-  public courseId: string;
+  public id: string;
   
   @Expose()
   @IsOptional()

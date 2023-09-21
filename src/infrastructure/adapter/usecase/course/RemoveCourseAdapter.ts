@@ -12,7 +12,7 @@ export class RemoveCourseAdapter extends UseCaseValidatableAdapter implements Re
   
   @Expose()
   @IsUUID()
-  public courseId: string;
+  public id: string;
   
   public static async new(payload: RemoveCoursePort): Promise<RemoveCourseAdapter> {
     const adapter: RemoveCourseAdapter = plainToClass(RemoveCourseAdapter, payload);

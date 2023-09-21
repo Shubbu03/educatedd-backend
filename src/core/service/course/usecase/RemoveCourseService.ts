@@ -17,7 +17,7 @@ export class RemoveCourseService implements RemoveCourseUseCase {
   
   public async execute(payload: RemoveCoursePort): Promise<void> {
     const course: Course = CoreAssert.notEmpty(
-      await this.mediaRepository.findCourse({id: payload.courseId}),
+      await this.mediaRepository.findCourse({id: payload.id}),
       Exception.new({code: Code.ENTITY_NOT_FOUND_ERROR, overrideMessage: 'Course not found.'})
     );
   

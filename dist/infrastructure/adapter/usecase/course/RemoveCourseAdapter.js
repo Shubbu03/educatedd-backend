@@ -30,7 +30,7 @@ __decorate([
     (0, class_transformer_1.Expose)(),
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
-], RemoveCourseAdapter.prototype, "courseId", void 0);
+], RemoveCourseAdapter.prototype, "id", void 0);
 RemoveCourseAdapter = RemoveCourseAdapter_1 = __decorate([
     (0, class_transformer_1.Exclude)()
 ], RemoveCourseAdapter);

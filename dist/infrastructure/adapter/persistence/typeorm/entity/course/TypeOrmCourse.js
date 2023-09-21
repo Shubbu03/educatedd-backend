@@ -17,15 +17,11 @@ let TypeOrmCourse = class TypeOrmCourse {
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], TypeOrmCourse.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
 ], TypeOrmCourse.prototype, "ownerId", void 0);
 __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], TypeOrmCourse.prototype, "courseId", void 0);
+], TypeOrmCourse.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)

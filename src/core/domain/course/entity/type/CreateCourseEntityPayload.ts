@@ -9,7 +9,7 @@ export type CreateCourseEntityPayload = {
     // keywords:string[],
     // type: CourseType,
     // metadata: FileMetadata,
-    courseId?: string,
+    id: string,
     createdAt?: Date,
     editedAt?: Date,
     removedAt?: Date,

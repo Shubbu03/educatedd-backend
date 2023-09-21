@@ -1,12 +1,12 @@
 import { RepositoryFindOptions } from "@core/common/persistence/RepositoryOptions";
 
 export class DoesCourseExistQuery {
-  by: { id?: string; ownerId?: string; courseId?: string };
+  by: {ownerId?: string; id?: string };
 
   options?: RepositoryFindOptions;
 
   private constructor(
-    by: { id?: string; ownerId?: string; courseId?: string },
+    by: { id?: string; ownerId?: string;},
     options?: RepositoryFindOptions
   ) {
     this.by = by;
@@ -14,7 +14,7 @@ export class DoesCourseExistQuery {
   }
 
   public static new(
-    by: { id?: string; ownerId?: string; courseId?: string },
+    by: { id?: string; ownerId?: string; },
     options?: RepositoryFindOptions
   ): DoesCourseExistQuery {
     return new DoesCourseExistQuery(by, options);

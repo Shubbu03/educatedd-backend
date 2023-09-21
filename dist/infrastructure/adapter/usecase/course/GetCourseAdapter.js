@@ -16,6 +16,7 @@ const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 let GetCourseAdapter = GetCourseAdapter_1 = class GetCourseAdapter extends UseCaseValidatableAdapter_1.UseCaseValidatableAdapter {
     static async new(payload) {
+        console.log("New Payload from GetCourseAdapter.ts is::", payload);
         const adapter = (0, class_transformer_1.plainToClass)(GetCourseAdapter_1, payload);
         await adapter.validate();
         return adapter;
@@ -30,7 +31,7 @@ __decorate([
     (0, class_transformer_1.Expose)(),
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
-], GetCourseAdapter.prototype, "courseId", void 0);
+], GetCourseAdapter.prototype, "id", void 0);
 GetCourseAdapter = GetCourseAdapter_1 = __decorate([
     (0, class_transformer_1.Exclude)()
 ], GetCourseAdapter);

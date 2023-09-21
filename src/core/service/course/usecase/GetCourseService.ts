@@ -14,15 +14,15 @@ export class GetCourseService implements GetCourseUseCase {
   ) {}
   
   public async execute(payload: GetCoursePort): Promise<CourseUseCaseDto> {
-    const media: Course = CoreAssert.notEmpty(
-      await this.courseRepository.findCourse({id: payload.courseId}),
+    const course: Course = CoreAssert.notEmpty(
+      await this.courseRepository.findCourse({id: payload.id}),
       Exception.new({code: Code.ENTITY_NOT_FOUND_ERROR, overrideMessage: 'Course not found.'})
     );
   
-    const hasAccess: boolean = payload.executorId === media.getOwnerId();
+    const hasAccess: boolean = payload.executorId === course.getOwnerId();
     CoreAssert.isTrue(hasAccess, Exception.new({code: Code.ACCESS_DENIED_ERROR}));
     
-    return CourseUseCaseDto.newFromCourse(media);
+    return CourseUseCaseDto.newFromCourse(course);
   }
   
 }

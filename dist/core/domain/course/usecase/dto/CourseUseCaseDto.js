@@ -11,11 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var CourseUseCaseDto_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseUseCaseDto = void 0;
-const CourseEnums_1 = require("@core/common/enums/CourseEnums");
 const class_transformer_1 = require("class-transformer");
 let CourseUseCaseDto = CourseUseCaseDto_1 = class CourseUseCaseDto {
     static newFromCourse(course) {
         const dto = (0, class_transformer_1.plainToClass)(CourseUseCaseDto_1, course);
+        dto.type = "PDF";
+        dto.id = course.getId();
+        dto.pdfDetails = course.getPdfDescription();
         dto.createdAt = course.getCreatedAt().getTime();
         dto.editedAt = course.getEditedAt()?.getTime() || null;
         return dto;
@@ -38,7 +40,7 @@ __decorate([
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
-], CourseUseCaseDto.prototype, "courseId", void 0);
+], CourseUseCaseDto.prototype, "id", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)

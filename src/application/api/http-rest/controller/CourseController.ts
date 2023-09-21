@@ -109,7 +109,7 @@ export class CourseController {
       // keywords: [query.Keywords],
     });
 
-    console.log("create course adapter from CourseController.ts is::",adapter);
+    console.log("create course adapter from CourseController.ts is::", adapter);
 
     const createdCourse: CourseUseCaseDto =
       await this.createCourseUseCase.execute(adapter);
@@ -154,7 +154,7 @@ export class CourseController {
     // return CoreApiResponse.success();
   }
 
-  @Put(":courseId")
+  @Put(":id")
   @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
@@ -163,11 +163,11 @@ export class CourseController {
   public async editCourse(
     @HttpUser() user: HttpUserPayload,
     @Body() body: HttpRestApiModelEditCourseBody,
-    @Param("courseId") courseId: string
+    @Param("id") id: string
   ): Promise<CoreApiResponse<CourseUseCaseDto>> {
     const adapter: EditCourseAdapter = await EditCourseAdapter.new({
       executorId: user.id,
-      courseId: courseId,
+      id: id,
       name: body.name,
     });
 
@@ -198,40 +198,43 @@ export class CourseController {
     return CoreApiResponse.success(courses);
   }
 
-  @Get(":courseId")
+  @Get(":id")
   @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, type: HttpRestApiResponseCourse })
   public async getCourse(
     @HttpUser() user: HttpUserPayload,
-    @Param("courseId") courseId: string
+    @Param("id") id: string
   ): Promise<CoreApiResponse<CourseUseCaseDto>> {
     const adapter: GetCourseAdapter = await GetCourseAdapter.new({
       executorId: user.id,
-      courseId: courseId,
+      id: id,
     });
+
+    console.log("Adapter from GET(:courseId) is::", adapter);
+
     const course: CourseUseCaseDto = await this.getCourseUseCase.execute(
       adapter
     );
 
-    this.setFileStorageBasePath([course]);
+    // this.setFileStorageBasePath([course]);
 
     return CoreApiResponse.success(course);
   }
 
-  @Delete(":courseId")
+  @Delete(":id")
   @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, type: HttpRestApiResponseCourse })
   public async removeCourse(
     @HttpUser() user: HttpUserPayload,
-    @Param("courseId") courseId: string
+    @Param("id") id: string
   ): Promise<CoreApiResponse<void>> {
     const adapter: RemoveCourseAdapter = await RemoveCourseAdapter.new({
       executorId: user.id,
-      courseId: courseId,
+      id: id,
     });
     await this.removeCourseUseCase.execute(adapter);
 

@@ -1,5 +1,5 @@
 export interface GetCoursePort {
     executorId: string;
-    courseId: string;
+    id: string;
   }
   

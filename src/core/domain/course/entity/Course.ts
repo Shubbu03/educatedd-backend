@@ -67,7 +67,7 @@ export class Course extends Entity<string> implements RemovableEntity {
     // this.metadata = payload.metadata;
 
     // this.id = payload.id || v4();
-    this.id = payload.courseId || v4();
+    this.id = payload.id || v4();
     this.createdAt = payload.createdAt || new Date();
     this.editedAt = payload.editedAt || null;
     this.removedAt = payload.removedAt || null;

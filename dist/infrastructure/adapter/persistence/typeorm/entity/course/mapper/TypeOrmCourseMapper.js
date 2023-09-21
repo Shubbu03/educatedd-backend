@@ -7,7 +7,7 @@ const TypeOrmCourse_1 = require("@infrastructure/adapter/persistence/typeorm/ent
 class TypeOrmCourseMapper {
     static toOrmEntity(domainCourse) {
         const ormCourse = new TypeOrmCourse_1.TypeOrmCourse();
-        ormCourse.courseId = domainCourse.getId();
+        ormCourse.id = domainCourse.getId();
         ormCourse.ownerId = domainCourse.getOwnerId();
         ormCourse.title = domainCourse.getTitle();
         ormCourse.createdAt = domainCourse.getCreatedAt();
@@ -27,7 +27,7 @@ class TypeOrmCourseMapper {
         });
         const domainCourse = new Course_1.Course({
             ownerId: ormCourse.ownerId,
-            courseId: ormCourse.courseId,
+            id: ormCourse.id,
             title: ormCourse.title,
             description: ormCourse.description,
             pdfDetails: ormCourse.pdfDetails,

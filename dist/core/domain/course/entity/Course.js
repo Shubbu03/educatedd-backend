@@ -20,7 +20,7 @@ class Course extends Entity_1.Entity {
         this.title = payload.title;
         this.description = payload.description;
         this.pdfDetails = payload.pdfDetails;
-        this.id = payload.courseId || (0, uuid_1.v4)();
+        this.id = payload.id || (0, uuid_1.v4)();
         this.createdAt = payload.createdAt || new Date();
         this.editedAt = payload.editedAt || null;
         this.removedAt = payload.removedAt || null;

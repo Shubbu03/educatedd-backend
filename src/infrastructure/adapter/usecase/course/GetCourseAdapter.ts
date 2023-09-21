@@ -12,9 +12,11 @@ export class GetCourseAdapter extends UseCaseValidatableAdapter implements GetCo
   
   @Expose()
   @IsUUID()
-  public courseId: string;
+  public id: string;
   
   public static async new(payload: GetCoursePort): Promise<GetCourseAdapter> {
+
+    console.log("New Payload from GetCourseAdapter.ts is::",payload);
     const adapter: GetCourseAdapter = plainToClass(GetCourseAdapter, payload);
     await adapter.validate();
     

@@ -7,7 +7,7 @@ export class TypeOrmCourseMapper {
   public static toOrmEntity(domainCourse: Course): TypeOrmCourse {
     const ormCourse: TypeOrmCourse = new TypeOrmCourse();
     
-    ormCourse.courseId           = domainCourse.getId();
+    ormCourse.id           = domainCourse.getId();
     ormCourse.ownerId      = domainCourse.getOwnerId();
     ormCourse.title         = domainCourse.getTitle();
     // ormCourse.type         = domainCourse.getType();
@@ -38,7 +38,7 @@ export class TypeOrmCourseMapper {
     
     const domainCourse: Course = new Course({
       ownerId  : ormCourse.ownerId,
-      courseId: ormCourse.courseId,
+      id: ormCourse.id,
       title     : ormCourse.title,
       description:ormCourse.description,
       pdfDetails:ormCourse.pdfDetails,

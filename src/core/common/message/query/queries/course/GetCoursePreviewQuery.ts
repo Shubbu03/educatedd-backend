@@ -1,12 +1,12 @@
 import { RepositoryFindOptions } from "@core/common/persistence/RepositoryOptions";
 
 export class GetCoursePreviewQuery {
-  by: { id?: string; ownerId?: string; courseId?: string };
+  by: { id?: string; ownerId?: string;};
 
   options?: RepositoryFindOptions;
 
   private constructor(
-    by: { id?: string; ownerId?: string; courseId?: string },
+    by: { id?: string; ownerId?: string; },
     options?: RepositoryFindOptions
   ) {
     this.by = by;
@@ -14,7 +14,7 @@ export class GetCoursePreviewQuery {
   }
 
   public static new(
-    by: { id?: string; ownerId?: string; courseId?: string },
+    by: { id?: string; ownerId?: string; },
     options?: RepositoryFindOptions
   ): GetCoursePreviewQuery {
     return new GetCoursePreviewQuery(by, options);

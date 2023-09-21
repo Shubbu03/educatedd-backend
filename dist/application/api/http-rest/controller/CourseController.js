@@ -66,10 +66,10 @@ let CourseController = class CourseController {
         const uploadedFile = await this.uploadFileUseCase.execute(upload_adapter);
         return CoreApiResponse_1.CoreApiResponse.success(uploadedFile);
     }
-    async editCourse(user, body, courseId) {
+    async editCourse(user, body, id) {
         const adapter = await EditCourseAdapter_1.EditCourseAdapter.new({
             executorId: user.id,
-            courseId: courseId,
+            id: id,
             name: body.name,
         });
         const editedCourse = await this.editCourseUseCase.execute(adapter);
@@ -84,19 +84,19 @@ let CourseController = class CourseController {
         this.setFileStorageBasePath(courses);
         return CoreApiResponse_1.CoreApiResponse.success(courses);
     }
-    async getCourse(user, courseId) {
+    async getCourse(user, id) {
         const adapter = await GetCourseAdapter_1.GetCourseAdapter.new({
             executorId: user.id,
-            courseId: courseId,
+            id: id,
         });
+        console.log("Adapter from GET(:courseId) is::", adapter);
         const course = await this.getCourseUseCase.execute(adapter);
-        this.setFileStorageBasePath([course]);
         return CoreApiResponse_1.CoreApiResponse.success(course);
     }
-    async removeCourse(user, courseId) {
+    async removeCourse(user, id) {
         const adapter = await RemoveCourseAdapter_1.RemoveCourseAdapter.new({
             executorId: user.id,
-            courseId: courseId,
+            id: id,
         });
         await this.removeCourseUseCase.execute(adapter);
         return CoreApiResponse_1.CoreApiResponse.success();
@@ -140,7 +140,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CourseController.prototype, "uploadFile", null);
 __decorate([
-    (0, common_1.Put)(":courseId"),
+    (0, common_1.Put)(":id"),
     (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
@@ -148,7 +148,7 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCourse_1.HttpRestApiResponseCourse }),
     __param(0, (0, HttpUser_1.HttpUser)()),
     __param(1, (0, common_1.Body)()),
-    __param(2, (0, common_1.Param)("courseId")),
+    __param(2, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, HttpRestApiModelEditCourseBody_1.HttpRestApiModelEditCourseBody, String]),
     __metadata("design:returntype", Promise)
@@ -165,25 +165,25 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CourseController.prototype, "getCourseList", null);
 __decorate([
-    (0, common_1.Get)(":courseId"),
+    (0, common_1.Get)(":id"),
     (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCourse_1.HttpRestApiResponseCourse }),
     __param(0, (0, HttpUser_1.HttpUser)()),
-    __param(1, (0, common_1.Param)("courseId")),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], CourseController.prototype, "getCourse", null);
 __decorate([
-    (0, common_1.Delete)(":courseId"),
+    (0, common_1.Delete)(":id"),
     (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCourse_1.HttpRestApiResponseCourse }),
     __param(0, (0, HttpUser_1.HttpUser)()),
-    __param(1, (0, common_1.Param)("courseId")),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)

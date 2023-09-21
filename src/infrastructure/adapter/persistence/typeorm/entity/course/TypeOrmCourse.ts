@@ -3,14 +3,14 @@ import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity("course")
 export class TypeOrmCourse {
-  @Column()
-  public id: string;
+  // @Column()
+  // public id: string;
 
   @Column()
   public ownerId: string;
 
   @PrimaryColumn()
-  public courseId: string;
+  public id: string;
 
   @Column()
   public title: string;

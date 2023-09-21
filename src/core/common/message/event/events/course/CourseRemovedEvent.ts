@@ -2,20 +2,20 @@ import { CourseType } from '@core/common/enums/CourseEnums';
 
 export class CourseRemovedEvent {
   
-  public readonly courseId: string;
+  public readonly id: string;
   
   public readonly ownerId: string;
   
   // public readonly type: CourseType;
   
-  private constructor(courseId: string,ownerId: string ) {
-    this.courseId = courseId;
+  private constructor(id: string,ownerId: string ) {
+    this.id = id;
     this.ownerId = ownerId;
 
   }
   
-  public static new(courseId: string,ownerId: string): CourseRemovedEvent {
-    return new CourseRemovedEvent(courseId,ownerId );
+  public static new(id: string,ownerId: string): CourseRemovedEvent {
+    return new CourseRemovedEvent(id,ownerId );
   }
   
 }

@@ -15,7 +15,7 @@ export class EditCourseService implements EditCourseUseCase {
   
   public async execute(payload: EditCoursePort): Promise<CourseUseCaseDto> {
     const course: Course = CoreAssert.notEmpty(
-      await this.courseRepository.findCourse({id: payload.courseId}),
+      await this.courseRepository.findCourse({id: payload.id}),
       Exception.new({code: Code.ENTITY_NOT_FOUND_ERROR, overrideMessage: 'Media not found.'})
     );
     

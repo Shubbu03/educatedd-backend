@@ -3,14 +3,14 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class HttpRestApiModelCourse {
   
-  @ApiProperty({type: 'string'})
-  public id: string;
+  // @ApiProperty({type: 'string'})
+  // public id: string;
   
   @ApiProperty({type: 'string'})
   public ownerId: string;
 
   @ApiProperty({type: 'string'})
-  public courseId: string;
+  public id: string;
   
   @ApiProperty({type: 'string'})
   public title: string;
@@ -27,8 +27,8 @@ export class HttpRestApiModelCourse {
   @ApiProperty({enum: CourseType})
   public type: CourseType;
   
-  @ApiProperty({type: 'string'})
-  public url: string;
+  // @ApiProperty({type: 'string'})
+  // public url: string;
   
   @ApiProperty({type: 'number'})
   public createdAt: number;

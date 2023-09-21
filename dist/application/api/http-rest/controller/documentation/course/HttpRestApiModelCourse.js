@@ -17,15 +17,11 @@ class HttpRestApiModelCourse {
 __decorate([
     (0, swagger_1.ApiProperty)({ type: 'string' }),
     __metadata("design:type", String)
-], HttpRestApiModelCourse.prototype, "id", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ type: 'string' }),
-    __metadata("design:type", String)
 ], HttpRestApiModelCourse.prototype, "ownerId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: 'string' }),
     __metadata("design:type", String)
-], HttpRestApiModelCourse.prototype, "courseId", void 0);
+], HttpRestApiModelCourse.prototype, "id", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: 'string' }),
     __metadata("design:type", String)
@@ -46,10 +42,6 @@ __decorate([
     (0, swagger_1.ApiProperty)({ enum: CourseEnums_1.CourseType }),
     __metadata("design:type", String)
 ], HttpRestApiModelCourse.prototype, "type", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ type: 'string' }),
-    __metadata("design:type", String)
-], HttpRestApiModelCourse.prototype, "url", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: 'number' }),
     __metadata("design:type", Number)

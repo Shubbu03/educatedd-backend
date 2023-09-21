@@ -30,7 +30,7 @@ __decorate([
     (0, class_transformer_1.Expose)(),
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
-], EditCourseAdapter.prototype, "courseId", void 0);
+], EditCourseAdapter.prototype, "id", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     (0, class_validator_1.IsOptional)(),

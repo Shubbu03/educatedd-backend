@@ -6,8 +6,8 @@ import { UploadFile } from "../../entity/UploadFile";
 
 @Exclude()
 export class CourseUseCaseDto {
-  @Expose()
-  public id: string;
+  // @Expose()
+  // public id: string;
 
   @Expose()
   public ownerId: string;
@@ -30,8 +30,8 @@ export class CourseUseCaseDto {
   @Expose()
   public type: CourseType;
 
-  @Expose()
-  public url: string;
+  // @Expose()
+  // public url: string;
 
   public createdAt: number;
 
@@ -40,7 +40,8 @@ export class CourseUseCaseDto {
   public static newFromCourse(course: Course): CourseUseCaseDto {
     const dto: CourseUseCaseDto = plainToClass(CourseUseCaseDto, course);
 
-    dto.url = course.getMetadata().relativePath;
+    // dto.url = course.
+    
     dto.createdAt = course.getCreatedAt().getTime();
     dto.editedAt = course.getEditedAt()?.getTime() || null;
 
@@ -50,7 +51,7 @@ export class CourseUseCaseDto {
   public static upload_new(file: UploadFile): CourseUseCaseDto {
     const dto: CourseUseCaseDto = plainToClass(CourseUseCaseDto, file);
 
-    dto.url = file.getMetadata().relativePath;
+    dto.pdfDetails = file.getMetadata().relativePath;
     dto.createdAt = file.getCreatedAt().getTime();
     dto.editedAt = file.getEditedAt()?.getTime() || null;
 

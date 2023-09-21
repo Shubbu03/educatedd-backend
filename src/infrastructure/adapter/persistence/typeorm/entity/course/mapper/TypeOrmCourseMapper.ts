@@ -7,15 +7,15 @@ export class TypeOrmCourseMapper {
   public static toOrmEntity(domainCourse: Course): TypeOrmCourse {
     const ormCourse: TypeOrmCourse = new TypeOrmCourse();
     
-    ormCourse.courseId           = domainCourse.getCourseId();
+    ormCourse.courseId           = domainCourse.getId();
     ormCourse.ownerId      = domainCourse.getOwnerId();
     ormCourse.title         = domainCourse.getTitle();
-    ormCourse.type         = domainCourse.getType();
+    // ormCourse.type         = domainCourse.getType();
     
-    ormCourse.relativePath = domainCourse.getMetadata().relativePath;
-    ormCourse.size         = domainCourse.getMetadata().size as number;
-    ormCourse.ext          = domainCourse.getMetadata().ext as string;
-    ormCourse.mimetype     = domainCourse.getMetadata().mimetype as string;
+    // ormCourse.relativePath = domainCourse.getMetadata().relativePath;
+    // ormCourse.size         = domainCourse.getMetadata().size as number;
+    // ormCourse.ext          = domainCourse.getMetadata().ext as string;
+    // ormCourse.mimetype     = domainCourse.getMetadata().mimetype as string;
     
     ormCourse.createdAt    = domainCourse.getCreatedAt();
     ormCourse.editedAt     = domainCourse.getEditedAt() as Date;
@@ -42,10 +42,10 @@ export class TypeOrmCourseMapper {
       title     : ormCourse.title,
       description:ormCourse.description,
       pdfDetails:ormCourse.pdfDetails,
-      keywords:ormCourse.keywords,
-      type     : ormCourse.type,
-      metadata : metadata,
-      id       : ormCourse.id,
+      // keywords:ormCourse.keywords,
+      // type     : ormCourse.type,
+      // metadata : metadata,
+      // id       : ormCourse.id,
       createdAt: ormCourse.createdAt,
       editedAt : ormCourse.editedAt,
       removedAt: ormCourse.removedAt,

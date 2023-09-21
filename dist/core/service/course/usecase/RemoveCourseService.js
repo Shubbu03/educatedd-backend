@@ -15,7 +15,7 @@ class RemoveCourseService {
         const hasAccess = payload.executorId === course.getOwnerId();
         CoreAssert_1.CoreAssert.isTrue(hasAccess, Exception_1.Exception.new({ code: Code_1.Code.ACCESS_DENIED_ERROR }));
         await this.mediaRepository.removeCourse(course);
-        await this.eventBus.sendEvent(CourseRemovedEvent_1.CourseRemovedEvent.new(course.getId(), course.getOwnerId(), course.getType()));
+        await this.eventBus.sendEvent(CourseRemovedEvent_1.CourseRemovedEvent.new(course.getId(), course.getOwnerId()));
     }
 }
 exports.RemoveCourseService = RemoveCourseService;

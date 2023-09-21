@@ -19,8 +19,8 @@ export class Course extends Entity<string> implements RemovableEntity {
   @IsUUID()
   private readonly ownerId: string;
 
-  @IsUUID()
-  private readonly courseId: string;
+  // @IsUUID()
+  // private readonly courseId: string;
 
   @IsString()
   private title: string;
@@ -31,18 +31,18 @@ export class Course extends Entity<string> implements RemovableEntity {
   @IsString()
   private readonly pdfDetails: string;
 
-  @IsString()
-  private readonly keywords: string[];
+  // @IsString()
+  // private readonly keywords: string[];
 
-  @IsEnum(CourseType)
-  private readonly type: CourseType;
+  // @IsEnum(CourseType)
+  // private readonly type: CourseType;
 
-  @IsInstance(FileMetadata)
-  private metadata: FileMetadata;
+  // @IsInstance(FileMetadata)
+  // private metadata: FileMetadata;
 
-  @IsOptional()
-  @IsUUID()
-  readonly id: string;
+  // @IsOptional()
+  // @IsUUID()
+  // readonly id: string;
 
   @IsDate()
   private readonly createdAt: Date;
@@ -59,15 +59,15 @@ export class Course extends Entity<string> implements RemovableEntity {
     super();
 
     this.ownerId = payload.ownerId;
-    this.courseId = payload.courseId;
     this.title = payload.title;
     this.description = payload.description;
     this.pdfDetails = payload.pdfDetails;
-    this.keywords = payload.keywords;
-    this.type = payload.type;
-    this.metadata = payload.metadata;
+    // this.keywords = payload.keywords;
+    // this.type = payload.type;
+    // this.metadata = payload.metadata;
 
-    this.id = payload.id || v4();
+    // this.id = payload.id || v4();
+    this.id = payload.courseId || v4();
     this.createdAt = payload.createdAt || new Date();
     this.editedAt = payload.editedAt || null;
     this.removedAt = payload.removedAt || null;
@@ -77,9 +77,9 @@ export class Course extends Entity<string> implements RemovableEntity {
     return this.ownerId;
   }
 
-  public getCourseId(): string {
-    return this.courseId;
-  }
+  // public getCourseId(): string {
+  //   return this.courseId;
+  // }
 
   public getTitle(): string {
     return this.title;
@@ -93,17 +93,17 @@ export class Course extends Entity<string> implements RemovableEntity {
     return this.pdfDetails;
   }
 
-  public getKeywords(): string[] {
-    return this.keywords;
-  }
+  // public getKeywords(): string[] {
+  //   return this.keywords;
+  // }
 
-  public getType(): CourseType {
-    return this.type;
-  }
+  // public getType(): CourseType {
+  //   return this.type;
+  // }
 
-  public getMetadata(): FileMetadata {
-    return this.metadata;
-  }
+  // public getMetadata(): FileMetadata {
+  //   return this.metadata;
+  // }
 
   public getCreatedAt(): Date {
     return this.createdAt;
@@ -125,7 +125,7 @@ export class Course extends Entity<string> implements RemovableEntity {
       this.editedAt = currentDate;
     }
     if (payload.metadata) {
-      this.metadata = payload.metadata;
+      // this.metadata = payload.metadata;
       this.editedAt = currentDate;
     }
 
@@ -140,6 +140,8 @@ export class Course extends Entity<string> implements RemovableEntity {
   public static async new(payload: CreateCourseEntityPayload): Promise<Course> {
     const course: Course = new Course(payload);
     await course.validate();
+
+    console.log("payload from Course.ts is::",course);
 
     return course;
   }

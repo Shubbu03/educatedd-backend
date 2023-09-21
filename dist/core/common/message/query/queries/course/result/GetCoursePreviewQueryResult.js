@@ -2,13 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetCoursePreviewQueryResult = void 0;
 class GetCoursePreviewQueryResult {
-    constructor(id, type, relativePath) {
+    constructor(id) {
         this.id = id;
-        this.type = type;
-        this.relativePath = relativePath;
     }
-    static new(id, type, relativePath) {
-        return new GetCoursePreviewQueryResult(id, type, relativePath);
+    static new(id) {
+        return new GetCoursePreviewQueryResult(id);
     }
 }
 exports.GetCoursePreviewQueryResult = GetCoursePreviewQueryResult;

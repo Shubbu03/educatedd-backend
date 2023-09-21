@@ -9,16 +9,11 @@ class CreateCourseService {
         this.courseFileStorage = courseFileStorage;
     }
     async execute(payload) {
-        const fileMetaData = await this.courseFileStorage.upload(payload.file, { type: payload.type });
         const course = await Course_1.Course.new({
             ownerId: payload.executorId,
-            courseId: payload.executorId,
-            title: payload.name,
-            description: payload.name,
-            pdfDetails: payload.name,
-            keywords: [payload.name],
-            type: payload.type,
-            metadata: fileMetaData,
+            title: payload.title,
+            description: payload.description,
+            pdfDetails: payload.pdfDetails,
         });
         await this.courseRepository.addCourse(course);
         return CourseUseCaseDto_1.CourseUseCaseDto.newFromCourse(course);

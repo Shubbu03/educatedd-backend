@@ -25,7 +25,7 @@ export class RemoveCourseService implements RemoveCourseUseCase {
     CoreAssert.isTrue(hasAccess, Exception.new({code: Code.ACCESS_DENIED_ERROR}));
     
     await this.mediaRepository.removeCourse(course);
-    await this.eventBus.sendEvent(CourseRemovedEvent.new(course.getId(), course.getOwnerId(), course.getType()));
+    await this.eventBus.sendEvent(CourseRemovedEvent.new(course.getId(),course.getOwnerId()));
   }
   
 }

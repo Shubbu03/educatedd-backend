@@ -4,18 +4,18 @@ export class GetCoursePreviewQueryResult {
   
   public readonly id: string;
   
-  public readonly type: CourseType;
+  // public readonly type: CourseType;
   
-  public readonly relativePath: string;
+  // public readonly relativePath: string;
   
-  constructor(id: string, type: CourseType, relativePath: string) {
+  constructor(id: string) {
     this.id = id;
-    this.type = type;
-    this.relativePath = relativePath;
+    // this.type = type;
+    // this.relativePath = relativePath;
   }
   
-  public static new(id: string, type: CourseType, relativePath: string): GetCoursePreviewQueryResult {
-    return new GetCoursePreviewQueryResult(id, type, relativePath);
+  public static new(id: string): GetCoursePreviewQueryResult {
+    return new GetCoursePreviewQueryResult(id);
   }
   
 }

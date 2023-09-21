@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseController = void 0;
 const HttpAuth_1 = require("@application/api/http-rest/auth/decorator/HttpAuth");
 const HttpUser_1 = require("@application/api/http-rest/auth/decorator/HttpUser");
-const HttpRestApiModelCreateCourseBody_1 = require("@application/api/http-rest/controller/documentation/course/HttpRestApiModelCreateCourseBody");
 const HttpRestApiModelCreateCourseQuery_1 = require("@application/api/http-rest/controller/documentation/course/HttpRestApiModelCreateCourseQuery");
 const HttpRestApiModelEditCourseBody_1 = require("@application/api/http-rest/controller/documentation/course/HttpRestApiModelEditCourseBody");
 const HttpRestApiResponseCourse_1 = require("@application/api/http-rest/controller/documentation/course/HttpRestApiResponseCourse");
@@ -45,14 +44,14 @@ let CourseController = class CourseController {
         this.getCourseUseCase = getCourseUseCase;
         this.removeCourseUseCase = removeCourseUseCase;
     }
-    async createCourse(request, file, query) {
+    async createCourse(request, query) {
         const adapter = await CreateCourseAdapter_1.CreateCourseAdapter.new({
             executorId: request.user.id,
-            courseId: request.user.id,
-            name: query.name || (0, path_1.parse)(file.originalname).name,
-            type: query.type,
-            file: file.buffer,
+            title: query.Title,
+            description: query.Description,
+            pdfDetails: query.pdfDetails,
         });
+        console.log("create course adapter from CourseController.ts is::", adapter);
         const createdCourse = await this.createCourseUseCase.execute(adapter);
         this.setFileStorageBasePath([createdCourse]);
         return CoreApiResponse_1.CoreApiResponse.success(createdCourse);
@@ -103,7 +102,6 @@ let CourseController = class CourseController {
         return CoreApiResponse_1.CoreApiResponse.success();
     }
     setFileStorageBasePath(courses) {
-        courses.forEach((course) => (course.url = (0, url_1.resolve)(FileStorageConfig_1.FileStorageConfig.BASE_PATH, course.url)));
     }
     setUploadedFilePath(newfile) {
         newfile.forEach((file) => (file.url = (0, url_1.resolve)(FileStorageConfig_1.FileStorageConfig.BASE_PATH, file.url)));
@@ -115,21 +113,19 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiConsumes)("multipart/form-data"),
-    (0, swagger_1.ApiBody)({ type: HttpRestApiModelCreateCourseBody_1.HttpRestApiModelCreateCourseBody }),
-    (0, swagger_1.ApiQuery)({ name: "Keywords", type: "string", required: true }),
-    (0, swagger_1.ApiQuery)({ name: "Title", type: "string", required: true }),
+    (0, swagger_1.ApiQuery)({ name: "pdfDetails", type: "string", required: true }),
     (0, swagger_1.ApiQuery)({ name: "Description", type: "string", required: true }),
-    (0, swagger_1.ApiQuery)({ name: "PDF Details", type: "string", required: true }),
+    (0, swagger_1.ApiQuery)({ name: "Title", type: "string", required: true }),
     (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCourse_1.HttpRestApiResponseCourse }),
     __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.UploadedFile)()),
-    __param(2, (0, common_1.Query)()),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object, HttpRestApiModelCreateCourseQuery_1.HttpRestApiModelCreateCourseQuery]),
+    __metadata("design:paramtypes", [Object, HttpRestApiModelCreateCourseQuery_1.HttpRestApiModelCreateCourseQuery]),
     __metadata("design:returntype", Promise)
 ], CourseController.prototype, "createCourse", null);
 __decorate([
     (0, common_1.Post)("/upload"),
+    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)("file")),
     (0, swagger_1.ApiBearerAuth)(),

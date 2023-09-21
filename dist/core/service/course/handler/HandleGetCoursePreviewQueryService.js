@@ -10,7 +10,7 @@ class HandleGetCoursePreviewQueryService {
         let queryResult;
         const course = await this.courseRepository.findCourse(query.by);
         if (course) {
-            queryResult = GetCoursePreviewQueryResult_1.GetCoursePreviewQueryResult.new(course.getId(), course.getType(), course.getMetadata().relativePath);
+            queryResult = GetCoursePreviewQueryResult_1.GetCoursePreviewQueryResult.new(course.getId());
         }
         return queryResult;
     }

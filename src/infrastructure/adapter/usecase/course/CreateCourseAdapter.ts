@@ -1,5 +1,4 @@
 import { UseCaseValidatableAdapter } from "@core/common/adapter/usecase/UseCaseValidatableAdapter";
-import { CourseType } from "@core/common/enums/CourseEnums";
 import { CreateCoursePort } from "@core/domain/course/port/usecase/CreateCoursePort";
 import { Exclude, Expose, plainToClass } from "class-transformer";
 import { IsDefined, IsEnum, IsString, IsUUID } from "class-validator";
@@ -13,21 +12,25 @@ export class CreateCourseAdapter
   @IsUUID()
   public executorId: string;
 
-  @Expose()
-  @IsUUID()
-  public courseId: string;
+  // @Expose()
+  // @IsUUID()
+  // public courseId: string;
 
   @Expose()
   @IsString()
-  public name: string;
+  public title: string;
 
   @Expose()
-  @IsEnum(CourseType)
-  public type: CourseType;
+  @IsString()
+  public description: string;
 
   @Expose()
-  @IsDefined()
-  public file: Buffer | NodeJS.ReadableStream;
+  @IsString()
+  public pdfDetails: string;
+
+  // @Expose()
+  // @IsString()
+  // public keywords: string[];
 
   public static async new(
     payload: CreateCoursePort

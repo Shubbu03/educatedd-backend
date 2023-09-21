@@ -16,7 +16,7 @@ export class HandleGetCoursePreviewQueryService implements GetCoursePreviewQuery
     
     const course: Optional<Course> = await this.courseRepository.findCourse(query.by);
     if (course) {
-      queryResult = GetCoursePreviewQueryResult.new(course.getId(), course.getType(), course.getMetadata().relativePath);
+      queryResult = GetCoursePreviewQueryResult.new(course.getId());
     }
     
     return queryResult;

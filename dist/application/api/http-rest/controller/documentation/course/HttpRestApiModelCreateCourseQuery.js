@@ -10,17 +10,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HttpRestApiModelCreateCourseQuery = void 0;
-const CourseEnums_1 = require("@core/common/enums/CourseEnums");
 const swagger_1 = require("@nestjs/swagger");
 class HttpRestApiModelCreateCourseQuery {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)({ type: 'string', required: false }),
+    (0, swagger_1.ApiProperty)({ type: "string", required: true }),
     __metadata("design:type", String)
-], HttpRestApiModelCreateCourseQuery.prototype, "name", void 0);
+], HttpRestApiModelCreateCourseQuery.prototype, "Title", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ enum: CourseEnums_1.CourseType }),
+    (0, swagger_1.ApiProperty)({ type: "string", required: true }),
     __metadata("design:type", String)
-], HttpRestApiModelCreateCourseQuery.prototype, "type", void 0);
+], HttpRestApiModelCreateCourseQuery.prototype, "Description", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: "string", required: true }),
+    __metadata("design:type", String)
+], HttpRestApiModelCreateCourseQuery.prototype, "pdfDetails", void 0);
 exports.HttpRestApiModelCreateCourseQuery = HttpRestApiModelCreateCourseQuery;
 //# sourceMappingURL=HttpRestApiModelCreateCourseQuery.js.map

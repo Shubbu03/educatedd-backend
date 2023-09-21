@@ -12,7 +12,6 @@ var CreateCourseAdapter_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateCourseAdapter = void 0;
 const UseCaseValidatableAdapter_1 = require("@core/common/adapter/usecase/UseCaseValidatableAdapter");
-const CourseEnums_1 = require("@core/common/enums/CourseEnums");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 let CreateCourseAdapter = CreateCourseAdapter_1 = class CreateCourseAdapter extends UseCaseValidatableAdapter_1.UseCaseValidatableAdapter {
@@ -29,24 +28,19 @@ __decorate([
 ], CreateCourseAdapter.prototype, "executorId", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
-    (0, class_validator_1.IsUUID)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateCourseAdapter.prototype, "courseId", void 0);
+], CreateCourseAdapter.prototype, "title", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateCourseAdapter.prototype, "name", void 0);
+], CreateCourseAdapter.prototype, "description", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
-    (0, class_validator_1.IsEnum)(CourseEnums_1.CourseType),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateCourseAdapter.prototype, "type", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    (0, class_validator_1.IsDefined)(),
-    __metadata("design:type", Object)
-], CreateCourseAdapter.prototype, "file", void 0);
+], CreateCourseAdapter.prototype, "pdfDetails", void 0);
 CreateCourseAdapter = CreateCourseAdapter_1 = __decorate([
     (0, class_transformer_1.Exclude)()
 ], CreateCourseAdapter);

@@ -1,12 +1,16 @@
-import { CourseType } from '@core/common/enums/CourseEnums';
-import { ApiProperty } from '@nestjs/swagger';
+import { CourseType } from "@core/common/enums/CourseEnums";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class HttpRestApiModelCreateCourseQuery {
-  
-  @ApiProperty({type: 'string', required: false})
-  public name: string;
-  
-  @ApiProperty({enum: CourseType})
-  public type: CourseType;
-  
+  @ApiProperty({ type: "string", required: true })
+  public Title: string;
+
+  @ApiProperty({ type: "string", required: true })
+  public Description: string;
+
+  @ApiProperty({ type: "string", required: true })
+  public pdfDetails: string;
+
+//   @ApiProperty({ type: "string", required: true })
+//   public Keywords: string;
 }

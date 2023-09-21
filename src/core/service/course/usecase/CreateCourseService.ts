@@ -14,17 +14,16 @@ export class CreateCourseService implements CreateCourseUseCase {
   ) {}
   
   public async execute(payload: CreateCoursePort): Promise<CourseUseCaseDto> {
-    const fileMetaData: FileMetadata = await this.courseFileStorage.upload(payload.file, {type: payload.type});
+    // const fileMetaData: FileMetadata = await this.courseFileStorage.upload(payload.file, {type: payload.type});
     
     const course: Course = await Course.new({
       ownerId: payload.executorId,
-      courseId:payload.executorId,
-      title: payload.name,
-      description:payload.name,
-      pdfDetails:payload.name, 
-      keywords: [payload.name],
-      type: payload.type,
-      metadata: fileMetaData,
+      title: payload.title,
+      description:payload.description,
+      pdfDetails:payload.pdfDetails, 
+      // keywords: payload.keywords,
+      // type: payload.type,
+      // metadata: fileMetaData,
     });
     
     await this.courseRepository.addCourse(course);

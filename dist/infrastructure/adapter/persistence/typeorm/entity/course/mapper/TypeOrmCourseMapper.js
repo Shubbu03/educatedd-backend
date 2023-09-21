@@ -7,14 +7,9 @@ const TypeOrmCourse_1 = require("@infrastructure/adapter/persistence/typeorm/ent
 class TypeOrmCourseMapper {
     static toOrmEntity(domainCourse) {
         const ormCourse = new TypeOrmCourse_1.TypeOrmCourse();
-        ormCourse.courseId = domainCourse.getCourseId();
+        ormCourse.courseId = domainCourse.getId();
         ormCourse.ownerId = domainCourse.getOwnerId();
         ormCourse.title = domainCourse.getTitle();
-        ormCourse.type = domainCourse.getType();
-        ormCourse.relativePath = domainCourse.getMetadata().relativePath;
-        ormCourse.size = domainCourse.getMetadata().size;
-        ormCourse.ext = domainCourse.getMetadata().ext;
-        ormCourse.mimetype = domainCourse.getMetadata().mimetype;
         ormCourse.createdAt = domainCourse.getCreatedAt();
         ormCourse.editedAt = domainCourse.getEditedAt();
         ormCourse.removedAt = domainCourse.getRemovedAt();
@@ -36,10 +31,6 @@ class TypeOrmCourseMapper {
             title: ormCourse.title,
             description: ormCourse.description,
             pdfDetails: ormCourse.pdfDetails,
-            keywords: ormCourse.keywords,
-            type: ormCourse.type,
-            metadata: metadata,
-            id: ormCourse.id,
             createdAt: ormCourse.createdAt,
             editedAt: ormCourse.editedAt,
             removedAt: ormCourse.removedAt,

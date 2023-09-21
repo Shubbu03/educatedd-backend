@@ -11,31 +11,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Course = void 0;
 const Entity_1 = require("@core/common/entity/Entity");
-const CourseEnums_1 = require("@core/common/enums/CourseEnums");
-const FileMetadata_1 = require("@core/domain/media/value-object/FileMetadata");
 const class_validator_1 = require("class-validator");
 const uuid_1 = require("uuid");
 class Course extends Entity_1.Entity {
     constructor(payload) {
         super();
         this.ownerId = payload.ownerId;
-        this.courseId = payload.courseId;
         this.title = payload.title;
         this.description = payload.description;
         this.pdfDetails = payload.pdfDetails;
-        this.keywords = payload.keywords;
-        this.type = payload.type;
-        this.metadata = payload.metadata;
-        this.id = payload.id || (0, uuid_1.v4)();
+        this.id = payload.courseId || (0, uuid_1.v4)();
         this.createdAt = payload.createdAt || new Date();
         this.editedAt = payload.editedAt || null;
         this.removedAt = payload.removedAt || null;
     }
     getOwnerId() {
         return this.ownerId;
-    }
-    getCourseId() {
-        return this.courseId;
     }
     getTitle() {
         return this.title;
@@ -45,15 +36,6 @@ class Course extends Entity_1.Entity {
     }
     getPdfDescription() {
         return this.pdfDetails;
-    }
-    getKeywords() {
-        return this.keywords;
-    }
-    getType() {
-        return this.type;
-    }
-    getMetadata() {
-        return this.metadata;
     }
     getCreatedAt() {
         return this.createdAt;
@@ -71,7 +53,6 @@ class Course extends Entity_1.Entity {
             this.editedAt = currentDate;
         }
         if (payload.metadata) {
-            this.metadata = payload.metadata;
             this.editedAt = currentDate;
         }
         await this.validate();
@@ -83,6 +64,7 @@ class Course extends Entity_1.Entity {
     static async new(payload) {
         const course = new Course(payload);
         await course.validate();
+        console.log("payload from Course.ts is::", course);
         return course;
     }
 }
@@ -90,10 +72,6 @@ __decorate([
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
 ], Course.prototype, "ownerId", void 0);
-__decorate([
-    (0, class_validator_1.IsUUID)(),
-    __metadata("design:type", String)
-], Course.prototype, "courseId", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
@@ -106,23 +84,6 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], Course.prototype, "pdfDetails", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", Array)
-], Course.prototype, "keywords", void 0);
-__decorate([
-    (0, class_validator_1.IsEnum)(CourseEnums_1.CourseType),
-    __metadata("design:type", String)
-], Course.prototype, "type", void 0);
-__decorate([
-    (0, class_validator_1.IsInstance)(FileMetadata_1.FileMetadata),
-    __metadata("design:type", FileMetadata_1.FileMetadata)
-], Course.prototype, "metadata", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsUUID)(),
-    __metadata("design:type", String)
-], Course.prototype, "id", void 0);
 __decorate([
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)

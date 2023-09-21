@@ -90,34 +90,37 @@ export class CourseController {
   // @UseInterceptors(FileInterceptor("file"))
   @ApiBearerAuth()
   @ApiConsumes("multipart/form-data")
-  @ApiBody({ type: HttpRestApiModelCreateCourseBody })
-  @ApiQuery({ name: "Keywords", type: "string", required: true })
-  @ApiQuery({ name: "Title", type: "string", required: true })
+  // @ApiBody({ type: HttpRestApiModelCreateCourseBody })
+  // @ApiQuery({ name: "Keywords", type: "string", required: true })
+  @ApiQuery({ name: "pdfDetails", type: "string", required: true })
   @ApiQuery({ name: "Description", type: "string", required: true })
-  @ApiQuery({ name: "PDF Details", type: "string", required: true })
+  @ApiQuery({ name: "Title", type: "string", required: true })
   @ApiResponse({ status: HttpStatus.OK, type: HttpRestApiResponseCourse })
   public async createCourse(
     @Req() request: HttpRequestWithUser,
-    @UploadedFile() file: MulterFile,
     @Query() query: HttpRestApiModelCreateCourseQuery
   ): Promise<CoreApiResponse<CourseUseCaseDto>> {
     const adapter: CreateCourseAdapter = await CreateCourseAdapter.new({
       executorId: request.user.id,
-      courseId: request.user.id,
-      name: query.name || parse(file.originalname).name,
-      type: query.type,
-      file: file.buffer,
+      // courseId: request.user.id,
+      title: query.Title,
+      description: query.Description,
+      pdfDetails: query.pdfDetails,
+      // keywords: [query.Keywords],
     });
+
+    console.log("create course adapter from CourseController.ts is::",adapter);
 
     const createdCourse: CourseUseCaseDto =
       await this.createCourseUseCase.execute(adapter);
+
     this.setFileStorageBasePath([createdCourse]);
 
     return CoreApiResponse.success(createdCourse);
   }
 
   @Post("/upload")
-  // @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR)
+  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR)
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FileInterceptor("file"))
   @ApiBearerAuth()
@@ -128,17 +131,8 @@ export class CourseController {
   public async uploadFile(
     @Req() request: HttpRequestWithUser,
     @UploadedFile() file: MulterFile
-    // @Query() query: HttpRestApiModelUploadFile
   ): Promise<CoreApiResponse<CourseUseCaseDto>> {
-    // ?var uploadNew = Buffer.from(file,'base64');
     console.log("Complete request from CourseController.ts is:", request);
-
-    // const adapter1: UploadFileAdapter = await UploadFileAdapter.new({
-    //   // courseId: request.user.id,
-    //   // name: query.name || parse(file.originalname).name,
-    //   // type: query.type,
-    //   file: file.buffer,
-    // });
 
     const upload_adapter: NewUploadFileAdapter = await NewUploadFileAdapter.new(
       {
@@ -147,8 +141,6 @@ export class CourseController {
         file: file.buffer,
       }
     );
-
-    // console.log("file name from CourseController.ts is::",upload_adapter.name);
 
     const uploadedFile: CourseUseCaseDto = await this.uploadFileUseCase.execute(
       upload_adapter
@@ -247,10 +239,10 @@ export class CourseController {
   }
 
   private setFileStorageBasePath(courses: CourseUseCaseDto[]): void {
-    courses.forEach(
-      (course: CourseUseCaseDto) =>
-        (course.url = resolve(FileStorageConfig.BASE_PATH, course.url))
-    );
+    // courses.forEach(
+    //   (course: CourseUseCaseDto) =>
+    //     // (course.url = resolve(FileStorageConfig.BASE_PATH, course.url))
+    // );
   }
 
   private setUploadedFilePath(newfile: NewUploadFilePort[]): void {
@@ -267,10 +259,3 @@ type MulterFile = {
   size: number;
   buffer: Buffer;
 };
-
-// type MulterFileNew = {
-//   originalname: string;
-//   mimetype: string;
-//   size: number;
-//   buffer: Buffer
-// };

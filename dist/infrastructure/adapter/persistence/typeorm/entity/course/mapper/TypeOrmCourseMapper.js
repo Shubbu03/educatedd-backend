@@ -10,13 +10,15 @@ class TypeOrmCourseMapper {
         ormCourse.id = domainCourse.getId();
         ormCourse.ownerId = domainCourse.getOwnerId();
         ormCourse.title = domainCourse.getTitle();
+        ormCourse.description = domainCourse.getDescription();
+        ormCourse.pdfDetails = domainCourse.getPdfDescription();
         ormCourse.createdAt = domainCourse.getCreatedAt();
         ormCourse.editedAt = domainCourse.getEditedAt();
         ormCourse.removedAt = domainCourse.getRemovedAt();
         return ormCourse;
     }
     static toOrmEntities(domainCourses) {
-        return domainCourses.map(domainCourse => this.toOrmEntity(domainCourse));
+        return domainCourses.map((domainCourse) => this.toOrmEntity(domainCourse));
     }
     static toDomainEntity(ormCourse) {
         const metadata = new FileMetadata_1.FileMetadata({
@@ -38,7 +40,7 @@ class TypeOrmCourseMapper {
         return domainCourse;
     }
     static toDomainEntities(ormCourses) {
-        return ormCourses.map(ormCourse => this.toDomainEntity(ormCourse));
+        return ormCourses.map((ormCourse) => this.toDomainEntity(ormCourse));
     }
 }
 exports.TypeOrmCourseMapper = TypeOrmCourseMapper;

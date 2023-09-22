@@ -20,7 +20,7 @@ class TransactionalUseCaseWrapper {
         console.log("port is:", port);
         const result = await this.useCase.execute(port);
         (0, typeorm_transactional_cls_hooked_1.runOnTransactionCommit)(async () => this.useCase.onCommit?.(result, port));
-        console.log("result is:", result);
+        console.log("result from TransactionalUseCaseWrapper:", result);
         return result;
     }
 }

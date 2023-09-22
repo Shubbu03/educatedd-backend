@@ -1,6 +1,7 @@
 import { FileMetadata } from '@core/domain/media/value-object/FileMetadata';
 
 export type EditCourseEntityPayload = {
-    name?:string,
+    title?:string,
+    description?:string,
     metadata?:FileMetadata
 }

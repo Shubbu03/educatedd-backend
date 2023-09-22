@@ -1,6 +1,7 @@
 export interface EditCoursePort {
     executorId: string;
     id: string;
-    name?: string;
+    title?: string;
+    description?: string;
   }
   

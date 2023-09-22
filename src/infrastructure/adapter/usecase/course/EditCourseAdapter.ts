@@ -17,7 +17,14 @@ export class EditCourseAdapter extends UseCaseValidatableAdapter implements Edit
   @Expose()
   @IsOptional()
   @IsString()
-  public name?: string;
+  public title?: string;
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  public description?: string;
+
+
   
   public static async new(payload: EditCoursePort): Promise<EditCourseAdapter> {
     const adapter: EditCourseAdapter = plainToClass(EditCourseAdapter, payload);

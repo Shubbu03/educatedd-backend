@@ -48,8 +48,12 @@ class Course extends Entity_1.Entity {
     }
     async edit(payload) {
         const currentDate = new Date();
-        if (payload.name) {
-            this.title = payload.name;
+        if (payload.title) {
+            this.title = payload.title;
+            this.editedAt = currentDate;
+        }
+        if (payload.description) {
+            this.description = payload.description;
             this.editedAt = currentDate;
         }
         if (payload.metadata) {

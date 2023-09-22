@@ -14,8 +14,12 @@ const swagger_1 = require("@nestjs/swagger");
 class HttpRestApiModelEditCourseBody {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)({ type: 'string', required: false }),
+    (0, swagger_1.ApiProperty)({ type: 'string', required: true }),
     __metadata("design:type", String)
-], HttpRestApiModelEditCourseBody.prototype, "name", void 0);
+], HttpRestApiModelEditCourseBody.prototype, "title", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: "string", required: false }),
+    __metadata("design:type", String)
+], HttpRestApiModelEditCourseBody.prototype, "description", void 0);
 exports.HttpRestApiModelEditCourseBody = HttpRestApiModelEditCourseBody;
 //# sourceMappingURL=HttpRestApiModelEditCourseBody.js.map

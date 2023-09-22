@@ -26,7 +26,7 @@ export class Course extends Entity<string> implements RemovableEntity {
   private title: string;
 
   @IsString()
-  private readonly description: string;
+  private description: string;
 
   @IsString()
   private readonly pdfDetails: string;
@@ -120,8 +120,13 @@ export class Course extends Entity<string> implements RemovableEntity {
   public async edit(payload: EditCourseEntityPayload): Promise<void> {
     const currentDate: Date = new Date();
 
-    if (payload.name) {
-      this.title = payload.name;
+    if (payload.title) {
+      this.title = payload.title;
+      this.editedAt = currentDate;
+    }
+
+    if (payload.description) {
+      this.description = payload.description;
       this.editedAt = currentDate;
     }
     if (payload.metadata) {
@@ -141,7 +146,7 @@ export class Course extends Entity<string> implements RemovableEntity {
     const course: Course = new Course(payload);
     await course.validate();
 
-    console.log("payload from Course.ts is::",course);
+    console.log("payload from Course.ts is::", course);
 
     return course;
   }

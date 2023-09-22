@@ -168,7 +168,8 @@ export class CourseController {
     const adapter: EditCourseAdapter = await EditCourseAdapter.new({
       executorId: user.id,
       id: id,
-      name: body.name,
+      title: body.title,
+      description: body.description
     });
 
     const editedCourse: CourseUseCaseDto = await this.editCourseUseCase.execute(

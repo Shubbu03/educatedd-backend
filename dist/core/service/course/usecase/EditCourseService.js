@@ -10,10 +10,16 @@ class EditCourseService {
         this.courseRepository = courseRepository;
     }
     async execute(payload) {
-        const course = CoreAssert_1.CoreAssert.notEmpty(await this.courseRepository.findCourse({ id: payload.id }), Exception_1.Exception.new({ code: Code_1.Code.ENTITY_NOT_FOUND_ERROR, overrideMessage: 'Media not found.' }));
+        const course = CoreAssert_1.CoreAssert.notEmpty(await this.courseRepository.findCourse({ id: payload.id }), Exception_1.Exception.new({
+            code: Code_1.Code.ENTITY_NOT_FOUND_ERROR,
+            overrideMessage: "Course not found.",
+        }));
         const hasAccess = payload.executorId === course.getOwnerId();
         CoreAssert_1.CoreAssert.isTrue(hasAccess, Exception_1.Exception.new({ code: Code_1.Code.ACCESS_DENIED_ERROR }));
-        await course.edit({ name: payload.name });
+        await course.edit({
+            title: payload.title,
+            description: payload.description,
+        });
         await this.courseRepository.updateCourse(course);
         return CourseUseCaseDto_1.CourseUseCaseDto.newFromCourse(course);
     }

@@ -52,6 +52,7 @@ let CourseController = class CourseController {
             pdfDetails: query.pdfDetails,
         });
         console.log("create course adapter from CourseController.ts is::", adapter);
+        console.log("query iss::", query);
         const createdCourse = await this.createCourseUseCase.execute(adapter);
         this.setFileStorageBasePath([createdCourse]);
         return CoreApiResponse_1.CoreApiResponse.success(createdCourse);
@@ -90,7 +91,6 @@ let CourseController = class CourseController {
             executorId: user.id,
             id: id,
         });
-        console.log("Adapter from GET(:courseId) is::", adapter);
         const course = await this.getCourseUseCase.execute(adapter);
         return CoreApiResponse_1.CoreApiResponse.success(course);
     }

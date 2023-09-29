@@ -109,7 +109,11 @@ export class CourseController {
       // keywords: [query.Keywords],
     });
 
+    
+
     console.log("create course adapter from CourseController.ts is::", adapter);
+
+    console.log("query iss::",query);
 
     const createdCourse: CourseUseCaseDto =
       await this.createCourseUseCase.execute(adapter);
@@ -213,7 +217,7 @@ export class CourseController {
       id: id,
     });
 
-    console.log("Adapter from GET(:courseId) is::", adapter);
+    // console.log("Adapter from GET(:courseId) is::", adapter);
 
     const course: CourseUseCaseDto = await this.getCourseUseCase.execute(
       adapter

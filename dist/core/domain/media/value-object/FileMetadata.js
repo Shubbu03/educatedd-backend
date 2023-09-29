@@ -19,7 +19,6 @@ class FileMetadata extends ValueObject_1.ValueObject {
         this.size = payload.size || null;
         this.ext = payload.ext || null;
         this.mimetype = payload.mimetype || null;
-        console.log("payload from filemetadata is:", payload);
     }
     static async new(payload) {
         const fileMetadata = new FileMetadata(payload);

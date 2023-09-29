@@ -26,7 +26,7 @@ export class FileMetadata extends ValueObject {
     this.size = payload.size || null;
     this.ext = payload.ext || null;
     this.mimetype = payload.mimetype || null;
-    console.log("payload from filemetadata is:",payload)
+    // console.log("payload from filemetadata is:",payload)
 
   }
 

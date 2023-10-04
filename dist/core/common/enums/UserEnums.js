@@ -6,5 +6,6 @@ var UserRole;
     UserRole["ADMIN"] = "ADMIN";
     UserRole["AUTHOR"] = "AUTHOR";
     UserRole["GUEST"] = "GUEST";
+    UserRole["STUDENT"] = "STUDENT";
 })(UserRole = exports.UserRole || (exports.UserRole = {}));
 //# sourceMappingURL=UserEnums.js.map

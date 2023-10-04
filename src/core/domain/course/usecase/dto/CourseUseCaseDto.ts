@@ -4,6 +4,7 @@ import { Course } from "@core/domain/course/entity/Course";
 import { Exclude, Expose, plainToClass } from "class-transformer";
 import { UploadFile } from "../../entity/UploadFile";
 import {v4 as uuidv4} from 'uuid';
+import { Enrolled } from "../../entity/Enrolled";
 
 @Exclude()
 export class CourseUseCaseDto {
@@ -64,6 +65,14 @@ export class CourseUseCaseDto {
     dto.pdfDetails = course.getPdfDescription();
     dto.createdAt = course.getCreatedAt().getTime();
     dto.editedAt = course.getEditedAt()?.getTime() || null;
+
+    return dto;
+  }
+
+  public static enrolledCourse(courseID: Enrolled): CourseUseCaseDto {
+    const dto: CourseUseCaseDto = plainToClass(CourseUseCaseDto,courseID);
+
+    dto.id =  courseID.getCourseID();
 
     return dto;
   }

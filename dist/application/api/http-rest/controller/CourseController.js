@@ -35,11 +35,15 @@ const path_1 = require("path");
 const url_1 = require("url");
 const HttpRestApiModelUploadFile_1 = require("./documentation/course/HttpRestApiModelUploadFile");
 const UploadFileAdapter_1 = require("@infrastructure/adapter/usecase/course/UploadFileAdapter");
+const HttpRestApiResponseEnrolledCourse_1 = require("./documentation/course/HttpRestApiResponseEnrolledCourse");
+const HttpRestApiModelEnrolledCourseQuery_1 = require("./documentation/course/HttpRestApiModelEnrolledCourseQuery");
+const EnrolledCourseAdapter_1 = require("@infrastructure/adapter/usecase/course/EnrolledCourseAdapter");
 let CourseController = class CourseController {
-    constructor(createCourseUseCase, uploadFileUseCase, editCourseUseCase, getCourseListUseCase, getCourseUseCase, removeCourseUseCase) {
+    constructor(createCourseUseCase, uploadFileUseCase, editCourseUseCase, enrolledCourseUseCase, getCourseListUseCase, getCourseUseCase, removeCourseUseCase) {
         this.createCourseUseCase = createCourseUseCase;
         this.uploadFileUseCase = uploadFileUseCase;
         this.editCourseUseCase = editCourseUseCase;
+        this.enrolledCourseUseCase = enrolledCourseUseCase;
         this.getCourseListUseCase = getCourseListUseCase;
         this.getCourseUseCase = getCourseUseCase;
         this.removeCourseUseCase = removeCourseUseCase;
@@ -72,11 +76,20 @@ let CourseController = class CourseController {
             executorId: user.id,
             id: id,
             title: body.title,
-            description: body.description
+            description: body.description,
         });
         const editedCourse = await this.editCourseUseCase.execute(adapter);
         this.setFileStorageBasePath([editedCourse]);
         return CoreApiResponse_1.CoreApiResponse.success(editedCourse);
+    }
+    async enrolledCourse(request, query) {
+        const adapter = await EnrolledCourseAdapter_1.EnrolledCourseAdapter.new({
+            executorId: request.user.id,
+            courseId: query.CourseID,
+        });
+        console.log("ADAPTER FROM ENROLLED COURSE IS:::::", adapter);
+        const enrolledCourse = await this.enrolledCourseUseCase.execute(adapter);
+        return CoreApiResponse_1.CoreApiResponse.success(enrolledCourse);
     }
     async getCourseList(user) {
         const adapter = await GetCourseListAdapter_1.GetCourseListAdapter.new({
@@ -155,8 +168,24 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CourseController.prototype, "editCourse", null);
 __decorate([
+    (0, common_1.Post)("/enrolled"),
+    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.STUDENT),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiQuery)({ name: "CourseID", type: "string", required: true }),
+    (0, swagger_1.ApiResponse)({
+        status: common_1.HttpStatus.OK,
+        type: HttpRestApiResponseEnrolledCourse_1.HttpRestApiResponseEnrolledCourse,
+    }),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, HttpRestApiModelEnrolledCourseQuery_1.HttpRestApiModelEnrolledCourseQuery]),
+    __metadata("design:returntype", Promise)
+], CourseController.prototype, "enrolledCourse", null);
+__decorate([
     (0, common_1.Get)(),
-    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
+    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.STUDENT),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCourseList_1.HttpRestApiResponseCourseList }),
@@ -167,7 +196,7 @@ __decorate([
 ], CourseController.prototype, "getCourseList", null);
 __decorate([
     (0, common_1.Get)(":id"),
-    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
+    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.STUDENT),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseCourse_1.HttpRestApiResponseCourse }),
@@ -195,10 +224,11 @@ CourseController = __decorate([
     __param(0, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.CreateCourseUseCase)),
     __param(1, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.UploadFileUseCase)),
     __param(2, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.EditCourseUseCase)),
-    __param(3, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseListUseCase)),
-    __param(4, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseUseCase)),
-    __param(5, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.RemoveCourseUseCase)),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object])
+    __param(3, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.EnrolledCourseUseCase)),
+    __param(4, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseListUseCase)),
+    __param(5, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseUseCase)),
+    __param(6, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.RemoveCourseUseCase)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object])
 ], CourseController);
 exports.CourseController = CourseController;
 //# sourceMappingURL=CourseController.js.map

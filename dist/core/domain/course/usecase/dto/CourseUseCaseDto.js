@@ -22,6 +22,11 @@ let CourseUseCaseDto = CourseUseCaseDto_1 = class CourseUseCaseDto {
         dto.editedAt = course.getEditedAt()?.getTime() || null;
         return dto;
     }
+    static enrolledCourse(courseID) {
+        const dto = (0, class_transformer_1.plainToClass)(CourseUseCaseDto_1, courseID);
+        dto.id = courseID.getCourseID();
+        return dto;
+    }
     static upload_new(file) {
         const dto = (0, class_transformer_1.plainToClass)(CourseUseCaseDto_1, file);
         dto.pdfDetails = file.getMetadata().relativePath;

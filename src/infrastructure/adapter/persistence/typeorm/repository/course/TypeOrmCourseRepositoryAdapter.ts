@@ -1,47 +1,67 @@
-import { RepositoryFindOptions, RepositoryRemoveOptions } from '@core/common/persistence/RepositoryOptions';
-import { Optional } from '@core/common/type/CommonTypes';
-import { Course } from '@core/domain/course/entity/Course';
-import { UploadFile } from '@core/domain/course/entity/UploadFile';
-import { CourseRepositoryPort, UploadNewFileRepositoryPort } from '@core/domain/course/port/persistence/CourseRepositoryPort';
-import { TypeOrmCourseMapper } from '@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmCourseMapper';
-import { TypeOrmCourse } from '@infrastructure/adapter/persistence/typeorm/entity/course/TypeOrmCourse';
-import { EntityRepository, InsertResult, SelectQueryBuilder } from 'typeorm';
-import { BaseRepository } from 'typeorm-transactional-cls-hooked';
-import { TypeOrmFile } from '../../entity/course/TypeOrmFile';
-import { TypeOrmFileMapper } from '@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmFileMapper';
+import {
+  RepositoryFindOptions,
+  RepositoryRemoveOptions,
+} from "@core/common/persistence/RepositoryOptions";
+import { Optional } from "@core/common/type/CommonTypes";
+import { Course } from "@core/domain/course/entity/Course";
+import { UploadFile } from "@core/domain/course/entity/UploadFile";
+import {
+  CourseRepositoryPort,
+  EnrolledCourseRepositoryPort,
+  UploadNewFileRepositoryPort,
+} from "@core/domain/course/port/persistence/CourseRepositoryPort";
+import { TypeOrmCourseMapper } from "@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmCourseMapper";
+import { TypeOrmCourse } from "@infrastructure/adapter/persistence/typeorm/entity/course/TypeOrmCourse";
+import { EntityRepository, InsertResult, SelectQueryBuilder } from "typeorm";
+import { BaseRepository } from "typeorm-transactional-cls-hooked";
+import { TypeOrmFile } from "../../entity/course/TypeOrmFile";
+import { TypeOrmFileMapper } from "@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmFileMapper";
+import { Enrolled } from "@core/domain/course/entity/Enrolled";
+import { TypeOrmEnrolledCourse } from "../../entity/course/TypeOrmEnrolledCourse";
+import { TypeOrmEnrolledCourseMapper } from "../../entity/course/mapper/TypeOrmEnrolledCourseMapper";
 
 @EntityRepository(TypeOrmCourse)
-export class TypeOrmCourseRepositoryAdapter extends BaseRepository<TypeOrmCourse> implements CourseRepositoryPort {
-  
-  private readonly courseAlias: string = 'course';
-  
+export class TypeOrmCourseRepositoryAdapter
+  extends BaseRepository<TypeOrmCourse>
+  implements CourseRepositoryPort
+{
+  private readonly courseAlias: string = "course";
+
   private readonly excludeRemovedCourseClause: string = `"${this.courseAlias}"."removedAt" IS NULL`;
-  
-  public async findCourse(by: {id?: string}, options: RepositoryFindOptions = {}): Promise<Optional<Course>> {
+
+  public async findCourse(
+    by: { id?: string },
+    options: RepositoryFindOptions = {}
+  ): Promise<Optional<Course>> {
     let domainEntity: Optional<Course>;
-    
-    const query: SelectQueryBuilder<TypeOrmCourse> = this.buildCourseQueryBuilder();
-  
+
+    const query: SelectQueryBuilder<TypeOrmCourse> =
+      this.buildCourseQueryBuilder();
+
     this.extendQueryWithByProperties(by, query);
-    
+
     if (!options.includeRemoved) {
       query.andWhere(this.excludeRemovedCourseClause);
     }
-    
+
     const ormEntity: Optional<TypeOrmCourse> = await query.getOne();
-    
+
     if (ormEntity) {
       domainEntity = TypeOrmCourseMapper.toDomainEntity(ormEntity);
     }
-    
+
     return domainEntity;
   }
-  
-  public async findCourses(by: {ownerId?: string}, options: RepositoryFindOptions = {}): Promise<Course[]> {
-    const query: SelectQueryBuilder<TypeOrmCourse> = this.buildCourseQueryBuilder();
-  
+
+  public async findCourses(
+    by: { ownerId?: string },
+    options: RepositoryFindOptions = {}
+  ): Promise<Course[]> {
+    const query: SelectQueryBuilder<TypeOrmCourse> =
+      this.buildCourseQueryBuilder();
+
     this.extendQueryWithByProperties(by, query);
-    
+
     if (!options.includeRemoved) {
       query.andWhere(this.excludeRemovedCourseClause);
     }
@@ -51,51 +71,81 @@ export class TypeOrmCourseRepositoryAdapter extends BaseRepository<TypeOrmCourse
     if (options.offset) {
       query.limit(options.offset);
     }
-    
+
     const ormCourses: TypeOrmCourse[] = await query.getMany();
-    const domainCourses: Course[] = TypeOrmCourseMapper.toDomainEntities(ormCourses);
-    
+    const domainCourses: Course[] =
+      TypeOrmCourseMapper.toDomainEntities(ormCourses);
+
     return domainCourses;
   }
-  
-  public async countCourses(by: {id?: string, ownerId?: string}, options: RepositoryFindOptions = {}): Promise<number> {
-    const query: SelectQueryBuilder<TypeOrmCourse> = this.buildCourseQueryBuilder();
-  
+
+  public async countCourses(
+    by: { id?: string; ownerId?: string },
+    options: RepositoryFindOptions = {}
+  ): Promise<number> {
+    const query: SelectQueryBuilder<TypeOrmCourse> =
+      this.buildCourseQueryBuilder();
+
     this.extendQueryWithByProperties(by, query);
-    
+
     if (!options.includeRemoved) {
       query.andWhere(this.excludeRemovedCourseClause);
     }
-    
+
     return query.getCount();
   }
-  
-  public async addCourse(course: Course): Promise<{id: string}> {
+
+  public async addCourse(course: Course): Promise<{ id: string }> {
     const ormCourse: TypeOrmCourse = TypeOrmCourseMapper.toOrmEntity(course);
-  
-    const insertResult: InsertResult = await this
-      .createQueryBuilder(this.courseAlias)
+
+    const insertResult: InsertResult = await this.createQueryBuilder(
+      this.courseAlias
+    )
       .insert()
       .into(TypeOrmCourse)
       .values([ormCourse])
       .execute();
-  
+
     return {
-      id: insertResult.identifiers[0].id
+      id: insertResult.identifiers[0].id,
     };
   }
 
-  
-  
-  public async updateCourse(course: Course): Promise<void>{
+  public async enrolledCourse(
+    enrollCourse: Enrolled
+  ): Promise<{ enrolled: boolean }> {
+    const ormEnrolled: TypeOrmEnrolledCourse =
+      TypeOrmEnrolledCourseMapper.toOrmEntity(enrollCourse);
+
+      console.log("entered the enrolledCourse")
+
+    const insertResult: InsertResult = await this.createQueryBuilder(
+      this.courseAlias
+    )
+      .insert()
+      .into(TypeOrmEnrolledCourse)
+      .values([ormEnrolled])
+      .execute();
+
+    console.log("insertResult from typeorm adapter is::", insertResult);
+
+    return {
+      enrolled: true,
+    };
+  }
+
+  public async updateCourse(course: Course): Promise<void> {
     const ormCourse: TypeOrmCourse = TypeOrmCourseMapper.toOrmEntity(course);
     await this.update(ormCourse.id, ormCourse);
   }
-  
-  public async removeCourse(media: Course, options: RepositoryRemoveOptions = {}): Promise<void> {
+
+  public async removeCourse(
+    media: Course,
+    options: RepositoryRemoveOptions = {}
+  ): Promise<void> {
     await media.remove();
     const ormMedia: TypeOrmCourse = TypeOrmCourseMapper.toOrmEntity(media);
-    
+
     if (options.disableSoftDeleting) {
       await this.delete(ormMedia);
     }
@@ -103,43 +153,73 @@ export class TypeOrmCourseRepositoryAdapter extends BaseRepository<TypeOrmCourse
       await this.update(ormMedia.id, ormMedia);
     }
   }
-  
+
   private buildCourseQueryBuilder(): SelectQueryBuilder<TypeOrmCourse> {
-    return this
-      .createQueryBuilder(this.courseAlias)
-      .select();
+    return this.createQueryBuilder(this.courseAlias).select();
   }
-  
-  private extendQueryWithByProperties(by: {id?: string, ownerId?: string}, query: SelectQueryBuilder<TypeOrmCourse>): void {
+
+  private extendQueryWithByProperties(
+    by: { id?: string; ownerId?: string },
+    query: SelectQueryBuilder<TypeOrmCourse>
+  ): void {
     if (by.id) {
-      query.andWhere(`"${this.courseAlias}"."id" = :id`, {id: by.id});
+      query.andWhere(`"${this.courseAlias}"."id" = :id`, { id: by.id });
     }
     if (by.ownerId) {
-      query.andWhere(`"${this.courseAlias}"."ownerId" = :ownerId`, {ownerId: by.ownerId});
+      query.andWhere(`"${this.courseAlias}"."ownerId" = :ownerId`, {
+        ownerId: by.ownerId,
+      });
     }
   }
-  
 }
 
-export class  TypeOrmUploadRepositoryAdapter extends BaseRepository<TypeOrmFile> implements UploadNewFileRepositoryPort{
+export class TypeOrmUploadRepositoryAdapter
+  extends BaseRepository<TypeOrmFile>
+  implements UploadNewFileRepositoryPort
+{
+  private readonly courseAlias: string = "course";
 
-  private readonly courseAlias: string = 'course';
-
-  public async uploadFile(file: UploadFile): Promise<{ url: string; }> {
+  public async uploadFile(file: UploadFile): Promise<{ url: string }> {
     const ormCourse: TypeOrmFile = TypeOrmFileMapper.toOrmEntity(file);
 
-    const uploadDoc: InsertResult = await this
-    .createQueryBuilder(this.courseAlias)
-    .insert()
-    .into(TypeOrmCourse)
-    .values([ormCourse])
-    .execute();
+    const uploadDoc: InsertResult = await this.createQueryBuilder(
+      this.courseAlias
+    )
+      .insert()
+      .into(TypeOrmCourse)
+      .values([ormCourse])
+      .execute();
 
-    return{
-      url: uploadDoc.identifiers[0].id
+    return {
+      url: uploadDoc.identifiers[0].id,
     };
-    
   }
+}
 
+export class TypeOrmEnrolledCourseRepositoryAdapter
+  extends BaseRepository<TypeOrmEnrolledCourse>
+  implements EnrolledCourseRepositoryPort
+{
+  private readonly courseIDAlias: string = "courseID";
 
+  public async enrolledCourse(
+    enrollCourse: Enrolled
+  ): Promise<{ enrolled: boolean }> {
+    const ormEnrolled: TypeOrmEnrolledCourse =
+      TypeOrmEnrolledCourseMapper.toOrmEntity(enrollCourse);
+
+    const insertResult: InsertResult = await this.createQueryBuilder(
+      this.courseIDAlias
+    )
+      .insert()
+      .into(TypeOrmEnrolledCourse)
+      .values([ormEnrolled])
+      .execute();
+
+    console.log("insertResult from typeorm adapter is::", insertResult);
+
+    return {
+      enrolled: true,
+    };
+  }
 }

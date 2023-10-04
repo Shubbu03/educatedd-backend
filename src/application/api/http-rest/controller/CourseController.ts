@@ -60,6 +60,10 @@ import {
   UploadFileAdapter,
 } from "@infrastructure/adapter/usecase/course/UploadFileAdapter";
 import { NewUploadFilePort } from "@core/domain/course/port/usecase/NewUploadFilePort";
+import { HttpRestApiResponseEnrolledCourse } from "./documentation/course/HttpRestApiResponseEnrolledCourse";
+import { HttpRestApiModelEnrolledCourseQuery } from "./documentation/course/HttpRestApiModelEnrolledCourseQuery";
+import { EnrolledCourseAdapter } from "@infrastructure/adapter/usecase/course/EnrolledCourseAdapter";
+import { EnrolledCourseUseCase } from "@core/domain/course/usecase/EnrolledCourseUseCase";
 
 @Controller("courses")
 @ApiTags("courses")
@@ -73,6 +77,9 @@ export class CourseController {
 
     @Inject(CourseDITokens.EditCourseUseCase)
     private readonly editCourseUseCase: EditCourseUseCase,
+
+    @Inject(CourseDITokens.EnrolledCourseUseCase)
+    private readonly enrolledCourseUseCase: EnrolledCourseUseCase,
 
     @Inject(CourseDITokens.GetCourseListUseCase)
     private readonly getCourseListUseCase: GetCourseListUseCase,
@@ -109,11 +116,9 @@ export class CourseController {
       // keywords: [query.Keywords],
     });
 
-    
-
     console.log("create course adapter from CourseController.ts is::", adapter);
 
-    console.log("query iss::",query);
+    console.log("query iss::", query);
 
     const createdCourse: CourseUseCaseDto =
       await this.createCourseUseCase.execute(adapter);
@@ -150,12 +155,7 @@ export class CourseController {
       upload_adapter
     );
 
-    // this.setUploadedFilePath([uploadedFile]);
-
     return CoreApiResponse.success(uploadedFile);
-
-    // return CoreApiResponse.success(upload_adapter.url);
-    // return CoreApiResponse.success();
   }
 
   @Put(":id")
@@ -173,7 +173,7 @@ export class CourseController {
       executorId: user.id,
       id: id,
       title: body.title,
-      description: body.description
+      description: body.description,
     });
 
     const editedCourse: CourseUseCaseDto = await this.editCourseUseCase.execute(
@@ -184,8 +184,34 @@ export class CourseController {
     return CoreApiResponse.success(editedCourse);
   }
 
+  @Post("/enrolled")
+  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR, UserRole.STUDENT)
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiQuery({ name: "CourseID", type: "string", required: true })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: HttpRestApiResponseEnrolledCourse,
+  })
+  public async enrolledCourse(
+    @Req() request: HttpRequestWithUser,
+    @Query() query: HttpRestApiModelEnrolledCourseQuery
+  ): Promise<CoreApiResponse<boolean>> {
+    const adapter: EnrolledCourseAdapter = await EnrolledCourseAdapter.new({
+      executorId: request.user.id,
+      courseId: query.CourseID,
+    });
+
+    console.log("ADAPTER FROM ENROLLED COURSE IS:::::",adapter)
+
+    const enrolledCourse: boolean = 
+     await this.enrolledCourseUseCase.execute(adapter);
+
+     return CoreApiResponse.success(enrolledCourse);
+  }
+
   @Get()
-  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR)
+  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR, UserRole.STUDENT)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, type: HttpRestApiResponseCourseList })
@@ -204,7 +230,7 @@ export class CourseController {
   }
 
   @Get(":id")
-  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR)
+  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR, UserRole.STUDENT)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, type: HttpRestApiResponseCourse })
@@ -217,13 +243,9 @@ export class CourseController {
       id: id,
     });
 
-    // console.log("Adapter from GET(:courseId) is::", adapter);
-
     const course: CourseUseCaseDto = await this.getCourseUseCase.execute(
       adapter
     );
-
-    // this.setFileStorageBasePath([course]);
 
     return CoreApiResponse.success(course);
   }

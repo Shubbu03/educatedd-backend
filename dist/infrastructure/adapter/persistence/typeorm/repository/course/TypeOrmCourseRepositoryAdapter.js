@@ -6,16 +6,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TypeOrmUploadRepositoryAdapter = exports.TypeOrmCourseRepositoryAdapter = void 0;
+exports.TypeOrmEnrolledCourseRepositoryAdapter = exports.TypeOrmUploadRepositoryAdapter = exports.TypeOrmCourseRepositoryAdapter = void 0;
 const TypeOrmCourseMapper_1 = require("@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmCourseMapper");
 const TypeOrmCourse_1 = require("@infrastructure/adapter/persistence/typeorm/entity/course/TypeOrmCourse");
 const typeorm_1 = require("typeorm");
 const typeorm_transactional_cls_hooked_1 = require("typeorm-transactional-cls-hooked");
 const TypeOrmFileMapper_1 = require("@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmFileMapper");
+const TypeOrmEnrolledCourse_1 = require("../../entity/course/TypeOrmEnrolledCourse");
+const TypeOrmEnrolledCourseMapper_1 = require("../../entity/course/mapper/TypeOrmEnrolledCourseMapper");
 let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extends typeorm_transactional_cls_hooked_1.BaseRepository {
     constructor() {
         super(...arguments);
-        this.courseAlias = 'course';
+        this.courseAlias = "course";
         this.excludeRemovedCourseClause = `"${this.courseAlias}"."removedAt" IS NULL`;
     }
     async findCourse(by, options = {}) {
@@ -57,14 +59,26 @@ let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extend
     }
     async addCourse(course) {
         const ormCourse = TypeOrmCourseMapper_1.TypeOrmCourseMapper.toOrmEntity(course);
-        const insertResult = await this
-            .createQueryBuilder(this.courseAlias)
+        const insertResult = await this.createQueryBuilder(this.courseAlias)
             .insert()
             .into(TypeOrmCourse_1.TypeOrmCourse)
             .values([ormCourse])
             .execute();
         return {
-            id: insertResult.identifiers[0].id
+            id: insertResult.identifiers[0].id,
+        };
+    }
+    async enrolledCourse(enrollCourse) {
+        const ormEnrolled = TypeOrmEnrolledCourseMapper_1.TypeOrmEnrolledCourseMapper.toOrmEntity(enrollCourse);
+        console.log("entered the enrolledCourse");
+        const insertResult = await this.createQueryBuilder(this.courseAlias)
+            .insert()
+            .into(TypeOrmEnrolledCourse_1.TypeOrmEnrolledCourse)
+            .values([ormEnrolled])
+            .execute();
+        console.log("insertResult from typeorm adapter is::", insertResult);
+        return {
+            enrolled: true,
         };
     }
     async updateCourse(course) {
@@ -82,16 +96,16 @@ let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extend
         }
     }
     buildCourseQueryBuilder() {
-        return this
-            .createQueryBuilder(this.courseAlias)
-            .select();
+        return this.createQueryBuilder(this.courseAlias).select();
     }
     extendQueryWithByProperties(by, query) {
         if (by.id) {
             query.andWhere(`"${this.courseAlias}"."id" = :id`, { id: by.id });
         }
         if (by.ownerId) {
-            query.andWhere(`"${this.courseAlias}"."ownerId" = :ownerId`, { ownerId: by.ownerId });
+            query.andWhere(`"${this.courseAlias}"."ownerId" = :ownerId`, {
+                ownerId: by.ownerId,
+            });
         }
     }
 };
@@ -102,20 +116,38 @@ exports.TypeOrmCourseRepositoryAdapter = TypeOrmCourseRepositoryAdapter;
 class TypeOrmUploadRepositoryAdapter extends typeorm_transactional_cls_hooked_1.BaseRepository {
     constructor() {
         super(...arguments);
-        this.courseAlias = 'course';
+        this.courseAlias = "course";
     }
     async uploadFile(file) {
         const ormCourse = TypeOrmFileMapper_1.TypeOrmFileMapper.toOrmEntity(file);
-        const uploadDoc = await this
-            .createQueryBuilder(this.courseAlias)
+        const uploadDoc = await this.createQueryBuilder(this.courseAlias)
             .insert()
             .into(TypeOrmCourse_1.TypeOrmCourse)
             .values([ormCourse])
             .execute();
         return {
-            url: uploadDoc.identifiers[0].id
+            url: uploadDoc.identifiers[0].id,
         };
     }
 }
 exports.TypeOrmUploadRepositoryAdapter = TypeOrmUploadRepositoryAdapter;
+class TypeOrmEnrolledCourseRepositoryAdapter extends typeorm_transactional_cls_hooked_1.BaseRepository {
+    constructor() {
+        super(...arguments);
+        this.courseIDAlias = "courseID";
+    }
+    async enrolledCourse(enrollCourse) {
+        const ormEnrolled = TypeOrmEnrolledCourseMapper_1.TypeOrmEnrolledCourseMapper.toOrmEntity(enrollCourse);
+        const insertResult = await this.createQueryBuilder(this.courseIDAlias)
+            .insert()
+            .into(TypeOrmEnrolledCourse_1.TypeOrmEnrolledCourse)
+            .values([ormEnrolled])
+            .execute();
+        console.log("insertResult from typeorm adapter is::", insertResult);
+        return {
+            enrolled: true,
+        };
+    }
+}
+exports.TypeOrmEnrolledCourseRepositoryAdapter = TypeOrmEnrolledCourseRepositoryAdapter;
 //# sourceMappingURL=TypeOrmCourseRepositoryAdapter.js.map

@@ -23,21 +23,7 @@ export class UploadCourseService implements NewUploadFileUseCase {
   ) {}
 
   public async execute(payload: NewUploadFilePort): Promise<any> {
-    //Promise<CourseUseCaseDto>
     console.log("new payload from UploadCourseService.ts:", payload.file);
-
-    // const fileMetaData: FileMetadata = await this.courseFileStorage.upload(
-    //   payload.file
-    // );
-    // console.log("filemetadata:", fileMetaData);
-    // const newFile: UploadFile = await UploadFile.new({
-    //   // file: String(payload.file),
-    //   metadata: fileMetaData,
-    // });
-
-    // await this.fileRepository.uploadFile(newFile);
-
-    // return CourseUseCaseDto.upload_new(newFile);
 
     var name = payload.name
 

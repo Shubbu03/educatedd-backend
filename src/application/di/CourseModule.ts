@@ -13,7 +13,7 @@ import { GetCourseListService } from '@core/service/course/usecase/GetCourseList
 import { GetCourseService } from '@core/service/course/usecase/GetCourseService';
 import { RemoveCourseService } from '@core/service/course/usecase/RemoveCourseService';
 import { MinioCourseFileStorageAdapter } from '@infrastructure/adapter/persistence/media-file/MinioCourseFileStorageAdapter';
-import { TypeOrmCourseRepositoryAdapter } from '@infrastructure/adapter/persistence/typeorm/repository/course/TypeOrmCourseRepositoryAdapter';
+import { TypeOrmCourseRepositoryAdapter, TypeOrmEnrolledCourseRepositoryAdapter } from '@infrastructure/adapter/persistence/typeorm/repository/course/TypeOrmCourseRepositoryAdapter';
 import { NestWrapperDoesCourseExistQueryHandler } from '@infrastructure/handler/course/NestWrapperDoesCourseExistQueryHandler';
 import { NestWrapperGetCoursePreviewQueryHandler } from '@infrastructure/handler/course/NestWrapperGetCoursePreviewQueryHandler';
 import { TransactionalUseCaseWrapper } from '@infrastructure/transaction/TransactionalUseCaseWrapper';
@@ -22,6 +22,8 @@ import { Provider } from '@nestjs/common/interfaces/modules/provider.interface';
 import { Connection } from 'typeorm';
 import { UploadCourseService } from '@core/service/course/usecase/UploadCourseService';
 import { NewUploadFileUseCase } from '@core/domain/course/usecase/NewUploadFileUseCase';
+import { EnrolledCourseUseCase } from '@core/domain/course/usecase/EnrolledCourseUseCase';
+import { EnrolledCourseService } from '@core/service/course/usecase/EnrolledCourseService';
 
 const persistenceProviders: Provider[] = [
     {
@@ -30,7 +32,7 @@ const persistenceProviders: Provider[] = [
     },
     {
       provide   : CourseDITokens.CourseRepository,
-      useFactory: connection => connection.getCustomRepository(TypeOrmCourseRepositoryAdapter),
+      useFactory: connection => connection.getCustomRepository(TypeOrmCourseRepositoryAdapter,TypeOrmEnrolledCourseRepositoryAdapter),
       inject    : [Connection]
     }
   ];
@@ -40,6 +42,14 @@ const persistenceProviders: Provider[] = [
       provide   : CourseDITokens.CreateCourseUseCase,
       useFactory: (courseRepository, courseFileStorage) => {
         const service: CreateCourseUseCase = new CreateCourseService(courseRepository, courseFileStorage);
+        return new TransactionalUseCaseWrapper(service);
+      },
+      inject    : [CourseDITokens.CourseRepository, CourseDITokens.CourseFileStorage]
+    },
+    {
+      provide   : CourseDITokens.EnrolledCourseUseCase,
+      useFactory: (enrolledCourseRepository) => {
+        const service: EnrolledCourseUseCase = new EnrolledCourseService(enrolledCourseRepository);
         return new TransactionalUseCaseWrapper(service);
       },
       inject    : [CourseDITokens.CourseRepository, CourseDITokens.CourseFileStorage]

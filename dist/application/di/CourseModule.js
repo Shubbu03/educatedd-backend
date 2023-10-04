@@ -25,6 +25,7 @@ const TransactionalUseCaseWrapper_1 = require("@infrastructure/transaction/Trans
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
 const UploadCourseService_1 = require("@core/service/course/usecase/UploadCourseService");
+const EnrolledCourseService_1 = require("@core/service/course/usecase/EnrolledCourseService");
 const persistenceProviders = [
     {
         provide: CourseDITokens_1.CourseDITokens.CourseFileStorage,
@@ -32,7 +33,7 @@ const persistenceProviders = [
     },
     {
         provide: CourseDITokens_1.CourseDITokens.CourseRepository,
-        useFactory: connection => connection.getCustomRepository(TypeOrmCourseRepositoryAdapter_1.TypeOrmCourseRepositoryAdapter),
+        useFactory: connection => connection.getCustomRepository(TypeOrmCourseRepositoryAdapter_1.TypeOrmCourseRepositoryAdapter, TypeOrmCourseRepositoryAdapter_1.TypeOrmEnrolledCourseRepositoryAdapter),
         inject: [typeorm_1.Connection]
     }
 ];
@@ -41,6 +42,14 @@ const useCaseProviders = [
         provide: CourseDITokens_1.CourseDITokens.CreateCourseUseCase,
         useFactory: (courseRepository, courseFileStorage) => {
             const service = new CreateCourseService_1.CreateCourseService(courseRepository, courseFileStorage);
+            return new TransactionalUseCaseWrapper_1.TransactionalUseCaseWrapper(service);
+        },
+        inject: [CourseDITokens_1.CourseDITokens.CourseRepository, CourseDITokens_1.CourseDITokens.CourseFileStorage]
+    },
+    {
+        provide: CourseDITokens_1.CourseDITokens.EnrolledCourseUseCase,
+        useFactory: (enrolledCourseRepository) => {
+            const service = new EnrolledCourseService_1.EnrolledCourseService(enrolledCourseRepository);
             return new TransactionalUseCaseWrapper_1.TransactionalUseCaseWrapper(service);
         },
         inject: [CourseDITokens_1.CourseDITokens.CourseRepository, CourseDITokens_1.CourseDITokens.CourseFileStorage]

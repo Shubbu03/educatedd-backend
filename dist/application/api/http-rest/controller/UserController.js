@@ -77,7 +77,7 @@ __decorate([
     (0, common_1.Get)("me"),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
-    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.GUEST),
+    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.GUEST, UserEnums_1.UserRole.STUDENT),
     (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseUser_1.HttpRestApiResponseUser }),
     __param(0, (0, HttpUser_1.HttpUser)()),
     __metadata("design:type", Function),
@@ -86,7 +86,7 @@ __decorate([
 ], UserController.prototype, "getMe", null);
 __decorate([
     (0, common_1.Put)("edit/:userId"),
-    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
+    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.STUDENT),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiBody)({ type: HttpRestApiEditUser_1.HttpRestApiEditUser }),

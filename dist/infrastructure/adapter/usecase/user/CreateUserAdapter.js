@@ -39,7 +39,7 @@ __decorate([
 ], CreateUserAdapter.prototype, "email", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
-    (0, class_validator_1.IsIn)([UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.GUEST]),
+    (0, class_validator_1.IsIn)([UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.GUEST, UserEnums_1.UserRole.STUDENT]),
     __metadata("design:type", String)
 ], CreateUserAdapter.prototype, "role", void 0);
 __decorate([

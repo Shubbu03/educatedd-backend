@@ -67,7 +67,7 @@ export class UserController {
   @Get("me")
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
-  @HttpAuth(UserRole.AUTHOR, UserRole.ADMIN, UserRole.GUEST)
+  @HttpAuth(UserRole.AUTHOR, UserRole.ADMIN, UserRole.GUEST,UserRole.STUDENT)
   @ApiResponse({ status: HttpStatus.OK, type: HttpRestApiResponseUser })
   public async getMe(
     @HttpUser() httpUser: HttpUserPayload
@@ -81,7 +81,7 @@ export class UserController {
   }
 
   @Put("edit/:userId")
-  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR)
+  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR,UserRole.STUDENT)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiBody({ type: HttpRestApiEditUser })

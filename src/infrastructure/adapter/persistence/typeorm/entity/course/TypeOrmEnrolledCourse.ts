@@ -7,4 +7,7 @@ export class TypeOrmEnrolledCourse{
 
     @PrimaryColumn()
     public id: string;
+
+    @Column()
+    public userID: string;
 }

@@ -8,6 +8,8 @@ class TypeOrmEnrolledCourseMapper {
         const ormEnrolled = new TypeOrmEnrolledCourse_1.TypeOrmEnrolledCourse();
         ormEnrolled.courseID = domainEnrolled.getCourseID();
         ormEnrolled.id = domainEnrolled.getOwnerId();
+        ormEnrolled.userID = domainEnrolled.getUserID();
+        console.log("ormEnrolled from typeormenrollcour mapper::", ormEnrolled);
         return ormEnrolled;
     }
     static toOrmEntities(domainEnrolled) {
@@ -17,7 +19,9 @@ class TypeOrmEnrolledCourseMapper {
         const domainCourse = new Enrolled_1.Enrolled({
             ownerId: ormCourse.id,
             courseID: ormCourse.courseID,
+            userID: ormCourse.userID
         });
+        console.log("DomainCourse from typeormenrollcour mapper::", domainCourse);
         return domainCourse;
     }
     static toDomainEntities(ormCourses) {

@@ -31,6 +31,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], EnrolledCourseAdapter.prototype, "courseId", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    (0, class_validator_1.IsUUID)(),
+    __metadata("design:type", String)
+], EnrolledCourseAdapter.prototype, "userId", void 0);
 EnrolledCourseAdapter = EnrolledCourseAdapter_1 = __decorate([
     (0, class_transformer_1.Exclude)()
 ], EnrolledCourseAdapter);

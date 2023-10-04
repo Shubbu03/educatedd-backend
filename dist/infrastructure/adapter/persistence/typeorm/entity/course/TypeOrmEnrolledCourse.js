@@ -21,6 +21,10 @@ __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
 ], TypeOrmEnrolledCourse.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], TypeOrmEnrolledCourse.prototype, "userID", void 0);
 TypeOrmEnrolledCourse = __decorate([
     (0, typeorm_1.Entity)("enrolled_course")
 ], TypeOrmEnrolledCourse);

@@ -6,6 +6,7 @@ class EnrolledCourseTable1696348145402 {
         await queryRunner.query(`
         CREATE TABLE public."enrolled_course"(
          "courseID"       UUID NULL,
+         
          "id"            UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
         
          "createdAt"     TIMESTAMP WITH TIME ZONE NULL,

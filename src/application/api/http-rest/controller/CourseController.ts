@@ -59,6 +59,7 @@ import {
   NewUploadFileAdapter,
   UploadFileAdapter,
 } from "@infrastructure/adapter/usecase/course/UploadFileAdapter";
+import { v4 } from 'uuid';
 import { NewUploadFilePort } from "@core/domain/course/port/usecase/NewUploadFilePort";
 import { HttpRestApiResponseEnrolledCourse } from "./documentation/course/HttpRestApiResponseEnrolledCourse";
 import { HttpRestApiModelEnrolledCourseQuery } from "./documentation/course/HttpRestApiModelEnrolledCourseQuery";
@@ -197,11 +198,15 @@ export class CourseController {
     @Req() request: HttpRequestWithUser,
     @Query() query: HttpRestApiModelEnrolledCourseQuery
   ): Promise<CoreApiResponse<boolean>> {
+    const id = v4();
     const adapter: EnrolledCourseAdapter = await EnrolledCourseAdapter.new({
-      executorId: request.user.id,
+      // executorId: request.user.id,
+      executorId: id,
       courseId: query.CourseID,
+      userId: request.user.id,
     });
-
+    
+    console.log("Complete REQUEST from enrolled is::",request)
     console.log("ADAPTER FROM ENROLLED COURSE IS:::::",adapter)
 
     const enrolledCourse: boolean = 

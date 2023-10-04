@@ -35,6 +35,7 @@ const path_1 = require("path");
 const url_1 = require("url");
 const HttpRestApiModelUploadFile_1 = require("./documentation/course/HttpRestApiModelUploadFile");
 const UploadFileAdapter_1 = require("@infrastructure/adapter/usecase/course/UploadFileAdapter");
+const uuid_1 = require("uuid");
 const HttpRestApiResponseEnrolledCourse_1 = require("./documentation/course/HttpRestApiResponseEnrolledCourse");
 const HttpRestApiModelEnrolledCourseQuery_1 = require("./documentation/course/HttpRestApiModelEnrolledCourseQuery");
 const EnrolledCourseAdapter_1 = require("@infrastructure/adapter/usecase/course/EnrolledCourseAdapter");
@@ -83,10 +84,13 @@ let CourseController = class CourseController {
         return CoreApiResponse_1.CoreApiResponse.success(editedCourse);
     }
     async enrolledCourse(request, query) {
+        const id = (0, uuid_1.v4)();
         const adapter = await EnrolledCourseAdapter_1.EnrolledCourseAdapter.new({
-            executorId: request.user.id,
+            executorId: id,
             courseId: query.CourseID,
+            userId: request.user.id,
         });
+        console.log("Complete REQUEST from enrolled is::", request);
         console.log("ADAPTER FROM ENROLLED COURSE IS:::::", adapter);
         const enrolledCourse = await this.enrolledCourseUseCase.execute(adapter);
         return CoreApiResponse_1.CoreApiResponse.success(enrolledCourse);

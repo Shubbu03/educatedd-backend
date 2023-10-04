@@ -17,6 +17,7 @@ class Enrolled extends Entity_1.Entity {
         super();
         this.ownerId = payload.ownerId;
         this.courseID = payload.courseID;
+        this.userID = payload.userID;
         this.createdAt = payload.createdAt || new Date();
         this.editedAt = payload.editedAt || null;
         this.removedAt = payload.removedAt || null;
@@ -26,6 +27,9 @@ class Enrolled extends Entity_1.Entity {
     }
     getCourseID() {
         return this.courseID;
+    }
+    getUserID() {
+        return this.userID;
     }
     getCreatedAt() {
         return this.createdAt;
@@ -54,6 +58,10 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], Enrolled.prototype, "courseID", void 0);
+__decorate([
+    (0, class_validator_1.IsUUID)(),
+    __metadata("design:type", String)
+], Enrolled.prototype, "userID", void 0);
 __decorate([
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)

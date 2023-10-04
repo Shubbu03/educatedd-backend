@@ -1,7 +1,7 @@
 import { UseCaseValidatableAdapter } from "@core/common/adapter/usecase/UseCaseValidatableAdapter";
 import { EnrolledCoursePort } from "@core/domain/course/port/usecase/EnrolledCoursePort";
 import { Exclude, Expose, plainToClass } from "class-transformer";
-import { IsDefined, IsEnum, IsString, IsUUID } from "class-validator";
+import { IsDefined, IsEnum, IsString, IsUUID, isUUID } from "class-validator";
 
 @Exclude()
 export class EnrolledCourseAdapter
@@ -19,6 +19,10 @@ export class EnrolledCourseAdapter
   @Expose()
   @IsString()
   public courseId: string;
+
+  @Expose()
+  @IsUUID()
+  public userId: string;
 
 //   @Expose()
 //   @IsString()

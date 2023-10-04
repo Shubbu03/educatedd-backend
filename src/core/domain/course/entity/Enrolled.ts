@@ -16,6 +16,9 @@ export class Enrolled extends Entity<string> implements RemovableEntity {
   @IsString()
   private courseID: string;
 
+  @IsUUID()
+  private userID: string;
+
   @IsDate()
   private readonly createdAt: Date;
 
@@ -32,6 +35,7 @@ export class Enrolled extends Entity<string> implements RemovableEntity {
 
     this.ownerId = payload.ownerId;
     this.courseID = payload.courseID;
+    this.userID = payload.userID;
     
     this.createdAt = payload.createdAt || new Date();
     this.editedAt = payload.editedAt || null;
@@ -44,6 +48,10 @@ export class Enrolled extends Entity<string> implements RemovableEntity {
 
   public getCourseID(): string {
     return this.courseID;
+  }
+
+  public getUserID(): string {
+    return this.userID;
   }
 
   public getCreatedAt(): Date {

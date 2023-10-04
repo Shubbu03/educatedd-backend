@@ -7,6 +7,9 @@ export class TypeOrmEnrolledCourseMapper{
 
         ormEnrolled.courseID = domainEnrolled.getCourseID();
         ormEnrolled.id = domainEnrolled.getOwnerId();
+        ormEnrolled.userID = domainEnrolled.getUserID();
+
+        console.log("ormEnrolled from typeormenrollcour mapper::",ormEnrolled)
 
         return ormEnrolled;
     }
@@ -26,8 +29,11 @@ export class TypeOrmEnrolledCourseMapper{
         const domainCourse: Enrolled = new Enrolled({
           ownerId: ormCourse.id,
           courseID: ormCourse.courseID,
+          userID: ormCourse.userID
           
         });
+
+        console.log("DomainCourse from typeormenrollcour mapper::",domainCourse)
     
         return domainCourse;
       }

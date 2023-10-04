@@ -23,11 +23,6 @@ let EnrolledCourseAdapter = EnrolledCourseAdapter_1 = class EnrolledCourseAdapte
 };
 __decorate([
     (0, class_transformer_1.Expose)(),
-    (0, class_validator_1.IsUUID)(),
-    __metadata("design:type", String)
-], EnrolledCourseAdapter.prototype, "executorId", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], EnrolledCourseAdapter.prototype, "courseId", void 0);

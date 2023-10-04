@@ -1,5 +1,5 @@
 export interface EnrolledCoursePort {
-  executorId: string;
+  // executorId: string;
   courseId: string;
   userId: string;
 }

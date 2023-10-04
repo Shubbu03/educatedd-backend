@@ -8,9 +8,9 @@ export class EnrolledCourseAdapter
   extends UseCaseValidatableAdapter
   implements EnrolledCoursePort
 {
-  @Expose()
-  @IsUUID()
-  public executorId: string;
+  // @Expose()
+  // @IsUUID()
+  // public executorId: string;
 
   // @Expose()
   // @IsUUID()

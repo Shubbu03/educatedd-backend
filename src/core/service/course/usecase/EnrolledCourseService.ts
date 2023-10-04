@@ -10,7 +10,7 @@ import { EnrolledCoursePort } from "@core/domain/course/port/usecase/EnrolledCou
 import { EnrolledCourseUseCase } from "@core/domain/course/usecase/EnrolledCourseUseCase";
 // import { CourseUseCaseDto } from "@core/domain/course/usecase/dto/CourseUseCaseDto";
 // import { FileMetadata } from "@core/domain/media/value-object/FileMetadata";
-// import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 export class EnrolledCourseService implements EnrolledCourseUseCase {
   constructor(
@@ -19,7 +19,7 @@ export class EnrolledCourseService implements EnrolledCourseUseCase {
 
   public async execute(payload: EnrolledCoursePort): Promise<boolean> {
     const enrolledCourse: Enrolled = await Enrolled.new({
-      ownerId: payload.executorId,
+      ownerId: uuidv4(),
       courseID: payload.courseId,
       userID: payload.userId
     });

@@ -86,7 +86,6 @@ let CourseController = class CourseController {
     async enrolledCourse(request, query) {
         const id = (0, uuid_1.v4)();
         const adapter = await EnrolledCourseAdapter_1.EnrolledCourseAdapter.new({
-            executorId: id,
             courseId: query.CourseID,
             userId: request.user.id,
         });

@@ -201,7 +201,7 @@ export class CourseController {
     const id = v4();
     const adapter: EnrolledCourseAdapter = await EnrolledCourseAdapter.new({
       // executorId: request.user.id,
-      executorId: id,
+      // executorId: id,
       courseId: query.CourseID,
       userId: request.user.id,
     });

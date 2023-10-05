@@ -14,12 +14,12 @@ export interface CourseRepositoryPort {
   ): Promise<Optional<Course>>;
 
   findCourses(
-    by: { ownerId?: string },
+    // by: { ownerId?: string },
     options?: RepositoryFindOptions
   ): Promise<Course[]>;
 
   countCourses(
-    by: { id?: string; ownerId?: string },
+    by: { id?: string;},
     options?: RepositoryFindOptions
   ): Promise<number>;
 

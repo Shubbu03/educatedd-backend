@@ -33,9 +33,8 @@ let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extend
         }
         return domainEntity;
     }
-    async findCourses(by, options = {}) {
+    async findCourses(options = {}) {
         const query = this.buildCourseQueryBuilder();
-        this.extendQueryWithByProperties(by, query);
         if (!options.includeRemoved) {
             query.andWhere(this.excludeRemovedCourseClause);
         }
@@ -51,7 +50,6 @@ let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extend
     }
     async countCourses(by, options = {}) {
         const query = this.buildCourseQueryBuilder();
-        this.extendQueryWithByProperties(by, query);
         if (!options.includeRemoved) {
             query.andWhere(this.excludeRemovedCourseClause);
         }

@@ -54,13 +54,13 @@ export class TypeOrmCourseRepositoryAdapter
   }
 
   public async findCourses(
-    by: { ownerId?: string },
+    // by: { ownerId?: string },
     options: RepositoryFindOptions = {}
   ): Promise<Course[]> {
     const query: SelectQueryBuilder<TypeOrmCourse> =
       this.buildCourseQueryBuilder();
 
-    this.extendQueryWithByProperties(by, query);
+    // this.extendQueryWithByProperties1(query);
 
     if (!options.includeRemoved) {
       query.andWhere(this.excludeRemovedCourseClause);
@@ -80,13 +80,13 @@ export class TypeOrmCourseRepositoryAdapter
   }
 
   public async countCourses(
-    by: { id?: string; ownerId?: string },
+    by: { id?: string; },
     options: RepositoryFindOptions = {}
   ): Promise<number> {
     const query: SelectQueryBuilder<TypeOrmCourse> =
       this.buildCourseQueryBuilder();
 
-    this.extendQueryWithByProperties(by, query);
+    // this.extendQueryWithByProperties(by, query);
 
     if (!options.includeRemoved) {
       query.andWhere(this.excludeRemovedCourseClause);
@@ -171,6 +171,20 @@ export class TypeOrmCourseRepositoryAdapter
       });
     }
   }
+
+  // private extendQueryWithByProperties1(
+  //   // by: { id?: string; ownerId?: string },
+  //   query: SelectQueryBuilder<TypeOrmCourse>
+  // ): void {
+  //   if (by.id) {
+  //     query.andWhere(`"${this.courseAlias}"."id" = :id`, { id: by.id });
+  //   }
+  //   if (by.ownerId) {
+  //     query.andWhere(`"${this.courseAlias}"."ownerId" = :ownerId`, {
+  //       ownerId: by.ownerId,
+  //     });
+  //   }
+  // }
 }
 
 export class TypeOrmUploadRepositoryAdapter

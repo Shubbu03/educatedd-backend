@@ -7,7 +7,7 @@ class GetCourseListService {
         this.courseRepository = courseRepository;
     }
     async execute(payload) {
-        const courses = await this.courseRepository.findCourses({ ownerId: payload.executorId });
+        const courses = await this.courseRepository.findCourses();
         return CourseUseCaseDto_1.CourseUseCaseDto.newListFromCourses(courses);
     }
 }

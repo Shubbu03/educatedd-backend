@@ -11,7 +11,7 @@ export class GetCourseListService implements GetCourseListUseCase {
   ) {}
   
   public async execute(payload: GetCourseListPort): Promise<CourseUseCaseDto[]> {
-    const courses: Course[] = await this.courseRepository.findCourses({ownerId: payload.executorId});
+    const courses: Course[] = await this.courseRepository.findCourses();
     return CourseUseCaseDto.newListFromCourses(courses);
   }
   

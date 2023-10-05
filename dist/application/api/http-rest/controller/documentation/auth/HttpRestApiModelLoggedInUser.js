@@ -14,12 +14,16 @@ const swagger_1 = require("@nestjs/swagger");
 class HttpRestApiModelLoggedInUser {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)({ type: 'string' }),
+    (0, swagger_1.ApiProperty)({ type: "string" }),
     __metadata("design:type", String)
 ], HttpRestApiModelLoggedInUser.prototype, "id", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ type: 'string' }),
+    (0, swagger_1.ApiProperty)({ type: "string" }),
     __metadata("design:type", String)
 ], HttpRestApiModelLoggedInUser.prototype, "accessToken", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: "string" }),
+    __metadata("design:type", String)
+], HttpRestApiModelLoggedInUser.prototype, "role", void 0);
 exports.HttpRestApiModelLoggedInUser = HttpRestApiModelLoggedInUser;
 //# sourceMappingURL=HttpRestApiModelLoggedInUser.js.map

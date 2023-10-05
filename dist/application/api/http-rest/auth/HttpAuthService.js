@@ -36,6 +36,7 @@ let HttpAuthService = class HttpAuthService {
         return {
             id: user.id,
             accessToken: this.jwtService.sign(payload),
+            role: user.role
         };
     }
     async getUser(by) {

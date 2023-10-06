@@ -18,6 +18,7 @@ let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extend
     constructor() {
         super(...arguments);
         this.courseAlias = "course";
+        this.enrolledCourseAlias = "enrolled_course";
         this.excludeRemovedCourseClause = `"${this.courseAlias}"."removedAt" IS NULL`;
     }
     async findCourse(by, options = {}) {
@@ -35,6 +36,22 @@ let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extend
     }
     async findCourses(options = {}) {
         const query = this.buildCourseQueryBuilder();
+        if (!options.includeRemoved) {
+            query.andWhere(this.excludeRemovedCourseClause);
+        }
+        if (options.limit) {
+            query.limit(options.limit);
+        }
+        if (options.offset) {
+            query.limit(options.offset);
+        }
+        const ormCourses = await query.getMany();
+        const domainCourses = TypeOrmCourseMapper_1.TypeOrmCourseMapper.toDomainEntities(ormCourses);
+        return domainCourses;
+    }
+    async findEnrolledCourses(by, options = {}) {
+        const query = this.buildCourseQueryBuilder();
+        this.extendQueryWithByPropertiesEnrolled(by, query);
         if (!options.includeRemoved) {
             query.andWhere(this.excludeRemovedCourseClause);
         }
@@ -103,6 +120,14 @@ let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extend
         if (by.ownerId) {
             query.andWhere(`"${this.courseAlias}"."ownerId" = :ownerId`, {
                 ownerId: by.ownerId,
+            });
+        }
+    }
+    extendQueryWithByPropertiesEnrolled(by, query) {
+        if (by.userID) {
+            query.leftJoin(`"${this.enrolledCourseAlias}" "${this.courseAlias}"."id" = ${this.enrolledCourseAlias}."courseID"`, `e`)
+                .where(`"${this.enrolledCourseAlias}"."userID" = :userID`, {
+                userID: by.userID
             });
         }
     }

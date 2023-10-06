@@ -24,6 +24,7 @@ import { UploadCourseService } from '@core/service/course/usecase/UploadCourseSe
 import { NewUploadFileUseCase } from '@core/domain/course/usecase/NewUploadFileUseCase';
 import { EnrolledCourseUseCase } from '@core/domain/course/usecase/EnrolledCourseUseCase';
 import { EnrolledCourseService } from '@core/service/course/usecase/EnrolledCourseService';
+import { GetEnrolledCourseListService } from '@core/service/course/usecase/GetEnrolledCourseListService';
 
 const persistenceProviders: Provider[] = [
     {
@@ -74,6 +75,11 @@ const persistenceProviders: Provider[] = [
     {
       provide   : CourseDITokens.GetCourseListUseCase,
       useFactory: (courseRepository) => new GetCourseListService(courseRepository),
+      inject    : [CourseDITokens.CourseRepository]
+    },
+    {
+      provide   : CourseDITokens.GetEnrolledCourseListUseCase,
+      useFactory: (enrolledCourseListRepository) => new GetEnrolledCourseListService(enrolledCourseListRepository),
       inject    : [CourseDITokens.CourseRepository]
     },
     {

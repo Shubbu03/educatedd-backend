@@ -13,13 +13,10 @@ export interface CourseRepositoryPort {
     options?: RepositoryFindOptions
   ): Promise<Optional<Course>>;
 
-  findCourses(
-    // by: { ownerId?: string },
-    options?: RepositoryFindOptions
-  ): Promise<Course[]>;
+  findCourses(options?: RepositoryFindOptions): Promise<Course[]>;
 
   countCourses(
-    by: { id?: string;},
+    by: { id?: string },
     options?: RepositoryFindOptions
   ): Promise<number>;
 
@@ -29,6 +26,11 @@ export interface CourseRepositoryPort {
 
   removeCourse(media: Course, options?: RepositoryRemoveOptions): Promise<void>;
   enrolledCourse(enrollCourse: Enrolled): Promise<{ enrolled: boolean }>;
+
+  findEnrolledCourses(
+    by: { userID?: string },
+    options?: RepositoryFindOptions
+  ): Promise<Course[]>;
 }
 
 export interface UploadNewFileRepositoryPort {

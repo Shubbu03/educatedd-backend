@@ -3,7 +3,7 @@ import { Nullable } from "@core/common/type/CommonTypes";
 import { Course } from "@core/domain/course/entity/Course";
 import { Exclude, Expose, plainToClass } from "class-transformer";
 import { UploadFile } from "../../entity/UploadFile";
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { Enrolled } from "../../entity/Enrolled";
 
 @Exclude()
@@ -39,8 +39,6 @@ export class CourseUseCaseDto {
 
   public editedAt: Nullable<number>;
 
-
-
   // public static genUniqueId(): string {
   //   const dateStr = Date.now().toString(36); // convert num to base 36 and stringify
 
@@ -48,8 +46,6 @@ export class CourseUseCaseDto {
 
   //   return `${dateStr}-${randomStr}`;
   // }
-
-
 
   public static newFromCourse(
     course: Course
@@ -69,12 +65,28 @@ export class CourseUseCaseDto {
     return dto;
   }
 
-  public static enrolledCourse(courseID: Enrolled): CourseUseCaseDto {
-    const dto: CourseUseCaseDto = plainToClass(CourseUseCaseDto,courseID);
+  public static newEnrolledCourse(enrolled: Course): CourseUseCaseDto {
+    const dto: CourseUseCaseDto = plainToClass(CourseUseCaseDto, enrolled);
 
-    dto.id =  courseID.getCourseID();
+    dto.title = enrolled.getTitle();
+    dto.description = enrolled.getDescription();
+    dto.pdfDetails = enrolled.getPdfDescription();
 
     return dto;
+  }
+
+  public static enrolledCourse(courseID: Enrolled): CourseUseCaseDto {
+    const dto: CourseUseCaseDto = plainToClass(CourseUseCaseDto, courseID);
+
+    dto.id = courseID.getCourseID();
+
+    return dto;
+  }
+
+  public static newEnrolledCourseListFromCourses(
+    userID: Course[]
+  ): CourseUseCaseDto[] {
+    return userID.map((enroll) => this.newEnrolledCourse(enroll));
   }
 
   public static upload_new(file: UploadFile): CourseUseCaseDto {

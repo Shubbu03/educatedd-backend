@@ -22,10 +22,20 @@ let CourseUseCaseDto = CourseUseCaseDto_1 = class CourseUseCaseDto {
         dto.editedAt = course.getEditedAt()?.getTime() || null;
         return dto;
     }
+    static newEnrolledCourse(enrolled) {
+        const dto = (0, class_transformer_1.plainToClass)(CourseUseCaseDto_1, enrolled);
+        dto.title = enrolled.getTitle();
+        dto.description = enrolled.getDescription();
+        dto.pdfDetails = enrolled.getPdfDescription();
+        return dto;
+    }
     static enrolledCourse(courseID) {
         const dto = (0, class_transformer_1.plainToClass)(CourseUseCaseDto_1, courseID);
         dto.id = courseID.getCourseID();
         return dto;
+    }
+    static newEnrolledCourseListFromCourses(userID) {
+        return userID.map((enroll) => this.newEnrolledCourse(enroll));
     }
     static upload_new(file) {
         const dto = (0, class_transformer_1.plainToClass)(CourseUseCaseDto_1, file);

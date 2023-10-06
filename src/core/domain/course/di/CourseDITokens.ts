@@ -6,6 +6,7 @@ export class CourseDITokens {
   public static readonly UploadFileUseCase: unique symbol  = Symbol('UploadFileUseCase');
   public static readonly EditCourseUseCase: unique symbol    = Symbol('EditCourseUseCase');
   public static readonly EnrolledCourseUseCase: unique symbol    = Symbol('EnrolledCourseUseCase');
+  public static readonly GetEnrolledCourseListUseCase: unique symbol    = Symbol('GetEnrolledCourseListUseCase');
   public static readonly GetCourseListUseCase: unique symbol = Symbol('GetCourseListUseCase');
   public static readonly GetCourseUseCase: unique symbol     = Symbol('GetCourseUseCase');
   public static readonly RemoveCourseUseCase: unique symbol  = Symbol('RemoveCourseUseCase');

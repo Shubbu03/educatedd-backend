@@ -26,6 +26,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
 const UploadCourseService_1 = require("@core/service/course/usecase/UploadCourseService");
 const EnrolledCourseService_1 = require("@core/service/course/usecase/EnrolledCourseService");
+const GetEnrolledCourseListService_1 = require("@core/service/course/usecase/GetEnrolledCourseListService");
 const persistenceProviders = [
     {
         provide: CourseDITokens_1.CourseDITokens.CourseFileStorage,
@@ -73,6 +74,11 @@ const useCaseProviders = [
     {
         provide: CourseDITokens_1.CourseDITokens.GetCourseListUseCase,
         useFactory: (courseRepository) => new GetCourseListService_1.GetCourseListService(courseRepository),
+        inject: [CourseDITokens_1.CourseDITokens.CourseRepository]
+    },
+    {
+        provide: CourseDITokens_1.CourseDITokens.GetEnrolledCourseListUseCase,
+        useFactory: (enrolledCourseListRepository) => new GetEnrolledCourseListService_1.GetEnrolledCourseListService(enrolledCourseListRepository),
         inject: [CourseDITokens_1.CourseDITokens.CourseRepository]
     },
     {

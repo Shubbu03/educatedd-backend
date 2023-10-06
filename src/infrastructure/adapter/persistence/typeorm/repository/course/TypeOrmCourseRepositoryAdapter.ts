@@ -27,6 +27,8 @@ export class TypeOrmCourseRepositoryAdapter
 {
   private readonly courseAlias: string = "course";
 
+  private readonly enrolledCourseAlias: string = "enrolled_course";
+
   private readonly excludeRemovedCourseClause: string = `"${this.courseAlias}"."removedAt" IS NULL`;
 
   public async findCourse(
@@ -61,6 +63,32 @@ export class TypeOrmCourseRepositoryAdapter
       this.buildCourseQueryBuilder();
 
     // this.extendQueryWithByProperties1(query);
+
+    if (!options.includeRemoved) {
+      query.andWhere(this.excludeRemovedCourseClause);
+    }
+    if (options.limit) {
+      query.limit(options.limit);
+    }
+    if (options.offset) {
+      query.limit(options.offset);
+    }
+
+    const ormCourses: TypeOrmCourse[] = await query.getMany();
+    const domainCourses: Course[] =
+      TypeOrmCourseMapper.toDomainEntities(ormCourses);
+
+    return domainCourses;
+  }
+
+  public async findEnrolledCourses(
+    by: { userID?: string },
+    options: RepositoryFindOptions = {}
+  ): Promise<Course[]> {
+    const query: SelectQueryBuilder<TypeOrmCourse> =
+      this.buildCourseQueryBuilder();
+
+    this.extendQueryWithByPropertiesEnrolled(by,query);
 
     if (!options.includeRemoved) {
       query.andWhere(this.excludeRemovedCourseClause);
@@ -157,6 +185,11 @@ export class TypeOrmCourseRepositoryAdapter
   private buildCourseQueryBuilder(): SelectQueryBuilder<TypeOrmCourse> {
     return this.createQueryBuilder(this.courseAlias).select();
   }
+  
+  // private buildEnrolledCourseQueryBuilder(): SelectQueryBuilder<TypeOrmEnrolledCourse> {
+  //   return this.createQueryBuilder(this.courseAlias).select();
+  // }
+
 
   private extendQueryWithByProperties(
     by: { id?: string; ownerId?: string },
@@ -172,19 +205,21 @@ export class TypeOrmCourseRepositoryAdapter
     }
   }
 
-  // private extendQueryWithByProperties1(
-  //   // by: { id?: string; ownerId?: string },
-  //   query: SelectQueryBuilder<TypeOrmCourse>
-  // ): void {
-  //   if (by.id) {
-  //     query.andWhere(`"${this.courseAlias}"."id" = :id`, { id: by.id });
-  //   }
-  //   if (by.ownerId) {
-  //     query.andWhere(`"${this.courseAlias}"."ownerId" = :ownerId`, {
-  //       ownerId: by.ownerId,
-  //     });
-  //   }
-  // }
+  private extendQueryWithByPropertiesEnrolled(
+    by: { userID?: string },
+    query: SelectQueryBuilder<TypeOrmCourse>
+  ): void {
+  
+    if (by.userID) {
+      query.leftJoin(`"${this.enrolledCourseAlias}" "${this.courseAlias}"."id" = ${this.enrolledCourseAlias}."courseID"`,`e`)
+       .where(`"${this.enrolledCourseAlias}"."userID" = :userID`,{
+        userID : by.userID
+       })
+      // query.andWhere(`"${this.courseAlias}"."userID" = :userID`, {
+      //   userID: by.userID,
+      // });
+    }
+  }
 }
 
 export class TypeOrmUploadRepositoryAdapter

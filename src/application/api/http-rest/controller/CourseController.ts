@@ -17,6 +17,7 @@ import { CreateCourseUseCase } from "@core/domain/course/usecase/CreateCourseUse
 import { CourseUseCaseDto } from "@core/domain/course/usecase/dto/CourseUseCaseDto";
 import { EditCourseUseCase } from "@core/domain/course/usecase/EditCourseUseCase";
 import { GetCourseListUseCase } from "@core/domain/course/usecase/GetCourseListUseCase";
+import { GetEnrolledCourseListUseCase } from "@core/domain/course/usecase/GetEnrolledCourseListUseCase";
 import { GetCourseUseCase } from "@core/domain/course/usecase/GetCourseUseCase";
 import { RemoveCourseUseCase } from "@core/domain/course/usecase/RemoveCourseUseCase";
 import { UploadFileUseCase } from "@core/domain/course/usecase/UploadFileUseCase";
@@ -65,6 +66,8 @@ import { HttpRestApiResponseEnrolledCourse } from "./documentation/course/HttpRe
 import { HttpRestApiModelEnrolledCourseQuery } from "./documentation/course/HttpRestApiModelEnrolledCourseQuery";
 import { EnrolledCourseAdapter } from "@infrastructure/adapter/usecase/course/EnrolledCourseAdapter";
 import { EnrolledCourseUseCase } from "@core/domain/course/usecase/EnrolledCourseUseCase";
+import { HttpRestApiResponseEnrolledCourseList } from "./documentation/course/HttpRestApiResponseEnrolledCourseList";
+import { GetEnrolledCourseListAdapter } from "@infrastructure/adapter/usecase/course/GetEnrolledCourseListAdapter";
 
 @Controller("courses")
 @ApiTags("courses")
@@ -81,6 +84,9 @@ export class CourseController {
 
     @Inject(CourseDITokens.EnrolledCourseUseCase)
     private readonly enrolledCourseUseCase: EnrolledCourseUseCase,
+
+    @Inject(CourseDITokens.GetEnrolledCourseListUseCase)
+    private readonly getEnrolledCourseListUseCase: GetEnrolledCourseListUseCase,
 
     @Inject(CourseDITokens.GetCourseListUseCase)
     private readonly getCourseListUseCase: GetCourseListUseCase,
@@ -231,6 +237,8 @@ export class CourseController {
     );
     this.setFileStorageBasePath(courses);
 
+    console.log("Adapter from get list is::",adapter)
+
     return CoreApiResponse.success(courses);
   }
 
@@ -252,7 +260,33 @@ export class CourseController {
       adapter
     );
 
+    console.log("Adapter from get by id is::",adapter)
+
     return CoreApiResponse.success(course);
+  }
+
+  @Get("/enrolled/user")
+  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR, UserRole.STUDENT)
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, type: HttpRestApiResponseEnrolledCourseList })
+  public async getEnrolledCourseList(
+    @HttpUser() user : HttpUserPayload
+  ):Promise<CoreApiResponse<CourseUseCaseDto[]>>{
+    const adapter: GetEnrolledCourseListAdapter = await GetEnrolledCourseListAdapter.new({
+      executorId: user.id,
+      // title:,
+      // description:,
+      // isEnrolled:
+    });
+
+    const enrolled: CourseUseCaseDto[] = await this.getEnrolledCourseListUseCase.execute(
+      adapter
+    );
+    console.log("ADAPTER FROM GET ENROLLED ISS::",adapter)
+
+    return CoreApiResponse.success(enrolled)
+
   }
 
   @Delete(":id")

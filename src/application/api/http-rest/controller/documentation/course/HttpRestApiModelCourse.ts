@@ -3,9 +3,6 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class HttpRestApiModelCourse {
   
-  // @ApiProperty({type: 'string'})
-  // public id: string;
-  
   @ApiProperty({type: 'string'})
   public ownerId: string;
 

@@ -39,12 +39,15 @@ const uuid_1 = require("uuid");
 const HttpRestApiResponseEnrolledCourse_1 = require("./documentation/course/HttpRestApiResponseEnrolledCourse");
 const HttpRestApiModelEnrolledCourseQuery_1 = require("./documentation/course/HttpRestApiModelEnrolledCourseQuery");
 const EnrolledCourseAdapter_1 = require("@infrastructure/adapter/usecase/course/EnrolledCourseAdapter");
+const HttpRestApiResponseEnrolledCourseList_1 = require("./documentation/course/HttpRestApiResponseEnrolledCourseList");
+const GetEnrolledCourseListAdapter_1 = require("@infrastructure/adapter/usecase/course/GetEnrolledCourseListAdapter");
 let CourseController = class CourseController {
-    constructor(createCourseUseCase, uploadFileUseCase, editCourseUseCase, enrolledCourseUseCase, getCourseListUseCase, getCourseUseCase, removeCourseUseCase) {
+    constructor(createCourseUseCase, uploadFileUseCase, editCourseUseCase, enrolledCourseUseCase, getEnrolledCourseListUseCase, getCourseListUseCase, getCourseUseCase, removeCourseUseCase) {
         this.createCourseUseCase = createCourseUseCase;
         this.uploadFileUseCase = uploadFileUseCase;
         this.editCourseUseCase = editCourseUseCase;
         this.enrolledCourseUseCase = enrolledCourseUseCase;
+        this.getEnrolledCourseListUseCase = getEnrolledCourseListUseCase;
         this.getCourseListUseCase = getCourseListUseCase;
         this.getCourseUseCase = getCourseUseCase;
         this.removeCourseUseCase = removeCourseUseCase;
@@ -100,6 +103,7 @@ let CourseController = class CourseController {
         });
         const courses = await this.getCourseListUseCase.execute(adapter);
         this.setFileStorageBasePath(courses);
+        console.log("Adapter from get list is::", adapter);
         return CoreApiResponse_1.CoreApiResponse.success(courses);
     }
     async getCourse(user, id) {
@@ -108,7 +112,16 @@ let CourseController = class CourseController {
             id: id,
         });
         const course = await this.getCourseUseCase.execute(adapter);
+        console.log("Adapter from get by id is::", adapter);
         return CoreApiResponse_1.CoreApiResponse.success(course);
+    }
+    async getEnrolledCourseList(user) {
+        const adapter = await GetEnrolledCourseListAdapter_1.GetEnrolledCourseListAdapter.new({
+            executorId: user.id,
+        });
+        const enrolled = await this.getEnrolledCourseListUseCase.execute(adapter);
+        console.log("ADAPTER FROM GET ENROLLED ISS::", adapter);
+        return CoreApiResponse_1.CoreApiResponse.success(enrolled);
     }
     async removeCourse(user, id) {
         const adapter = await RemoveCourseAdapter_1.RemoveCourseAdapter.new({
@@ -210,6 +223,17 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CourseController.prototype, "getCourse", null);
 __decorate([
+    (0, common_1.Get)("/enrolled/user"),
+    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.STUDENT),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseEnrolledCourseList_1.HttpRestApiResponseEnrolledCourseList }),
+    __param(0, (0, HttpUser_1.HttpUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], CourseController.prototype, "getEnrolledCourseList", null);
+__decorate([
     (0, common_1.Delete)(":id"),
     (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
@@ -228,10 +252,11 @@ CourseController = __decorate([
     __param(1, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.UploadFileUseCase)),
     __param(2, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.EditCourseUseCase)),
     __param(3, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.EnrolledCourseUseCase)),
-    __param(4, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseListUseCase)),
-    __param(5, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseUseCase)),
-    __param(6, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.RemoveCourseUseCase)),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object])
+    __param(4, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetEnrolledCourseListUseCase)),
+    __param(5, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseListUseCase)),
+    __param(6, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseUseCase)),
+    __param(7, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.RemoveCourseUseCase)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object])
 ], CourseController);
 exports.CourseController = CourseController;
 //# sourceMappingURL=CourseController.js.map

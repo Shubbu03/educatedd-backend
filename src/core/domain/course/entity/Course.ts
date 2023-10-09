@@ -14,6 +14,7 @@ import {
   IsUUID,
 } from "class-validator";
 import { v4 } from "uuid";
+import { Enrolled } from "./Enrolled";
 
 export class Course extends Entity<string> implements RemovableEntity {
   @IsUUID()
@@ -76,6 +77,10 @@ export class Course extends Entity<string> implements RemovableEntity {
   public getOwnerId(): string {
     return this.ownerId;
   }
+
+  // public getOwnerID() : Enrolled[]{
+  //   return [this.ownerId];
+  // }
 
   // public getCourseId(): string {
   //   return this.courseId;

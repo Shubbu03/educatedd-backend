@@ -1,5 +1,7 @@
 import { CourseType } from "@core/common/enums/CourseEnums";
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Course } from "@core/domain/course/entity/Course";
+import { Enrolled } from "@core/domain/course/entity/Enrolled";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn } from "typeorm";
 
 @Entity("course")
 export class TypeOrmCourse {
@@ -47,4 +49,10 @@ export class TypeOrmCourse {
 
   @Column()
   public removedAt: Date;
+
+  // @OneToMany(() => Enrolled, (enrolledCourse) => enrolledCourse.getId)
+  //   @JoinTable()
+  //   userID: Enrolled[]
+
+    
 }

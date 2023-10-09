@@ -12,13 +12,17 @@ import {
 } from "@core/domain/course/port/persistence/CourseRepositoryPort";
 import { TypeOrmCourseMapper } from "@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmCourseMapper";
 import { TypeOrmCourse } from "@infrastructure/adapter/persistence/typeorm/entity/course/TypeOrmCourse";
-import { EntityRepository, InsertResult, SelectQueryBuilder } from "typeorm";
+import { EntityRepository, InsertResult, SelectQueryBuilder, getManager, getRepository } from "typeorm";
 import { BaseRepository } from "typeorm-transactional-cls-hooked";
 import { TypeOrmFile } from "../../entity/course/TypeOrmFile";
 import { TypeOrmFileMapper } from "@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmFileMapper";
 import { Enrolled } from "@core/domain/course/entity/Enrolled";
+// import {Enrol}
 import { TypeOrmEnrolledCourse } from "../../entity/course/TypeOrmEnrolledCourse";
 import { TypeOrmEnrolledCourseMapper } from "../../entity/course/mapper/TypeOrmEnrolledCourseMapper";
+import { query } from "express";
+
+
 
 @EntityRepository(TypeOrmCourse)
 export class TypeOrmCourseRepositoryAdapter
@@ -30,6 +34,16 @@ export class TypeOrmCourseRepositoryAdapter
   private readonly enrolledCourseAlias: string = "enrolled_course";
 
   private readonly excludeRemovedCourseClause: string = `"${this.courseAlias}"."removedAt" IS NULL`;
+
+  // private subQuery: string = "subQuery";
+   
+  // public subQuery = getManager()
+  //   .createQueryBuilder(this.enrolledCourseAlias,'ec').select(`courseID`)
+  //   .where(`"userID" = :userID`,{
+  //     userID : by.userID
+  //   })
+  //   .subQuery()
+
 
   public async findCourse(
     by: { id?: string },
@@ -86,7 +100,8 @@ export class TypeOrmCourseRepositoryAdapter
     options: RepositoryFindOptions = {}
   ): Promise<Course[]> {
     const query: SelectQueryBuilder<TypeOrmCourse> =
-      this.buildCourseQueryBuilder();
+      this.buildCourseQueryBuilder(); 
+      // this.buildCourseQueryBuilderWithID();
 
     this.extendQueryWithByPropertiesEnrolled(by,query);
 
@@ -185,11 +200,10 @@ export class TypeOrmCourseRepositoryAdapter
   private buildCourseQueryBuilder(): SelectQueryBuilder<TypeOrmCourse> {
     return this.createQueryBuilder(this.courseAlias).select();
   }
-  
-  // private buildEnrolledCourseQueryBuilder(): SelectQueryBuilder<TypeOrmEnrolledCourse> {
-  //   return this.createQueryBuilder(this.courseAlias).select();
-  // }
 
+  // private buildCourseQueryBuilderWithID(): SelectQueryBuilder<TypeOrmCourse> {
+  //   return this.createQueryBuilder(this.courseAlias).select().where(`"id"`);
+  // }
 
   private extendQueryWithByProperties(
     by: { id?: string; ownerId?: string },
@@ -209,12 +223,43 @@ export class TypeOrmCourseRepositoryAdapter
     by: { userID?: string },
     query: SelectQueryBuilder<TypeOrmCourse>
   ): void {
+
+    // const subQuery = getManager()
+    // .createQueryBuilder(this.enrolledCourseAlias,'ec').select(`courseID`)
+    // .where(`"userID" = :userID`,{
+    //   userID : by.userID
+    // })
+    // .subQuery()
   
     if (by.userID) {
-      query.leftJoin(`"${this.enrolledCourseAlias}" "${this.courseAlias}"."id" = ${this.enrolledCourseAlias}."courseID"`,`e`)
-       .where(`"${this.enrolledCourseAlias}"."userID" = :userID`,{
-        userID : by.userID
-       })
+
+      // const subQuery = getManager()
+      // .createQueryBuilder(this.courseAlias,'c')
+      // .select()
+      // .where(``)
+
+         const subQuery = getManager()
+      .createQueryBuilder(this.enrolledCourseAlias,'ec').select(`"courseID"`)
+      .where(`"userID" = '${by.userID}'`)
+      // .subQuery()
+
+      console.log("Subquery is::",subQuery.getQuery())
+
+      query.where(`"id" in (${subQuery.getQuery()})`)
+
+      console.log("Query is::",query.getQuery())
+
+
+
+      // Select * from Course where Id in (Select courseid from EnrolledCourse where userid = <userid>)
+
+
+
+
+      // query.leftJoinAndSelect(`"${this.enrolledCourseAlias}" "${this.courseAlias}"."id" = ${this.enrolledCourseAlias}."courseID"`,`e`)
+      //  .where(`"${this.enrolledCourseAlias}"."userID" = :userID`,{
+      //   userID : by.userID
+      //  })
       // query.andWhere(`"${this.courseAlias}"."userID" = :userID`, {
       //   userID: by.userID,
       // });

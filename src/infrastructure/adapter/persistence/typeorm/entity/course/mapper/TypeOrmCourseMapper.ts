@@ -11,7 +11,7 @@ export class TypeOrmCourseMapper {
     ormCourse.title = domainCourse.getTitle();
     ormCourse.description = domainCourse.getDescription();
     ormCourse.pdfDetails = domainCourse.getPdfDescription();
-    // ormCourse.type         = domainCourse.getType();
+    // ormCourse.userID         = domainCourse.getOwnerId();
 
     // ormCourse.relativePath = domainCourse.getMetadata().relativePath;
     // ormCourse.size         = domainCourse.getMetadata().size as number;

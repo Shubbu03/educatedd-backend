@@ -6,6 +6,7 @@
   "username": "shubbu",
   "password": "VBjwjKuKQ!i!w3Z",
   "database": "shubbu",
+  "entity": ["TypeOrmCourse","TypeOrmEnrolledCourse","TypeOrmUser"],
   "cli": {
     "migrationsDir": "src/infrastructure/adapter/persistence/typeorm/migration"
   }

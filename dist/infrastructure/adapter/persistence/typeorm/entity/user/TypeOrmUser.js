@@ -51,7 +51,7 @@ __decorate([
     __metadata("design:type", Date)
 ], TypeOrmUser.prototype, "removedAt", void 0);
 TypeOrmUser = __decorate([
-    (0, typeorm_1.Entity)('user')
+    (0, typeorm_1.Entity)("user")
 ], TypeOrmUser);
 exports.TypeOrmUser = TypeOrmUser;
 //# sourceMappingURL=TypeOrmUser.js.map

@@ -125,10 +125,12 @@ let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extend
     }
     extendQueryWithByPropertiesEnrolled(by, query) {
         if (by.userID) {
-            query.leftJoin(`"${this.enrolledCourseAlias}" "${this.courseAlias}"."id" = ${this.enrolledCourseAlias}."courseID"`, `e`)
-                .where(`"${this.enrolledCourseAlias}"."userID" = :userID`, {
-                userID: by.userID
-            });
+            const subQuery = (0, typeorm_1.getManager)()
+                .createQueryBuilder(this.enrolledCourseAlias, 'ec').select(`"courseID"`)
+                .where(`"userID" = '${by.userID}'`);
+            console.log("Subquery is::", subQuery.getQuery());
+            query.where(`"id" in (${subQuery.getQuery()})`);
+            console.log("Query is::", query.getQuery());
         }
     }
 };

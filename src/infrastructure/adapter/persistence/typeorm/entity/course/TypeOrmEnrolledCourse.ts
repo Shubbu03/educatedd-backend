@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Course } from "@core/domain/course/entity/Course";
+import { User } from "@core/domain/user/entity/User";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 
 @Entity("enrolled_course")
 export class TypeOrmEnrolledCourse{
@@ -10,4 +12,12 @@ export class TypeOrmEnrolledCourse{
 
     @Column()
     public userID: string;
+
+    // @ManyToMany(() => Course, (course) => course.getOwnerId)
+    // @JoinTable()
+    // courses: Course[]
+
+//     @ManyToMany(() => User)
+//     @JoinTable()
+//     _userID: User[]
 }

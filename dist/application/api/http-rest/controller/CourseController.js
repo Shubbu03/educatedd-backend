@@ -94,7 +94,6 @@ let CourseController = class CourseController {
             courseId: query.CourseID,
             userId: request.user.id,
         });
-        console.log("Complete REQUEST from enrolled is::", request);
         console.log("ADAPTER FROM ENROLLED COURSE IS:::::", adapter);
         const enrolledCourse = await this.enrolledCourseUseCase.execute(adapter);
         return CoreApiResponse_1.CoreApiResponse.success(enrolledCourse);

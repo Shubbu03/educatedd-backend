@@ -10,6 +10,7 @@ const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const cors_1 = __importDefault(require("cors"));
 const swagger_1 = require("@nestjs/swagger");
+const express_1 = __importDefault(require("express"));
 class ServerApplication {
     constructor() {
         this.host = ApiServerConfig_1.ApiServerConfig.HOST;
@@ -18,24 +19,29 @@ class ServerApplication {
     async run() {
         const app = await core_1.NestFactory.create(_RootModule_1.RootModule);
         app.use((0, cors_1.default)({
-            origin: "*"
+            origin: "*",
         }));
+        app.use("/uploadedFiles", express_1.default.static('dist/uploadedFiles/'));
         this.buildAPIDocumentation(app);
         this.log();
         await app.listen(this.port, this.host);
     }
     buildAPIDocumentation(app) {
-        const title = 'Educatedd';
-        const description = 'Educatedd API documentation';
-        const version = '1.0.0';
+        const title = "Educatedd";
+        const description = "Educatedd API documentation";
+        const version = "1.0.0";
         const options = new swagger_1.DocumentBuilder()
             .setTitle(title)
             .setDescription(description)
             .setVersion(version)
-            .addBearerAuth({ type: 'apiKey', in: 'header', name: ApiServerConfig_1.ApiServerConfig.ACCESS_TOKEN_HEADER })
+            .addBearerAuth({
+            type: "apiKey",
+            in: "header",
+            name: ApiServerConfig_1.ApiServerConfig.ACCESS_TOKEN_HEADER,
+        })
             .build();
         const document = swagger_1.SwaggerModule.createDocument(app, options);
-        swagger_1.SwaggerModule.setup('documentation', app, document);
+        swagger_1.SwaggerModule.setup("documentation", app, document);
     }
     log() {
         common_1.Logger.log(`Server started on host: ${this.host}; port: ${this.port};`, ServerApplication.name);

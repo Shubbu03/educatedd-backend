@@ -58,6 +58,7 @@ let CourseController = class CourseController {
             title: query.Title,
             description: query.Description,
             pdfDetails: query.pdfDetails,
+            chapter: query.chapter
         });
         console.log("create course adapter from CourseController.ts is::", adapter);
         console.log("query iss::", query);
@@ -143,6 +144,7 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiConsumes)("multipart/form-data"),
+    (0, swagger_1.ApiQuery)({ name: "chapter", type: "string", required: true }),
     (0, swagger_1.ApiQuery)({ name: "pdfDetails", type: "string", required: true }),
     (0, swagger_1.ApiQuery)({ name: "Description", type: "string", required: true }),
     (0, swagger_1.ApiQuery)({ name: "Title", type: "string", required: true }),

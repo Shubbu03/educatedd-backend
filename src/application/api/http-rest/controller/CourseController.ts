@@ -105,7 +105,7 @@ export class CourseController {
   @ApiBearerAuth()
   @ApiConsumes("multipart/form-data")
   // @ApiBody({ type: HttpRestApiModelCreateCourseBody })
-  // @ApiQuery({ name: "Keywords", type: "string", required: true })
+  @ApiQuery({ name: "chapter", type: "string", required: true })
   @ApiQuery({ name: "pdfDetails", type: "string", required: true })
   @ApiQuery({ name: "Description", type: "string", required: true })
   @ApiQuery({ name: "Title", type: "string", required: true })
@@ -120,6 +120,7 @@ export class CourseController {
       title: query.Title,
       description: query.Description,
       pdfDetails: query.pdfDetails,
+      chapter: query.chapter
       // keywords: [query.Keywords],
     });
 

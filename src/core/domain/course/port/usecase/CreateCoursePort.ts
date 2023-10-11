@@ -4,5 +4,6 @@ export interface CreateCoursePort {
   title: string;
   description: string;
   pdfDetails: string;
+  chapter: string;
   // keywords: string[];
 }

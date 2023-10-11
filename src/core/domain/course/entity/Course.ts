@@ -9,6 +9,7 @@ import {
   IsDate,
   IsEnum,
   IsInstance,
+  IsNumber,
   IsOptional,
   IsString,
   IsUUID,
@@ -28,6 +29,9 @@ export class Course extends Entity<string> implements RemovableEntity {
 
   @IsString()
   private description: string;
+
+  @IsString()
+  private chapter: string;
 
   @IsString()
   private readonly pdfDetails: string;
@@ -63,6 +67,7 @@ export class Course extends Entity<string> implements RemovableEntity {
     this.title = payload.title;
     this.description = payload.description;
     this.pdfDetails = payload.pdfDetails;
+    this.chapter = payload.chapter;
     // this.keywords = payload.keywords;
     // this.type = payload.type;
     // this.metadata = payload.metadata;
@@ -92,6 +97,10 @@ export class Course extends Entity<string> implements RemovableEntity {
 
   public getDescription(): string {
     return this.description;
+  }
+
+  public getChapter(): string {
+    return this.chapter;
   }
 
   public getPdfDescription(): string {

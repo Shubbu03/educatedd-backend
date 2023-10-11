@@ -11,6 +11,9 @@ export class HttpRestApiModelCreateCourseQuery {
   @ApiProperty({ type: "string", required: true })
   public pdfDetails: string;
 
+  @ApiProperty({ type: "string", required: true })
+  public chapter: string;
+
 //   @ApiProperty({ type: "string", required: true })
 //   public Keywords: string;
 }

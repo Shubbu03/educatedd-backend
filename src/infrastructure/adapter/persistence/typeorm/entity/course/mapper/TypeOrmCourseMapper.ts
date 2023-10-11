@@ -10,6 +10,7 @@ export class TypeOrmCourseMapper {
     ormCourse.ownerId = domainCourse.getOwnerId();
     ormCourse.title = domainCourse.getTitle();
     ormCourse.description = domainCourse.getDescription();
+    ormCourse.chapter = domainCourse.getChapter();
     ormCourse.pdfDetails = domainCourse.getPdfDescription();
     // ormCourse.userID         = domainCourse.getOwnerId();
 
@@ -21,7 +22,6 @@ export class TypeOrmCourseMapper {
     ormCourse.createdAt = domainCourse.getCreatedAt();
     ormCourse.editedAt = domainCourse.getEditedAt() as Date;
     ormCourse.removedAt = domainCourse.getRemovedAt() as Date;
-
     return ormCourse;
   }
 
@@ -43,6 +43,7 @@ export class TypeOrmCourseMapper {
       title: ormCourse.title,
       description: ormCourse.description,
       pdfDetails: ormCourse.pdfDetails,
+      chapter: ormCourse.chapter,
       // keywords:ormCourse.keywords,
       // type     : ormCourse.type,
       // metadata : metadata,
@@ -51,6 +52,8 @@ export class TypeOrmCourseMapper {
       editedAt: ormCourse.editedAt,
       removedAt: ormCourse.removedAt,
     });
+
+    console.log("ADDED COURSE FROM TYPEORMCOURSEMAPPER:::",domainCourse)
 
     return domainCourse;
   }

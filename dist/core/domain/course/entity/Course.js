@@ -20,6 +20,7 @@ class Course extends Entity_1.Entity {
         this.title = payload.title;
         this.description = payload.description;
         this.pdfDetails = payload.pdfDetails;
+        this.chapter = payload.chapter;
         this.id = payload.id || (0, uuid_1.v4)();
         this.createdAt = payload.createdAt || new Date();
         this.editedAt = payload.editedAt || null;
@@ -33,6 +34,9 @@ class Course extends Entity_1.Entity {
     }
     getDescription() {
         return this.description;
+    }
+    getChapter() {
+        return this.chapter;
     }
     getPdfDescription() {
         return this.pdfDetails;
@@ -84,6 +88,10 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], Course.prototype, "description", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], Course.prototype, "chapter", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)

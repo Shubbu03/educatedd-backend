@@ -17,6 +17,7 @@ let CourseUseCaseDto = CourseUseCaseDto_1 = class CourseUseCaseDto {
         const dto = (0, class_transformer_1.plainToClass)(CourseUseCaseDto_1, course);
         dto.type = "PDF";
         dto.id = course.getId();
+        dto.chapter = course.getChapter();
         dto.pdfDetails = course.getPdfDescription();
         dto.createdAt = course.getCreatedAt().getTime();
         dto.editedAt = course.getEditedAt()?.getTime() || null;
@@ -68,6 +69,10 @@ __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
 ], CourseUseCaseDto.prototype, "pdfDetails", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", String)
+], CourseUseCaseDto.prototype, "chapter", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Array)

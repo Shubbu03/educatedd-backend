@@ -16,6 +16,7 @@ class CreateCourseService {
             title: payload.title,
             description: payload.description,
             pdfDetails: payload.pdfDetails,
+            chapter: payload.chapter
         });
         console.log("NEWLY added course from CreateCourseService.ts is::", course);
         await this.courseRepository.addCourse(course);

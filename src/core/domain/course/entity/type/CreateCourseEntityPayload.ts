@@ -6,6 +6,7 @@ export type CreateCourseEntityPayload = {
     title: string,
     description:string,
     pdfDetails:string,
+    chapter: string,
     // keywords:string[],
     // type: CourseType,
     // metadata: FileMetadata,

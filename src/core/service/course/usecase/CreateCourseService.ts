@@ -23,6 +23,7 @@ export class CreateCourseService implements CreateCourseUseCase {
       title: payload.title,
       description:payload.description,
       pdfDetails:payload.pdfDetails, 
+      chapter:payload.chapter
       // keywords: payload.keywords,
       // type: payload.type,
       // metadata: fileMetaData,

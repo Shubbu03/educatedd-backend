@@ -11,6 +11,7 @@ class TypeOrmCourseMapper {
         ormCourse.ownerId = domainCourse.getOwnerId();
         ormCourse.title = domainCourse.getTitle();
         ormCourse.description = domainCourse.getDescription();
+        ormCourse.chapter = domainCourse.getChapter();
         ormCourse.pdfDetails = domainCourse.getPdfDescription();
         ormCourse.createdAt = domainCourse.getCreatedAt();
         ormCourse.editedAt = domainCourse.getEditedAt();
@@ -33,10 +34,12 @@ class TypeOrmCourseMapper {
             title: ormCourse.title,
             description: ormCourse.description,
             pdfDetails: ormCourse.pdfDetails,
+            chapter: ormCourse.chapter,
             createdAt: ormCourse.createdAt,
             editedAt: ormCourse.editedAt,
             removedAt: ormCourse.removedAt,
         });
+        console.log("ADDED COURSE FROM TYPEORMCOURSEMAPPER:::", domainCourse);
         return domainCourse;
     }
     static toDomainEntities(ormCourses) {

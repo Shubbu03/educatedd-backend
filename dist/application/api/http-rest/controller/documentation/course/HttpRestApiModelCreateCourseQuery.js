@@ -25,5 +25,9 @@ __decorate([
     (0, swagger_1.ApiProperty)({ type: "string", required: true }),
     __metadata("design:type", String)
 ], HttpRestApiModelCreateCourseQuery.prototype, "pdfDetails", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: "string", required: true }),
+    __metadata("design:type", String)
+], HttpRestApiModelCreateCourseQuery.prototype, "chapter", void 0);
 exports.HttpRestApiModelCreateCourseQuery = HttpRestApiModelCreateCourseQuery;
 //# sourceMappingURL=HttpRestApiModelCreateCourseQuery.js.map

@@ -21,7 +21,7 @@ class ServerApplication {
         app.use((0, cors_1.default)({
             origin: "*",
         }));
-        app.use("/uploadedFiles", express_1.default.static('dist/uploadedFiles/'));
+        app.use("/files", express_1.default.static('dist/'));
         this.buildAPIDocumentation(app);
         this.log();
         await app.listen(this.port, this.host);

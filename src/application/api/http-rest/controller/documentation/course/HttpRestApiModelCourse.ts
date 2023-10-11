@@ -18,6 +18,9 @@ export class HttpRestApiModelCourse {
   @ApiProperty({type: 'string'})
   public pdfDetails: string;
 
+  @ApiProperty({type: 'number'})
+  public chapter: string;
+
   @ApiProperty({type: 'string'})
   public keywords: string[];
   

@@ -1,7 +1,14 @@
 import { UseCaseValidatableAdapter } from "@core/common/adapter/usecase/UseCaseValidatableAdapter";
 import { CreateCoursePort } from "@core/domain/course/port/usecase/CreateCoursePort";
 import { Exclude, Expose, plainToClass } from "class-transformer";
-import { IsDefined, IsEnum, IsString, IsUUID } from "class-validator";
+import {
+  IsDefined,
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsString,
+  IsUUID,
+} from "class-validator";
 
 @Exclude()
 export class CreateCourseAdapter
@@ -27,6 +34,10 @@ export class CreateCourseAdapter
   @Expose()
   @IsString()
   public pdfDetails: string;
+
+  @Expose()
+  @IsString()
+  public chapter: string;
 
   // @Expose()
   // @IsString()

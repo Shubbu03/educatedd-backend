@@ -35,6 +35,10 @@ __decorate([
     __metadata("design:type", String)
 ], HttpRestApiModelCourse.prototype, "pdfDetails", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ type: 'number' }),
+    __metadata("design:type", String)
+], HttpRestApiModelCourse.prototype, "chapter", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ type: 'string' }),
     __metadata("design:type", Array)
 ], HttpRestApiModelCourse.prototype, "keywords", void 0);

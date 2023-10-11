@@ -41,6 +41,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateCourseAdapter.prototype, "pdfDetails", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateCourseAdapter.prototype, "chapter", void 0);
 CreateCourseAdapter = CreateCourseAdapter_1 = __decorate([
     (0, class_transformer_1.Exclude)()
 ], CreateCourseAdapter);

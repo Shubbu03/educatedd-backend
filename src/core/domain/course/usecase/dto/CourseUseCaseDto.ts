@@ -27,6 +27,9 @@ export class CourseUseCaseDto {
   public pdfDetails: string;
 
   @Expose()
+  public chapter: string;
+
+  @Expose()
   public keywords: string[];
 
   @Expose()
@@ -58,6 +61,7 @@ export class CourseUseCaseDto {
     // dto.courseId = uuidv4();
     // dto.description
     dto.id = course.getId();
+    dto.chapter = course.getChapter();
     dto.pdfDetails = course.getPdfDescription();
     dto.createdAt = course.getCreatedAt().getTime();
     dto.editedAt = course.getEditedAt()?.getTime() || null;

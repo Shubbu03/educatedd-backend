@@ -88,6 +88,9 @@ export class CourseController {
     @Inject(CourseDITokens.GetEnrolledCourseListUseCase)
     private readonly getEnrolledCourseListUseCase: GetEnrolledCourseListUseCase,
 
+    // @Inject(CourseDITokens.EditCompleteUseCase)
+    // private readonly getEditCompleteUseCase: EditCompleteUseCase,
+
     @Inject(CourseDITokens.GetCourseListUseCase)
     private readonly getCourseListUseCase: GetCourseListUseCase,
 
@@ -182,6 +185,7 @@ export class CourseController {
       id: id,
       title: body.title,
       description: body.description,
+      chapter: body.chapter
     });
 
     const editedCourse: CourseUseCaseDto = await this.editCourseUseCase.execute(
@@ -213,7 +217,7 @@ export class CourseController {
       userId: request.user.id,
     });
     
-    console.log("Complete REQUEST from enrolled is::",request)
+    // console.log("Complete REQUEST from enrolled is::",request)
     console.log("ADAPTER FROM ENROLLED COURSE IS:::::",adapter)
 
     const enrolledCourse: boolean = 

@@ -19,6 +19,7 @@ class EditCourseService {
         await course.edit({
             title: payload.title,
             description: payload.description,
+            chapter: payload.chapter
         });
         await this.courseRepository.updateCourse(course);
         return CourseUseCaseDto_1.CourseUseCaseDto.newFromCourse(course);

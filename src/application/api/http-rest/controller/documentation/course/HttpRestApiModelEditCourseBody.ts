@@ -6,4 +6,7 @@ export class HttpRestApiModelEditCourseBody {
 
   @ApiProperty({type: "string" , required: false})
   public description: string;
+
+  @ApiProperty({type: "string" , required: false})
+  public chapter: string;
 }

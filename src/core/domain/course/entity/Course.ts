@@ -143,6 +143,11 @@ export class Course extends Entity<string> implements RemovableEntity {
       this.description = payload.description;
       this.editedAt = currentDate;
     }
+
+    if (payload.chapter) {
+      this.chapter = payload.chapter;
+      this.editedAt = currentDate;
+    }
     if (payload.metadata) {
       // this.metadata = payload.metadata;
       this.editedAt = currentDate;

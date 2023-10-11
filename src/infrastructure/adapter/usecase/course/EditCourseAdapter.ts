@@ -24,6 +24,11 @@ export class EditCourseAdapter extends UseCaseValidatableAdapter implements Edit
   @IsString()
   public description?: string;
 
+  @Expose()
+  @IsOptional()
+  @IsString()
+  public chapter?: string;
+
 
   
   public static async new(payload: EditCoursePort): Promise<EditCourseAdapter> {

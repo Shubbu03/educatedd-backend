@@ -82,6 +82,7 @@ let CourseController = class CourseController {
             id: id,
             title: body.title,
             description: body.description,
+            chapter: body.chapter
         });
         const editedCourse = await this.editCourseUseCase.execute(adapter);
         this.setFileStorageBasePath([editedCourse]);

@@ -21,5 +21,9 @@ __decorate([
     (0, swagger_1.ApiProperty)({ type: "string", required: false }),
     __metadata("design:type", String)
 ], HttpRestApiModelEditCourseBody.prototype, "description", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: "string", required: false }),
+    __metadata("design:type", String)
+], HttpRestApiModelEditCourseBody.prototype, "chapter", void 0);
 exports.HttpRestApiModelEditCourseBody = HttpRestApiModelEditCourseBody;
 //# sourceMappingURL=HttpRestApiModelEditCourseBody.js.map

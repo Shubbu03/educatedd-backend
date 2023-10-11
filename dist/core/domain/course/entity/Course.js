@@ -60,6 +60,10 @@ class Course extends Entity_1.Entity {
             this.description = payload.description;
             this.editedAt = currentDate;
         }
+        if (payload.chapter) {
+            this.chapter = payload.chapter;
+            this.editedAt = currentDate;
+        }
         if (payload.metadata) {
             this.editedAt = currentDate;
         }

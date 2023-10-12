@@ -22,12 +22,7 @@ export class TypeOrmEnrolledCourseMapper {
   }
 
   public static toDomainEntity(ormCourse: TypeOrmEnrolledCourse): Enrolled {
-    // const metadata: FileMetadata = new FileMetadata({
-    //   relativePath: ormCourse.relativePath,
-    //   size: ormCourse.size,
-    //   ext: ormCourse.ext,
-    //   mimetype: ormCourse.mimetype,
-    // });
+   
 
     const domainCourse: Enrolled = new Enrolled({
       ownerId: ormCourse.id,

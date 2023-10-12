@@ -365,10 +365,6 @@ export class TypeOrmEnrolledCourseRepositoryAdapter
       query.getQuery()
     );
 
-    // if (!options?.includeRemoved) {
-    //   query.andWhere(this.excludeRemovedCourseClause);
-    // }
-
     const ormEntity: Optional<TypeOrmEnrolledCourse> = await query.execute();
 
     if (ormEntity) {
@@ -394,7 +390,7 @@ export class TypeOrmEnrolledCourseRepositoryAdapter
       // const subQuery = getManager()
       // .createQueryBuilder()
       query
-        .update(this.enrolledCourseAlias)
+        .update(this.enrolledCourseAlias,"ec")
         .set(`"completedchapter" = '${by.completedchapter}'`)
         .where(`"courseID" = '${by.courseID}'`)
         .andWhere(`"userID" = '${by.userID}'`);

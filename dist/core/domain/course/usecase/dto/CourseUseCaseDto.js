@@ -23,6 +23,11 @@ let CourseUseCaseDto = CourseUseCaseDto_1 = class CourseUseCaseDto {
         dto.editedAt = course.getEditedAt()?.getTime() || null;
         return dto;
     }
+    static newFromCompleteCourse(enroll) {
+        const dto = (0, class_transformer_1.plainToClass)(CourseUseCaseDto_1, enroll);
+        dto.chapter = enroll.getChapter();
+        return dto;
+    }
     static newEnrolledCourse(enrolled) {
         const dto = (0, class_transformer_1.plainToClass)(CourseUseCaseDto_1, enrolled);
         dto.title = enrolled.getTitle();

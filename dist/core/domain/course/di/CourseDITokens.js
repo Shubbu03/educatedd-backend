@@ -16,5 +16,6 @@ CourseDITokens.RemoveCourseUseCase = Symbol('RemoveCourseUseCase');
 CourseDITokens.DoesCourseExistQueryHandler = Symbol('DoesCourseExistQueryHandler');
 CourseDITokens.GetCoursePreviewQueryHandler = Symbol('GetCoursePreviewQueryHandler');
 CourseDITokens.CourseRepository = Symbol('CourseRepository');
+CourseDITokens.CompleteCourseRepository = Symbol('CompleteCourseRepository');
 CourseDITokens.CourseFileStorage = Symbol('CourseFileStorage');
 //# sourceMappingURL=CourseDITokens.js.map

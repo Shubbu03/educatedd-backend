@@ -18,17 +18,20 @@ class Enrolled extends Entity_1.Entity {
         this.ownerId = payload.ownerId;
         this.courseID = payload.courseID;
         this.userID = payload.userID;
+        this.chapter = payload.chapter;
         this.createdAt = payload.createdAt || new Date();
         this.editedAt = payload.editedAt || null;
         this.removedAt = payload.removedAt || null;
     }
     getOwnerId() {
+        console.log("OWNERID ISS::", this.ownerId);
         return this.ownerId;
     }
     getCourseID() {
         return this.courseID;
     }
     getUserID() {
+        console.log("OWNERID ISS::", this.userID);
         return this.userID;
     }
     getCreatedAt() {
@@ -36,6 +39,9 @@ class Enrolled extends Entity_1.Entity {
     }
     getEditedAt() {
         return this.editedAt;
+    }
+    getChapter() {
+        return this.chapter;
     }
     getRemovedAt() {
         return this.removedAt;
@@ -48,6 +54,16 @@ class Enrolled extends Entity_1.Entity {
         const course = new Enrolled(payload);
         await course.validate();
         return course;
+    }
+    async edit_complete(payload) {
+        const currentDate = new Date();
+        if (payload.chapterCompleted) {
+            console.log("ONLY THIS GETTING PRINTED FROM edit_complete:::::");
+            this.chapter = payload.chapterCompleted;
+            this.courseID = payload.courseID;
+            this.userID = payload.id;
+            this.editedAt = currentDate;
+        }
     }
 }
 __decorate([
@@ -62,6 +78,10 @@ __decorate([
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
 ], Enrolled.prototype, "userID", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], Enrolled.prototype, "chapter", void 0);
 __decorate([
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)

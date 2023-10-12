@@ -16,6 +16,7 @@ import {
 } from "class-validator";
 import { v4 } from "uuid";
 import { Enrolled } from "./Enrolled";
+import { EditCompleteEntityPayload } from "./type/EditCompleteEntityPayload";
 
 export class Course extends Entity<string> implements RemovableEntity {
   @IsUUID()
@@ -154,6 +155,16 @@ export class Course extends Entity<string> implements RemovableEntity {
     }
 
     await this.validate();
+  }
+
+  public async edit_complete(
+    payload: EditCompleteEntityPayload
+  ): Promise<void> {
+    const currentDate: Date = new Date();
+    if (payload.chapterCompleted) {
+      this.chapter = payload.chapterCompleted;
+      this.editedAt = currentDate;
+    }
   }
 
   public async remove(): Promise<void> {

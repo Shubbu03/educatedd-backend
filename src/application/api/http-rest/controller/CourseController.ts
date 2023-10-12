@@ -60,7 +60,7 @@ import {
   NewUploadFileAdapter,
   UploadFileAdapter,
 } from "@infrastructure/adapter/usecase/course/UploadFileAdapter";
-import { v4 } from 'uuid';
+import { v4 } from "uuid";
 import { NewUploadFilePort } from "@core/domain/course/port/usecase/NewUploadFilePort";
 import { HttpRestApiResponseEnrolledCourse } from "./documentation/course/HttpRestApiResponseEnrolledCourse";
 import { HttpRestApiModelEnrolledCourseQuery } from "./documentation/course/HttpRestApiModelEnrolledCourseQuery";
@@ -68,6 +68,10 @@ import { EnrolledCourseAdapter } from "@infrastructure/adapter/usecase/course/En
 import { EnrolledCourseUseCase } from "@core/domain/course/usecase/EnrolledCourseUseCase";
 import { HttpRestApiResponseEnrolledCourseList } from "./documentation/course/HttpRestApiResponseEnrolledCourseList";
 import { GetEnrolledCourseListAdapter } from "@infrastructure/adapter/usecase/course/GetEnrolledCourseListAdapter";
+import { HttpRestApiModelEditCompletedCourseBody } from "./documentation/course/HttpRestApiModelEditCompletedCourseBody";
+import { HttpRestApiModelCompletedChapterQuery } from "./documentation/course/HttpRestApiModelCompletedChapterQuery";
+import { EditCompleteUseCase } from "@core/domain/course/usecase/EditCompleteUseCase";
+import { CompletedChapterAdapter } from "@infrastructure/adapter/usecase/course/CompletedChapterAdapter";
 
 @Controller("courses")
 @ApiTags("courses")
@@ -88,8 +92,8 @@ export class CourseController {
     @Inject(CourseDITokens.GetEnrolledCourseListUseCase)
     private readonly getEnrolledCourseListUseCase: GetEnrolledCourseListUseCase,
 
-    // @Inject(CourseDITokens.EditCompleteUseCase)
-    // private readonly getEditCompleteUseCase: EditCompleteUseCase,
+    @Inject(CourseDITokens.EditCompleteUseCase)
+    private readonly getEditCompleteUseCase: EditCompleteUseCase,
 
     @Inject(CourseDITokens.GetCourseListUseCase)
     private readonly getCourseListUseCase: GetCourseListUseCase,
@@ -123,7 +127,7 @@ export class CourseController {
       title: query.Title,
       description: query.Description,
       pdfDetails: query.pdfDetails,
-      chapter: query.chapter
+      chapter: query.chapter,
       // keywords: [query.Keywords],
     });
 
@@ -170,7 +174,7 @@ export class CourseController {
   }
 
   @Put(":id")
-  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR)
+  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR, UserRole.STUDENT)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiBody({ type: HttpRestApiModelEditCourseBody })
@@ -185,7 +189,7 @@ export class CourseController {
       id: id,
       title: body.title,
       description: body.description,
-      chapter: body.chapter
+      chapter: body.chapter,
     });
 
     const editedCourse: CourseUseCaseDto = await this.editCourseUseCase.execute(
@@ -215,15 +219,17 @@ export class CourseController {
       // executorId: id,
       courseId: query.CourseID,
       userId: request.user.id,
+      chapter: query.chapter,
     });
-    
+
     // console.log("Complete REQUEST from enrolled is::",request)
-    console.log("ADAPTER FROM ENROLLED COURSE IS:::::",adapter)
+    console.log("ADAPTER FROM ENROLLED COURSE IS:::::", adapter);
 
-    const enrolledCourse: boolean = 
-     await this.enrolledCourseUseCase.execute(adapter);
+    const enrolledCourse: boolean = await this.enrolledCourseUseCase.execute(
+      adapter
+    );
 
-     return CoreApiResponse.success(enrolledCourse);
+    return CoreApiResponse.success(enrolledCourse);
   }
 
   @Get()
@@ -242,7 +248,7 @@ export class CourseController {
     );
     this.setFileStorageBasePath(courses);
 
-    console.log("Adapter from get list is::",adapter)
+    console.log("Adapter from get list is::", adapter);
 
     return CoreApiResponse.success(courses);
   }
@@ -265,7 +271,7 @@ export class CourseController {
       adapter
     );
 
-    console.log("Adapter from get by id is::",adapter)
+    console.log("Adapter from get by id is::", adapter);
 
     return CoreApiResponse.success(course);
   }
@@ -274,24 +280,52 @@ export class CourseController {
   @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR, UserRole.STUDENT)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
-  @ApiResponse({ status: HttpStatus.OK, type: HttpRestApiResponseEnrolledCourseList })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: HttpRestApiResponseEnrolledCourseList,
+  })
   public async getEnrolledCourseList(
-    @HttpUser() user : HttpUserPayload
-  ):Promise<CoreApiResponse<CourseUseCaseDto[]>>{
-    const adapter: GetEnrolledCourseListAdapter = await GetEnrolledCourseListAdapter.new({
+    @HttpUser() user: HttpUserPayload
+  ): Promise<CoreApiResponse<CourseUseCaseDto[]>> {
+    const adapter: GetEnrolledCourseListAdapter =
+      await GetEnrolledCourseListAdapter.new({
+        executorId: user.id,
+        // title:,
+        // description:,
+        // isEnrolled:
+      });
+
+    const enrolled: CourseUseCaseDto[] =
+      await this.getEnrolledCourseListUseCase.execute(adapter);
+    console.log("ADAPTER FROM GET ENROLLED ISS::", adapter);
+
+    return CoreApiResponse.success(enrolled);
+  }
+
+  @Put("/enrolled/:id")
+  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR, UserRole.STUDENT)
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiBody({ type: HttpRestApiModelEditCompletedCourseBody })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: HttpRestApiResponseEnrolledCourse,
+  })
+  public async completedCourse(
+    @HttpUser() user: HttpUserPayload,
+    // @Req() request: HttpRequestWithUser,
+    @Query() query: HttpRestApiModelCompletedChapterQuery
+  ): Promise<CoreApiResponse<CourseUseCaseDto>> {
+    const adapter: CompletedChapterAdapter = await CompletedChapterAdapter.new({
       executorId: user.id,
-      // title:,
-      // description:,
-      // isEnrolled:
+      courseId: query.CourseID,
+      chapterCompleted: query.chapterCompleted,
     });
 
-    const enrolled: CourseUseCaseDto[] = await this.getEnrolledCourseListUseCase.execute(
-      adapter
-    );
-    console.log("ADAPTER FROM GET ENROLLED ISS::",adapter)
+    const enrolledCourse: CourseUseCaseDto =
+      await this.getEditCompleteUseCase.execute(adapter);
 
-    return CoreApiResponse.success(enrolled)
-
+    return CoreApiResponse.success(enrolledCourse);
   }
 
   @Delete(":id")

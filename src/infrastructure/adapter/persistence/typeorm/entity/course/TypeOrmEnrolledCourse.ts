@@ -13,6 +13,9 @@ export class TypeOrmEnrolledCourse{
     @Column()
     public userID: string;
 
+    @Column()
+    public completedchapter: string;
+
     // @ManyToMany(() => Course, (course) => course.getOwnerId)
     // @JoinTable()
     // courses: Course[]

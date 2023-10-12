@@ -11,7 +11,8 @@ class EnrolledCourseService {
         const enrolledCourse = await Enrolled_1.Enrolled.new({
             ownerId: (0, uuid_1.v4)(),
             courseID: payload.courseId,
-            userID: payload.userId
+            userID: payload.userId,
+            chapter: payload.chapter
         });
         console.log("NEWLY added course from EnrolledCourseService.ts is::", enrolledCourse);
         await this.enrolledCourseRepository.enrolledCourse(enrolledCourse);

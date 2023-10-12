@@ -27,6 +27,7 @@ const typeorm_1 = require("typeorm");
 const UploadCourseService_1 = require("@core/service/course/usecase/UploadCourseService");
 const EnrolledCourseService_1 = require("@core/service/course/usecase/EnrolledCourseService");
 const GetEnrolledCourseListService_1 = require("@core/service/course/usecase/GetEnrolledCourseListService");
+const EditCompleteService_1 = require("@core/service/course/usecase/EditCompleteService");
 const persistenceProviders = [
     {
         provide: CourseDITokens_1.CourseDITokens.CourseFileStorage,
@@ -34,7 +35,12 @@ const persistenceProviders = [
     },
     {
         provide: CourseDITokens_1.CourseDITokens.CourseRepository,
-        useFactory: connection => connection.getCustomRepository(TypeOrmCourseRepositoryAdapter_1.TypeOrmCourseRepositoryAdapter, TypeOrmCourseRepositoryAdapter_1.TypeOrmEnrolledCourseRepositoryAdapter),
+        useFactory: connection => connection.getCustomRepository(TypeOrmCourseRepositoryAdapter_1.TypeOrmCourseRepositoryAdapter),
+        inject: [typeorm_1.Connection]
+    },
+    {
+        provide: CourseDITokens_1.CourseDITokens.CompleteCourseRepository,
+        useFactory: connection => connection.getCustomRepository(TypeOrmCourseRepositoryAdapter_1.TypeOrmEnrolledCourseRepositoryAdapter),
         inject: [typeorm_1.Connection]
     }
 ];
@@ -70,6 +76,14 @@ const useCaseProviders = [
             return new TransactionalUseCaseWrapper_1.TransactionalUseCaseWrapper(service);
         },
         inject: [CourseDITokens_1.CourseDITokens.CourseRepository]
+    },
+    {
+        provide: CourseDITokens_1.CourseDITokens.EditCompleteUseCase,
+        useFactory: (courseRepository) => {
+            const service = new EditCompleteService_1.EditCompleteService(courseRepository);
+            return new TransactionalUseCaseWrapper_1.TransactionalUseCaseWrapper(service);
+        },
+        inject: [CourseDITokens_1.CourseDITokens.CompleteCourseRepository]
     },
     {
         provide: CourseDITokens_1.CourseDITokens.GetCourseListUseCase,

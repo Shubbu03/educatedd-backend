@@ -13,6 +13,11 @@ export interface CourseRepositoryPort {
     options?: RepositoryFindOptions
   ): Promise<Optional<Course>>;
 
+  // findCompleteCourse(
+  //   by: { id?: string , courseID?: string , completedchapter?: string },
+  //   options?: RepositoryFindOptions
+  // ): Promise<Optional<Enrolled>>;
+
   findCourses(options?: RepositoryFindOptions): Promise<Course[]>;
 
   countCourses(
@@ -23,6 +28,8 @@ export interface CourseRepositoryPort {
   addCourse(media: Course): Promise<{ id: string }>;
 
   updateCourse(media: Course): Promise<void>;
+
+  // update_complete(course: Enrolled): Promise<void>;
 
   removeCourse(media: Course, options?: RepositoryRemoveOptions): Promise<void>;
   enrolledCourse(enrollCourse: Enrolled): Promise<{ enrolled: boolean }>;
@@ -39,4 +46,11 @@ export interface UploadNewFileRepositoryPort {
 
 export interface EnrolledCourseRepositoryPort {
   enrolledCourse(enrollCourse: Enrolled): Promise<{ enrolled: boolean }>;
+
+  findCompleteCourse(
+    by: { id?: string , courseID?: string , completedchapter?: string },
+    options?: RepositoryFindOptions
+  ): Promise<Optional<Enrolled>>;
+
+  update_complete(course: Enrolled): Promise<void>;
 }

@@ -25,6 +25,8 @@ import { NewUploadFileUseCase } from '@core/domain/course/usecase/NewUploadFileU
 import { EnrolledCourseUseCase } from '@core/domain/course/usecase/EnrolledCourseUseCase';
 import { EnrolledCourseService } from '@core/service/course/usecase/EnrolledCourseService';
 import { GetEnrolledCourseListService } from '@core/service/course/usecase/GetEnrolledCourseListService';
+import { EditCompleteService } from '@core/service/course/usecase/EditCompleteService';
+import { EditCompleteUseCase } from '@core/domain/course/usecase/EditCompleteUseCase';
 
 const persistenceProviders: Provider[] = [
     {
@@ -33,7 +35,12 @@ const persistenceProviders: Provider[] = [
     },
     {
       provide   : CourseDITokens.CourseRepository,
-      useFactory: connection => connection.getCustomRepository(TypeOrmCourseRepositoryAdapter,TypeOrmEnrolledCourseRepositoryAdapter),
+      useFactory: connection => connection.getCustomRepository(TypeOrmCourseRepositoryAdapter),
+      inject    : [Connection]
+    },
+    {
+      provide   : CourseDITokens.CompleteCourseRepository,
+      useFactory: connection => connection.getCustomRepository(TypeOrmEnrolledCourseRepositoryAdapter),
       inject    : [Connection]
     }
   ];
@@ -71,6 +78,15 @@ const persistenceProviders: Provider[] = [
         
       },
       inject    : [CourseDITokens.CourseRepository]
+    },
+    {
+      provide   : CourseDITokens.EditCompleteUseCase,
+      useFactory: (courseRepository) => {
+        const service: EditCompleteUseCase = new EditCompleteService(courseRepository);
+        return new TransactionalUseCaseWrapper(service);
+        
+      },
+      inject    : [CourseDITokens.CompleteCourseRepository]
     },
     {
       provide   : CourseDITokens.GetCourseListUseCase,

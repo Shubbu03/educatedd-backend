@@ -69,6 +69,14 @@ export class CourseUseCaseDto {
     return dto;
   }
 
+  public static newFromCompleteCourse(enroll: Enrolled): CourseUseCaseDto {
+    const dto: CourseUseCaseDto = plainToClass(CourseUseCaseDto, enroll);
+
+    dto.chapter = enroll.getChapter();
+
+    return dto;
+  }
+
   public static newEnrolledCourse(enrolled: Course): CourseUseCaseDto {
     const dto: CourseUseCaseDto = plainToClass(CourseUseCaseDto, enrolled);
 

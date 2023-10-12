@@ -69,6 +69,13 @@ class Course extends Entity_1.Entity {
         }
         await this.validate();
     }
+    async edit_complete(payload) {
+        const currentDate = new Date();
+        if (payload.chapterCompleted) {
+            this.chapter = payload.chapterCompleted;
+            this.editedAt = currentDate;
+        }
+    }
     async remove() {
         this.removedAt = new Date();
         await this.validate();

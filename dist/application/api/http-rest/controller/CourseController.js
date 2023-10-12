@@ -41,13 +41,17 @@ const HttpRestApiModelEnrolledCourseQuery_1 = require("./documentation/course/Ht
 const EnrolledCourseAdapter_1 = require("@infrastructure/adapter/usecase/course/EnrolledCourseAdapter");
 const HttpRestApiResponseEnrolledCourseList_1 = require("./documentation/course/HttpRestApiResponseEnrolledCourseList");
 const GetEnrolledCourseListAdapter_1 = require("@infrastructure/adapter/usecase/course/GetEnrolledCourseListAdapter");
+const HttpRestApiModelEditCompletedCourseBody_1 = require("./documentation/course/HttpRestApiModelEditCompletedCourseBody");
+const HttpRestApiModelCompletedChapterQuery_1 = require("./documentation/course/HttpRestApiModelCompletedChapterQuery");
+const CompletedChapterAdapter_1 = require("@infrastructure/adapter/usecase/course/CompletedChapterAdapter");
 let CourseController = class CourseController {
-    constructor(createCourseUseCase, uploadFileUseCase, editCourseUseCase, enrolledCourseUseCase, getEnrolledCourseListUseCase, getCourseListUseCase, getCourseUseCase, removeCourseUseCase) {
+    constructor(createCourseUseCase, uploadFileUseCase, editCourseUseCase, enrolledCourseUseCase, getEnrolledCourseListUseCase, getEditCompleteUseCase, getCourseListUseCase, getCourseUseCase, removeCourseUseCase) {
         this.createCourseUseCase = createCourseUseCase;
         this.uploadFileUseCase = uploadFileUseCase;
         this.editCourseUseCase = editCourseUseCase;
         this.enrolledCourseUseCase = enrolledCourseUseCase;
         this.getEnrolledCourseListUseCase = getEnrolledCourseListUseCase;
+        this.getEditCompleteUseCase = getEditCompleteUseCase;
         this.getCourseListUseCase = getCourseListUseCase;
         this.getCourseUseCase = getCourseUseCase;
         this.removeCourseUseCase = removeCourseUseCase;
@@ -58,7 +62,7 @@ let CourseController = class CourseController {
             title: query.Title,
             description: query.Description,
             pdfDetails: query.pdfDetails,
-            chapter: query.chapter
+            chapter: query.chapter,
         });
         console.log("create course adapter from CourseController.ts is::", adapter);
         console.log("query iss::", query);
@@ -82,7 +86,7 @@ let CourseController = class CourseController {
             id: id,
             title: body.title,
             description: body.description,
-            chapter: body.chapter
+            chapter: body.chapter,
         });
         const editedCourse = await this.editCourseUseCase.execute(adapter);
         this.setFileStorageBasePath([editedCourse]);
@@ -93,6 +97,7 @@ let CourseController = class CourseController {
         const adapter = await EnrolledCourseAdapter_1.EnrolledCourseAdapter.new({
             courseId: query.CourseID,
             userId: request.user.id,
+            chapter: query.chapter
         });
         console.log("ADAPTER FROM ENROLLED COURSE IS:::::", adapter);
         const enrolledCourse = await this.enrolledCourseUseCase.execute(adapter);
@@ -123,6 +128,15 @@ let CourseController = class CourseController {
         const enrolled = await this.getEnrolledCourseListUseCase.execute(adapter);
         console.log("ADAPTER FROM GET ENROLLED ISS::", adapter);
         return CoreApiResponse_1.CoreApiResponse.success(enrolled);
+    }
+    async completedCourse(user, request, query) {
+        const adapter = await CompletedChapterAdapter_1.CompletedChapterAdapter.new({
+            executorId: user.id,
+            courseId: query.CourseID,
+            chapterCompleted: query.chapterCompleted
+        });
+        const enrolledCourse = await this.getEditCompleteUseCase.execute(adapter);
+        return CoreApiResponse_1.CoreApiResponse.success(enrolledCourse);
     }
     async removeCourse(user, id) {
         const adapter = await RemoveCourseAdapter_1.RemoveCourseAdapter.new({
@@ -173,7 +187,7 @@ __decorate([
 ], CourseController.prototype, "uploadFile", null);
 __decorate([
     (0, common_1.Put)(":id"),
-    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
+    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.STUDENT),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiBody)({ type: HttpRestApiModelEditCourseBody_1.HttpRestApiModelEditCourseBody }),
@@ -229,12 +243,32 @@ __decorate([
     (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.STUDENT),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)(),
-    (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseEnrolledCourseList_1.HttpRestApiResponseEnrolledCourseList }),
+    (0, swagger_1.ApiResponse)({
+        status: common_1.HttpStatus.OK,
+        type: HttpRestApiResponseEnrolledCourseList_1.HttpRestApiResponseEnrolledCourseList,
+    }),
     __param(0, (0, HttpUser_1.HttpUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], CourseController.prototype, "getEnrolledCourseList", null);
+__decorate([
+    (0, common_1.Put)("/enrolled/:id"),
+    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.STUDENT),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiBody)({ type: HttpRestApiModelEditCompletedCourseBody_1.HttpRestApiModelEditCompletedCourseBody }),
+    (0, swagger_1.ApiResponse)({
+        status: common_1.HttpStatus.OK,
+        type: HttpRestApiResponseEnrolledCourse_1.HttpRestApiResponseEnrolledCourse,
+    }),
+    __param(0, (0, HttpUser_1.HttpUser)()),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, HttpRestApiModelCompletedChapterQuery_1.HttpRestApiModelCompletedChapterQuery]),
+    __metadata("design:returntype", Promise)
+], CourseController.prototype, "completedCourse", null);
 __decorate([
     (0, common_1.Delete)(":id"),
     (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR),
@@ -255,10 +289,11 @@ CourseController = __decorate([
     __param(2, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.EditCourseUseCase)),
     __param(3, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.EnrolledCourseUseCase)),
     __param(4, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetEnrolledCourseListUseCase)),
-    __param(5, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseListUseCase)),
-    __param(6, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseUseCase)),
-    __param(7, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.RemoveCourseUseCase)),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object])
+    __param(5, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.EditCompleteUseCase)),
+    __param(6, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseListUseCase)),
+    __param(7, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseUseCase)),
+    __param(8, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.RemoveCourseUseCase)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object])
 ], CourseController);
 exports.CourseController = CourseController;
 //# sourceMappingURL=CourseController.js.map

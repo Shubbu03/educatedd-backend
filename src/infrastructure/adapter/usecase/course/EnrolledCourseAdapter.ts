@@ -24,9 +24,9 @@ export class EnrolledCourseAdapter
   @IsUUID()
   public userId: string;
 
-//   @Expose()
-//   @IsString()
-//   public description: string;
+  @Expose()
+  @IsString()
+  public chapter: string;
 
 //   @Expose()
 //   @IsString()

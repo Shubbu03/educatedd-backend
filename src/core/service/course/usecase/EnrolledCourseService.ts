@@ -21,7 +21,8 @@ export class EnrolledCourseService implements EnrolledCourseUseCase {
     const enrolledCourse: Enrolled = await Enrolled.new({
       ownerId: uuidv4(),
       courseID: payload.courseId,
-      userID: payload.userId
+      userID: payload.userId,
+      chapter: payload.chapter
     });
 
     console.log(

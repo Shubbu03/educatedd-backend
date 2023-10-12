@@ -19,6 +19,7 @@ let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extend
         super(...arguments);
         this.courseAlias = "course";
         this.enrolledCourseAlias = "enrolled_course";
+        this.completeAlias = "completedchapter";
         this.excludeRemovedCourseClause = `"${this.courseAlias}"."removedAt" IS NULL`;
     }
     async findCourse(by, options = {}) {
@@ -126,11 +127,10 @@ let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extend
     extendQueryWithByPropertiesEnrolled(by, query) {
         if (by.userID) {
             const subQuery = (0, typeorm_1.getManager)()
-                .createQueryBuilder(this.enrolledCourseAlias, 'ec').select(`"courseID"`)
+                .createQueryBuilder(this.enrolledCourseAlias, "ec")
+                .select(`"courseID"`)
                 .where(`"userID" = '${by.userID}'`);
-            console.log("Subquery is::", subQuery.getQuery());
             query.where(`"id" in (${subQuery.getQuery()})`);
-            console.log("Query is::", query.getQuery());
         }
     }
 };
@@ -156,10 +156,14 @@ class TypeOrmUploadRepositoryAdapter extends typeorm_transactional_cls_hooked_1.
     }
 }
 exports.TypeOrmUploadRepositoryAdapter = TypeOrmUploadRepositoryAdapter;
-class TypeOrmEnrolledCourseRepositoryAdapter extends typeorm_transactional_cls_hooked_1.BaseRepository {
+let TypeOrmEnrolledCourseRepositoryAdapter = class TypeOrmEnrolledCourseRepositoryAdapter extends typeorm_transactional_cls_hooked_1.BaseRepository {
     constructor() {
         super(...arguments);
         this.courseIDAlias = "courseID";
+        this.enrolledCourseAlias = "enrolled_course";
+        this.courseAlias = "course";
+        this.completeAlias = "completedchapter";
+        this.excludeRemovedCourseClause = `"${this.courseAlias}"."removedAt" IS NULL`;
     }
     async enrolledCourse(enrollCourse) {
         const ormEnrolled = TypeOrmEnrolledCourseMapper_1.TypeOrmEnrolledCourseMapper.toOrmEntity(enrollCourse);
@@ -173,6 +177,41 @@ class TypeOrmEnrolledCourseRepositoryAdapter extends typeorm_transactional_cls_h
             enrolled: true,
         };
     }
-}
+    async update_complete(course) {
+        const ormCourse = TypeOrmEnrolledCourseMapper_1.TypeOrmEnrolledCourseMapper.toOrmEntity(course);
+        console.log("ENTERED UPDATE_COMPLETE FROM TYPEORM COURSE REPO", ormCourse);
+        await this.update(ormCourse.courseID, ormCourse);
+        console.log("ENTERED UPDATE FROM TYPEORM COURSE REPO", ormCourse);
+    }
+    async findCompleteCourse(by, options) {
+        let domainEntity;
+        const query = this.buildCompleteCourseQueryBuilder();
+        console.log("QUERY FROM FIND COMPLETE COURSE::", query);
+        this.extendQueryWithByPropertiesCompleteCourse(by, query);
+        console.log("QUERY FROM FIND COMPLETE COURSE AFTER BY ::", query.getQuery());
+        const ormEntity = await query.execute();
+        if (ormEntity) {
+            domainEntity = TypeOrmEnrolledCourseMapper_1.TypeOrmEnrolledCourseMapper.toDomainEntity(ormEntity);
+        }
+        console.log("QUERY FROM FIND COMPLETE COURSE BEFORE RETURN ::", query.getQuery());
+        return domainEntity;
+    }
+    buildCompleteCourseQueryBuilder() {
+        return this.createQueryBuilder();
+    }
+    extendQueryWithByPropertiesCompleteCourse(by, query) {
+        if (by.userID || by.courseID) {
+            query
+                .update(this.enrolledCourseAlias)
+                .set(`"completedchapter" = '${by.completedchapter}'`)
+                .where(`"courseID" = '${by.courseID}'`)
+                .andWhere(`"userID" = '${by.userID}'`);
+            console.log("QUERY FROM COMPLETEDCHAPTER IS::", query.getQuery());
+        }
+    }
+};
+TypeOrmEnrolledCourseRepositoryAdapter = __decorate([
+    (0, typeorm_1.EntityRepository)(TypeOrmEnrolledCourse_1.TypeOrmEnrolledCourse)
+], TypeOrmEnrolledCourseRepositoryAdapter);
 exports.TypeOrmEnrolledCourseRepositoryAdapter = TypeOrmEnrolledCourseRepositoryAdapter;
 //# sourceMappingURL=TypeOrmCourseRepositoryAdapter.js.map

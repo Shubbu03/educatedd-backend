@@ -8,36 +8,37 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var EnrolledCourseAdapter_1;
+var CompletedChapterAdapter_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EnrolledCourseAdapter = void 0;
+exports.CompletedChapterAdapter = void 0;
 const UseCaseValidatableAdapter_1 = require("@core/common/adapter/usecase/UseCaseValidatableAdapter");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
-let EnrolledCourseAdapter = EnrolledCourseAdapter_1 = class EnrolledCourseAdapter extends UseCaseValidatableAdapter_1.UseCaseValidatableAdapter {
+let CompletedChapterAdapter = CompletedChapterAdapter_1 = class CompletedChapterAdapter extends UseCaseValidatableAdapter_1.UseCaseValidatableAdapter {
     static async new(payload) {
-        const adapter = (0, class_transformer_1.plainToClass)(EnrolledCourseAdapter_1, payload);
+        const adapter = (0, class_transformer_1.plainToClass)(CompletedChapterAdapter_1, payload);
         await adapter.validate();
         return adapter;
     }
 };
 __decorate([
     (0, class_transformer_1.Expose)(),
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
-], EnrolledCourseAdapter.prototype, "courseId", void 0);
+], CompletedChapterAdapter.prototype, "executorId", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
-], EnrolledCourseAdapter.prototype, "userId", void 0);
+], CompletedChapterAdapter.prototype, "courseId", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], EnrolledCourseAdapter.prototype, "chapter", void 0);
-EnrolledCourseAdapter = EnrolledCourseAdapter_1 = __decorate([
+], CompletedChapterAdapter.prototype, "chapterCompleted", void 0);
+CompletedChapterAdapter = CompletedChapterAdapter_1 = __decorate([
     (0, class_transformer_1.Exclude)()
-], EnrolledCourseAdapter);
-exports.EnrolledCourseAdapter = EnrolledCourseAdapter;
-//# sourceMappingURL=EnrolledCourseAdapter.js.map
+], CompletedChapterAdapter);
+exports.CompletedChapterAdapter = CompletedChapterAdapter;
+//# sourceMappingURL=CompletedChapterAdapter.js.map

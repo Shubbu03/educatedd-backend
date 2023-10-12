@@ -6,6 +6,7 @@ export type EnrolledCourseEntityPayload = {
     
     courseID: string,
     userID: string,
+    chapter: string,
     createdAt?: Date,
     editedAt?: Date,
     removedAt?: Date,

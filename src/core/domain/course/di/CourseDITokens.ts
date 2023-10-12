@@ -20,5 +20,6 @@ export class CourseDITokens {
   // Repositories
   
   public static readonly CourseRepository: unique symbol  = Symbol('CourseRepository');
+  public static readonly CompleteCourseRepository: unique symbol  = Symbol('CompleteCourseRepository');
   public static readonly CourseFileStorage: unique symbol = Symbol('CourseFileStorage');
 }

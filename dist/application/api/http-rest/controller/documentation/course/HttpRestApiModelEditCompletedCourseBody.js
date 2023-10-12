@@ -9,17 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HttpRestApiModelEnrolledCourseQuery = void 0;
+exports.HttpRestApiModelEditCompletedCourseBody = void 0;
 const swagger_1 = require("@nestjs/swagger");
-class HttpRestApiModelEnrolledCourseQuery {
+class HttpRestApiModelEditCompletedCourseBody {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)({ type: "string", required: true }),
+    (0, swagger_1.ApiProperty)({ type: "string", required: false }),
     __metadata("design:type", String)
-], HttpRestApiModelEnrolledCourseQuery.prototype, "CourseID", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ type: "string", required: true }),
-    __metadata("design:type", String)
-], HttpRestApiModelEnrolledCourseQuery.prototype, "chapter", void 0);
-exports.HttpRestApiModelEnrolledCourseQuery = HttpRestApiModelEnrolledCourseQuery;
-//# sourceMappingURL=HttpRestApiModelEnrolledCourseQuery.js.map
+], HttpRestApiModelEditCompletedCourseBody.prototype, "chapterCompleted", void 0);
+exports.HttpRestApiModelEditCompletedCourseBody = HttpRestApiModelEditCompletedCourseBody;
+//# sourceMappingURL=HttpRestApiModelEditCompletedCourseBody.js.map

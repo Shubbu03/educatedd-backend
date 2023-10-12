@@ -9,28 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TypeOrmEnrolledCourse = void 0;
-const typeorm_1 = require("typeorm");
-let TypeOrmEnrolledCourse = class TypeOrmEnrolledCourse {
-};
+exports.HttpRestApiModelCompletedChapterQuery = void 0;
+const swagger_1 = require("@nestjs/swagger");
+class HttpRestApiModelCompletedChapterQuery {
+}
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, swagger_1.ApiProperty)({ type: "string", required: true }),
     __metadata("design:type", String)
-], TypeOrmEnrolledCourse.prototype, "courseID", void 0);
+], HttpRestApiModelCompletedChapterQuery.prototype, "CourseID", void 0);
 __decorate([
-    (0, typeorm_1.PrimaryColumn)(),
+    (0, swagger_1.ApiProperty)({ type: "string", required: true }),
     __metadata("design:type", String)
-], TypeOrmEnrolledCourse.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], TypeOrmEnrolledCourse.prototype, "userID", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], TypeOrmEnrolledCourse.prototype, "completedchapter", void 0);
-TypeOrmEnrolledCourse = __decorate([
-    (0, typeorm_1.Entity)("enrolled_course")
-], TypeOrmEnrolledCourse);
-exports.TypeOrmEnrolledCourse = TypeOrmEnrolledCourse;
-//# sourceMappingURL=TypeOrmEnrolledCourse.js.map
+], HttpRestApiModelCompletedChapterQuery.prototype, "chapterCompleted", void 0);
+exports.HttpRestApiModelCompletedChapterQuery = HttpRestApiModelCompletedChapterQuery;
+//# sourceMappingURL=HttpRestApiModelCompletedChapterQuery.js.map

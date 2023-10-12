@@ -1,10 +1,10 @@
 import { CourseType } from "@core/common/enums/CourseEnums";
 import { ApiProperty } from "@nestjs/swagger";
 
-export class HttpRestApiModelEnrolledCourseQuery {
+export class HttpRestApiModelCompletedChapterQuery {
   @ApiProperty({ type: "string", required: true })
   public CourseID: string;
 
   @ApiProperty({ type: "string", required: true })
-  public chapter: string;
+  public chapterCompleted: string;
 }

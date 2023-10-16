@@ -10,7 +10,11 @@ class EditCompleteService {
         this.courseRepository = courseRepository;
     }
     async execute(payload) {
-        const enroll = CoreAssert_1.CoreAssert.notEmpty(await this.courseRepository.findCompleteCourse({ courseID: payload.courseId }), Exception_1.Exception.new({
+        const enroll = CoreAssert_1.CoreAssert.notEmpty(await this.courseRepository.findCompleteCourse({
+            courseID: payload.courseId,
+            id: payload.executorId,
+            completedchapter: payload.chapterCompleted,
+        }), Exception_1.Exception.new({
             code: Code_1.Code.ENTITY_NOT_FOUND_ERROR,
             overrideMessage: "Course not found.",
         }));

@@ -5,6 +5,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TypeOrmEnrolledCourseRepositoryAdapter = exports.TypeOrmUploadRepositoryAdapter = exports.TypeOrmCourseRepositoryAdapter = void 0;
 const TypeOrmCourseMapper_1 = require("@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmCourseMapper");
@@ -14,6 +20,8 @@ const typeorm_transactional_cls_hooked_1 = require("typeorm-transactional-cls-ho
 const TypeOrmFileMapper_1 = require("@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmFileMapper");
 const TypeOrmEnrolledCourse_1 = require("../../entity/course/TypeOrmEnrolledCourse");
 const TypeOrmEnrolledCourseMapper_1 = require("../../entity/course/mapper/TypeOrmEnrolledCourseMapper");
+const common_1 = require("@nestjs/common");
+const typeorm_2 = require("@nestjs/typeorm");
 let TypeOrmCourseRepositoryAdapter = class TypeOrmCourseRepositoryAdapter extends typeorm_transactional_cls_hooked_1.BaseRepository {
     constructor() {
         super(...arguments);
@@ -157,8 +165,9 @@ class TypeOrmUploadRepositoryAdapter extends typeorm_transactional_cls_hooked_1.
 }
 exports.TypeOrmUploadRepositoryAdapter = TypeOrmUploadRepositoryAdapter;
 let TypeOrmEnrolledCourseRepositoryAdapter = class TypeOrmEnrolledCourseRepositoryAdapter extends typeorm_transactional_cls_hooked_1.BaseRepository {
-    constructor() {
-        super(...arguments);
+    constructor(connection) {
+        super();
+        this.connection = connection;
         this.courseIDAlias = "courseID";
         this.enrolledCourseAlias = "enrolled_course";
         this.courseAlias = "course";
@@ -180,24 +189,17 @@ let TypeOrmEnrolledCourseRepositoryAdapter = class TypeOrmEnrolledCourseReposito
     async update_complete(course) {
         const ormCourse = TypeOrmEnrolledCourseMapper_1.TypeOrmEnrolledCourseMapper.toOrmEntity(course);
         console.log("ENTERED UPDATE_COMPLETE FROM TYPEORM COURSE REPO", ormCourse);
-        await this.update(ormCourse.courseID, ormCourse);
+        await this.update(ormCourse.completedchapter, ormCourse);
         console.log("ENTERED UPDATE FROM TYPEORM COURSE REPO", ormCourse);
     }
     async findCompleteCourse(by, options) {
         let domainEntity;
-        const query = this.buildCompleteCourseQueryBuilder();
-        console.log("QUERY FROM FIND COMPLETE COURSE::", query);
-        this.extendQueryWithByPropertiesCompleteCourse(by, query);
-        console.log("QUERY FROM FIND COMPLETE COURSE AFTER BY ::", query.getQuery());
-        const ormEntity = await query.execute();
-        if (ormEntity) {
-            domainEntity = TypeOrmEnrolledCourseMapper_1.TypeOrmEnrolledCourseMapper.toDomainEntity(ormEntity);
-        }
-        console.log("QUERY FROM FIND COMPLETE COURSE BEFORE RETURN ::", query.getQuery());
+        this.connection.query(`UPDATE enrolled_course SET "completedchapter" = '${by.completedchapter}' WHERE "courseID" = '${by.courseID}' AND "userID" = '${by.id}'`);
         return domainEntity;
     }
     buildCompleteCourseQueryBuilder() {
-        return this.createQueryBuilder();
+        console.log("QUERY FROM BUILD COMPLETE IN REPO ADAPTER::", this.createQueryBuilder());
+        return this.createQueryBuilder(this.enrolledCourseAlias);
     }
     extendQueryWithByPropertiesCompleteCourse(by, query) {
         if (by.userID || by.courseID) {
@@ -211,7 +213,10 @@ let TypeOrmEnrolledCourseRepositoryAdapter = class TypeOrmEnrolledCourseReposito
     }
 };
 TypeOrmEnrolledCourseRepositoryAdapter = __decorate([
-    (0, typeorm_1.EntityRepository)(TypeOrmEnrolledCourse_1.TypeOrmEnrolledCourse)
+    (0, common_1.Injectable)(),
+    (0, typeorm_1.EntityRepository)(TypeOrmEnrolledCourse_1.TypeOrmEnrolledCourse),
+    __param(0, (0, typeorm_2.InjectConnection)()),
+    __metadata("design:paramtypes", [typeorm_1.Connection])
 ], TypeOrmEnrolledCourseRepositoryAdapter);
 exports.TypeOrmEnrolledCourseRepositoryAdapter = TypeOrmEnrolledCourseRepositoryAdapter;
 //# sourceMappingURL=TypeOrmCourseRepositoryAdapter.js.map

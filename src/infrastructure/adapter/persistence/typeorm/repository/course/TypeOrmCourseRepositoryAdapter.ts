@@ -13,6 +13,7 @@ import {
 import { TypeOrmCourseMapper } from "@infrastructure/adapter/persistence/typeorm/entity/course/mapper/TypeOrmCourseMapper";
 import { TypeOrmCourse } from "@infrastructure/adapter/persistence/typeorm/entity/course/TypeOrmCourse";
 import {
+  Connection,
   EntityRepository,
   InsertResult,
   QueryBuilder,
@@ -28,6 +29,8 @@ import { Enrolled } from "@core/domain/course/entity/Enrolled";
 import { TypeOrmEnrolledCourse } from "../../entity/course/TypeOrmEnrolledCourse";
 import { TypeOrmEnrolledCourseMapper } from "../../entity/course/mapper/TypeOrmEnrolledCourseMapper";
 import { query } from "express";
+import { Injectable } from "@nestjs/common";
+import { InjectConnection } from "@nestjs/typeorm";
 
 @EntityRepository(TypeOrmCourse)
 export class TypeOrmCourseRepositoryAdapter
@@ -302,7 +305,7 @@ export class TypeOrmUploadRepositoryAdapter
     };
   }
 }
-
+@Injectable()
 @EntityRepository(TypeOrmEnrolledCourse)
 export class TypeOrmEnrolledCourseRepositoryAdapter
   extends BaseRepository<TypeOrmEnrolledCourse>
@@ -317,6 +320,15 @@ export class TypeOrmEnrolledCourseRepositoryAdapter
   private readonly completeAlias: string = "completedchapter";
 
   private readonly excludeRemovedCourseClause: string = `"${this.courseAlias}"."removedAt" IS NULL`;
+
+  constructor(@InjectConnection() private readonly connection: Connection) {
+    super();
+
+    // this.connection.query(``)
+
+
+  }
+
 
   public async enrolledCourse(
     enrollCourse: Enrolled
@@ -343,7 +355,8 @@ export class TypeOrmEnrolledCourseRepositoryAdapter
     const ormCourse: TypeOrmEnrolledCourse =
       TypeOrmEnrolledCourseMapper.toOrmEntity(course);
     console.log("ENTERED UPDATE_COMPLETE FROM TYPEORM COURSE REPO", ormCourse);
-    await this.update(ormCourse.courseID, ormCourse);
+    // await this.update(ormCourse.courseID, ormCourse);
+    await this.update(ormCourse.completedchapter, ormCourse);
 
     console.log("ENTERED UPDATE FROM TYPEORM COURSE REPO", ormCourse);
   }
@@ -353,33 +366,39 @@ export class TypeOrmEnrolledCourseRepositoryAdapter
     options?: RepositoryFindOptions | undefined
   ): Promise<Optional<Enrolled>> {
     let domainEntity: Optional<Enrolled>;
-    const query: QueryBuilder<TypeOrmEnrolledCourse> =
-      this.buildCompleteCourseQueryBuilder();
 
-    console.log("QUERY FROM FIND COMPLETE COURSE::", query);
+    //Update enrolled_course set "completedchapter" = '540' where "courseID" = '5442fec2-30ac-4dda-96a7-f356818fac0e' and "userID"  = '08ad4e47-7b4c-41be-adfb-2d007b868b6e'
+    this.connection.query(`UPDATE enrolled_course SET "completedchapter" = '${by.completedchapter}' WHERE "courseID" = '${by.courseID}' AND "userID" = '${by.id}'`)
+    
+    // // console.log("ULTIMATE QUERY IS:::=>",this.connection.query);
+    // const query: QueryBuilder<TypeOrmEnrolledCourse> =
+    //   this.buildCompleteCourseQueryBuilder();
 
-    this.extendQueryWithByPropertiesCompleteCourse(by, query);
+    // console.log("QUERY FROM FIND COMPLETE COURSE::", query);
 
-    console.log(
-      "QUERY FROM FIND COMPLETE COURSE AFTER BY ::",
-      query.getQuery()
-    );
+    // this.extendQueryWithByPropertiesCompleteCourse(by, query);
 
-    const ormEntity: Optional<TypeOrmEnrolledCourse> = await query.execute();
+    // console.log(
+    //   "QUERY FROM FIND COMPLETE COURSE AFTER BY ::",
+    //   query.getQuery()
+    // );
 
-    if (ormEntity) {
-      domainEntity = TypeOrmEnrolledCourseMapper.toDomainEntity(ormEntity);
-    }
+    // const ormEntity: Optional<TypeOrmEnrolledCourse> = await query.execute();
+    //      console.log("ORM ENTITY IS::",ormEntity)
+    // if (ormEntity) {
+    //   domainEntity = TypeOrmEnrolledCourseMapper.toDomainEntity(ormEntity);
+    // }
 
-    console.log(
-      "QUERY FROM FIND COMPLETE COURSE BEFORE RETURN ::",
-      query.getQuery()
-    );
+    // console.log(
+    //   "QUERY FROM FIND COMPLETE COURSE BEFORE RETURN ::",
+    //   query.getQuery()
+    // );
     return domainEntity;
   }
 
   private buildCompleteCourseQueryBuilder(): QueryBuilder<TypeOrmEnrolledCourse> {
-    return this.createQueryBuilder();
+    console.log("QUERY FROM BUILD COMPLETE IN REPO ADAPTER::",this.createQueryBuilder())
+    return this.createQueryBuilder(this.enrolledCourseAlias);
   }
 
   private extendQueryWithByPropertiesCompleteCourse(
@@ -388,7 +407,11 @@ export class TypeOrmEnrolledCourseRepositoryAdapter
   ): void {
     if (by.userID || by.courseID) {
       // const subQuery = getManager()
-      // .createQueryBuilder()
+      // .createQueryBuilder(this.enrolledCourseAlias,"ec")
+      // // .set(`"completedchapter" = '${by.completedchapter}'`)
+      //   .where(`"courseID" = '${by.courseID}'`)
+      //   .andWhere(`"userID" = '${by.userID}'`);
+
       query
         .update(this.enrolledCourseAlias,"ec")
         .set(`"completedchapter" = '${by.completedchapter}'`)

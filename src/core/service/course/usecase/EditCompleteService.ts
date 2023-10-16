@@ -20,7 +20,11 @@ export class EditCompleteService implements EditCompleteUseCase {
 
   public async execute(payload: EditCompletePort): Promise<CourseUseCaseDto> {
     const enroll: Enrolled = CoreAssert.notEmpty(
-      await this.courseRepository.findCompleteCourse({ courseID: payload.courseId }),
+      await this.courseRepository.findCompleteCourse({
+        courseID: payload.courseId,
+        id: payload.executorId,
+        completedchapter: payload.chapterCompleted,
+      }),
       Exception.new({
         code: Code.ENTITY_NOT_FOUND_ERROR,
         overrideMessage: "Course not found.",

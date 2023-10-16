@@ -97,7 +97,7 @@ let CourseController = class CourseController {
         const adapter = await EnrolledCourseAdapter_1.EnrolledCourseAdapter.new({
             courseId: query.CourseID,
             userId: request.user.id,
-            chapter: query.chapter
+            chapter: String(query.chapter),
         });
         console.log("ADAPTER FROM ENROLLED COURSE IS:::::", adapter);
         const enrolledCourse = await this.enrolledCourseUseCase.execute(adapter);
@@ -129,11 +129,11 @@ let CourseController = class CourseController {
         console.log("ADAPTER FROM GET ENROLLED ISS::", adapter);
         return CoreApiResponse_1.CoreApiResponse.success(enrolled);
     }
-    async completedCourse(user, request, query) {
+    async completedCourse(user, query) {
         const adapter = await CompletedChapterAdapter_1.CompletedChapterAdapter.new({
             executorId: user.id,
             courseId: query.CourseID,
-            chapterCompleted: query.chapterCompleted
+            chapterCompleted: query.chapterCompleted,
         });
         const enrolledCourse = await this.getEditCompleteUseCase.execute(adapter);
         return CoreApiResponse_1.CoreApiResponse.success(enrolledCourse);
@@ -263,10 +263,9 @@ __decorate([
         type: HttpRestApiResponseEnrolledCourse_1.HttpRestApiResponseEnrolledCourse,
     }),
     __param(0, (0, HttpUser_1.HttpUser)()),
-    __param(1, (0, common_1.Req)()),
-    __param(2, (0, common_1.Query)()),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object, HttpRestApiModelCompletedChapterQuery_1.HttpRestApiModelCompletedChapterQuery]),
+    __metadata("design:paramtypes", [Object, HttpRestApiModelCompletedChapterQuery_1.HttpRestApiModelCompletedChapterQuery]),
     __metadata("design:returntype", Promise)
 ], CourseController.prototype, "completedCourse", null);
 __decorate([

@@ -202,7 +202,7 @@ let TypeOrmEnrolledCourseRepositoryAdapter = class TypeOrmEnrolledCourseReposito
     extendQueryWithByPropertiesCompleteCourse(by, query) {
         if (by.userID || by.courseID) {
             query
-                .update(this.enrolledCourseAlias)
+                .update(this.enrolledCourseAlias, "ec")
                 .set(`"completedchapter" = '${by.completedchapter}'`)
                 .where(`"courseID" = '${by.courseID}'`)
                 .andWhere(`"userID" = '${by.userID}'`);

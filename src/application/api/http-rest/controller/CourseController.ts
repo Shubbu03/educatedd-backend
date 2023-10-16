@@ -219,7 +219,7 @@ export class CourseController {
       // executorId: id,
       courseId: query.CourseID,
       userId: request.user.id,
-      chapter: query.chapter,
+      chapter: String(query.chapter),
     });
 
     // console.log("Complete REQUEST from enrolled is::",request)

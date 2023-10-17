@@ -53,6 +53,9 @@ let CourseUseCaseDto = CourseUseCaseDto_1 = class CourseUseCaseDto {
     static newListFromCourses(courses) {
         return courses.map((courses) => this.newFromCourse(courses));
     }
+    static newCompleteChapterList(courses) {
+        return courses.map((courses) => this.newFromCompleteCourse(courses));
+    }
 };
 __decorate([
     (0, class_transformer_1.Expose)(),

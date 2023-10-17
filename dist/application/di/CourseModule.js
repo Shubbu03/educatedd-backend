@@ -28,6 +28,7 @@ const UploadCourseService_1 = require("@core/service/course/usecase/UploadCourse
 const EnrolledCourseService_1 = require("@core/service/course/usecase/EnrolledCourseService");
 const GetEnrolledCourseListService_1 = require("@core/service/course/usecase/GetEnrolledCourseListService");
 const EditCompleteService_1 = require("@core/service/course/usecase/EditCompleteService");
+const GetCompleteChapterListService_1 = require("@core/service/course/usecase/GetCompleteChapterListService");
 const persistenceProviders = [
     {
         provide: CourseDITokens_1.CourseDITokens.CourseFileStorage,
@@ -89,6 +90,11 @@ const useCaseProviders = [
         provide: CourseDITokens_1.CourseDITokens.GetCourseListUseCase,
         useFactory: (courseRepository) => new GetCourseListService_1.GetCourseListService(courseRepository),
         inject: [CourseDITokens_1.CourseDITokens.CourseRepository]
+    },
+    {
+        provide: CourseDITokens_1.CourseDITokens.GetCompleteChapterListUseCase,
+        useFactory: (courseRepository) => new GetCompleteChapterListService_1.GetCompleteChapterListService(courseRepository),
+        inject: [CourseDITokens_1.CourseDITokens.CompleteCourseRepository]
     },
     {
         provide: CourseDITokens_1.CourseDITokens.GetEnrolledCourseListUseCase,

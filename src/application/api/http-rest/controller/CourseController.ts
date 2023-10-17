@@ -72,6 +72,9 @@ import { HttpRestApiModelEditCompletedCourseBody } from "./documentation/course/
 import { HttpRestApiModelCompletedChapterQuery } from "./documentation/course/HttpRestApiModelCompletedChapterQuery";
 import { EditCompleteUseCase } from "@core/domain/course/usecase/EditCompleteUseCase";
 import { CompletedChapterAdapter } from "@infrastructure/adapter/usecase/course/CompletedChapterAdapter";
+import { HttpRestApiResponseCompleteChapterList } from "./documentation/course/HttpRestApiResponseCompleteChapterList";
+import { GetCompleteChapterListAdapter } from "@infrastructure/adapter/usecase/course/GetCompleteChapterListAdapter";
+import { GetCompleteChapterListUseCase } from "@core/domain/course/usecase/GetCompleteChapterListUseCase";
 
 @Controller("courses")
 @ApiTags("courses")
@@ -100,6 +103,9 @@ export class CourseController {
 
     @Inject(CourseDITokens.GetCourseUseCase)
     private readonly getCourseUseCase: GetCourseUseCase,
+
+    @Inject(CourseDITokens.GetCompleteChapterListUseCase)
+    private readonly getCompleteChapterUseCase: GetCompleteChapterListUseCase,
 
     @Inject(CourseDITokens.RemoveCourseUseCase)
     private readonly removeCourseUseCase: RemoveCourseUseCase
@@ -300,6 +306,28 @@ export class CourseController {
     console.log("ADAPTER FROM GET ENROLLED ISS::", adapter);
 
     return CoreApiResponse.success(enrolled);
+  }
+
+  @Get("/enrolled/chapter")
+  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR, UserRole.STUDENT)
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: HttpRestApiResponseCompleteChapterList,
+  })
+  public async getCompleteChapterList(
+    @HttpUser() user: HttpUserPayload
+  ):Promise<CoreApiResponse<CourseUseCaseDto[]>>{
+    const adapter: GetCompleteChapterListAdapter = await GetCompleteChapterListAdapter.new({
+      executorId: user.id,
+      
+    });
+
+    const completed: CourseUseCaseDto[] = await this.getCompleteChapterUseCase.execute(adapter);
+
+    return CoreApiResponse.success(completed);
+
   }
 
   @Put("/enrolled/:id")

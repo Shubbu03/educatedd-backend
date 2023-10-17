@@ -27,6 +27,7 @@ import { EnrolledCourseService } from '@core/service/course/usecase/EnrolledCour
 import { GetEnrolledCourseListService } from '@core/service/course/usecase/GetEnrolledCourseListService';
 import { EditCompleteService } from '@core/service/course/usecase/EditCompleteService';
 import { EditCompleteUseCase } from '@core/domain/course/usecase/EditCompleteUseCase';
+import { GetCompleteChapterListService } from '@core/service/course/usecase/GetCompleteChapterListService';
 
 const persistenceProviders: Provider[] = [
     {
@@ -92,6 +93,11 @@ const persistenceProviders: Provider[] = [
       provide   : CourseDITokens.GetCourseListUseCase,
       useFactory: (courseRepository) => new GetCourseListService(courseRepository),
       inject    : [CourseDITokens.CourseRepository]
+    },
+    {
+      provide   : CourseDITokens.GetCompleteChapterListUseCase,
+      useFactory: (courseRepository) => new GetCompleteChapterListService(courseRepository),
+      inject    : [CourseDITokens.CompleteCourseRepository]
     },
     {
       provide   : CourseDITokens.GetEnrolledCourseListUseCase,

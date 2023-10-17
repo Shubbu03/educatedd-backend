@@ -197,9 +197,14 @@ let TypeOrmEnrolledCourseRepositoryAdapter = class TypeOrmEnrolledCourseReposito
         this.connection.query(`UPDATE enrolled_course SET "completedchapter" = '${by.completedchapter}' WHERE "courseID" = '${by.courseID}' AND "userID" = '${by.id}'`);
         return domainEntity;
     }
+    async findCompleteChapter(options = {}) {
+        const query = this.buildCompleteCourseQueryBuilder();
+        const ormComplete = await query.getMany();
+        const domainComplete = TypeOrmEnrolledCourseMapper_1.TypeOrmEnrolledCourseMapper.toDomainEntities(ormComplete);
+        return domainComplete;
+    }
     buildCompleteCourseQueryBuilder() {
-        console.log("QUERY FROM BUILD COMPLETE IN REPO ADAPTER::", this.createQueryBuilder());
-        return this.createQueryBuilder(this.enrolledCourseAlias);
+        return this.createQueryBuilder(this.enrolledCourseAlias).select();
     }
     extendQueryWithByPropertiesCompleteCourse(by, query) {
         if (by.userID || by.courseID) {

@@ -12,6 +12,7 @@ CourseDITokens.GetEnrolledCourseListUseCase = Symbol('GetEnrolledCourseListUseCa
 CourseDITokens.EditCompleteUseCase = Symbol('EditCompleteUseCase');
 CourseDITokens.GetCourseListUseCase = Symbol('GetCourseListUseCase');
 CourseDITokens.GetCourseUseCase = Symbol('GetCourseUseCase');
+CourseDITokens.GetCompleteChapterListUseCase = Symbol('GetCompleteChapterListUseCase');
 CourseDITokens.RemoveCourseUseCase = Symbol('RemoveCourseUseCase');
 CourseDITokens.DoesCourseExistQueryHandler = Symbol('DoesCourseExistQueryHandler');
 CourseDITokens.GetCoursePreviewQueryHandler = Symbol('GetCoursePreviewQueryHandler');

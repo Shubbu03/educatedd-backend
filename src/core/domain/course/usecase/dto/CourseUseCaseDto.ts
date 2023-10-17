@@ -77,6 +77,8 @@ export class CourseUseCaseDto {
     return dto;
   }
 
+
+
   public static newEnrolledCourse(enrolled: Course): CourseUseCaseDto {
     const dto: CourseUseCaseDto = plainToClass(CourseUseCaseDto, enrolled);
 
@@ -114,4 +116,10 @@ export class CourseUseCaseDto {
   public static newListFromCourses(courses: Course[]): CourseUseCaseDto[] {
     return courses.map((courses) => this.newFromCourse(courses));
   }
+
+  public static newCompleteChapterList(courses: Enrolled[]): CourseUseCaseDto[] {
+    return courses.map((courses) => this.newFromCompleteCourse(courses));
+  }
+
+  
 }

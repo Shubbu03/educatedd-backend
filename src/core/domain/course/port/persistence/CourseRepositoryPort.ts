@@ -48,9 +48,11 @@ export interface EnrolledCourseRepositoryPort {
   enrolledCourse(enrollCourse: Enrolled): Promise<{ enrolled: boolean }>;
 
   findCompleteCourse(
-    by: { id?: string , courseID?: string , completedchapter?: string },
+    by: { id?: string; courseID?: string; completedchapter?: string },
     options?: RepositoryFindOptions
   ): Promise<Optional<Enrolled>>;
 
   update_complete(course: Enrolled): Promise<void>;
+
+  findCompleteChapter(options?: RepositoryFindOptions): Promise<Enrolled[]>;
 }

@@ -10,6 +10,7 @@ export class CourseDITokens {
   public static readonly EditCompleteUseCase: unique symbol = Symbol('EditCompleteUseCase');
   public static readonly GetCourseListUseCase: unique symbol = Symbol('GetCourseListUseCase');
   public static readonly GetCourseUseCase: unique symbol     = Symbol('GetCourseUseCase');
+  public static readonly GetCompleteChapterListUseCase: unique symbol     = Symbol('GetCompleteChapterListUseCase');
   public static readonly RemoveCourseUseCase: unique symbol  = Symbol('RemoveCourseUseCase');
   
   // Handlers

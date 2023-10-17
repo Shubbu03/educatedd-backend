@@ -396,9 +396,21 @@ export class TypeOrmEnrolledCourseRepositoryAdapter
     return domainEntity;
   }
 
-  private buildCompleteCourseQueryBuilder(): QueryBuilder<TypeOrmEnrolledCourse> {
-    console.log("QUERY FROM BUILD COMPLETE IN REPO ADAPTER::",this.createQueryBuilder())
-    return this.createQueryBuilder(this.enrolledCourseAlias);
+  public async findCompleteChapter(
+    options: RepositoryFindOptions = {}
+  ):Promise<Enrolled[]> {
+    const query: SelectQueryBuilder<TypeOrmEnrolledCourse> = this.buildCompleteCourseQueryBuilder();
+
+    const ormComplete: TypeOrmEnrolledCourse[] = await query.getMany();
+
+    const domainComplete: Enrolled[] = TypeOrmEnrolledCourseMapper.toDomainEntities(ormComplete);
+
+    return domainComplete;
+  }
+
+  private buildCompleteCourseQueryBuilder(): SelectQueryBuilder<TypeOrmEnrolledCourse> {
+    // console.log("QUERY FROM BUILD COMPLETE IN REPO ADAPTER::",this.createQueryBuilder())
+    return this.createQueryBuilder(this.enrolledCourseAlias).select();
   }
 
   private extendQueryWithByPropertiesCompleteCourse(

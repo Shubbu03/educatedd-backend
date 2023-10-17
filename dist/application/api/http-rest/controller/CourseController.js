@@ -44,8 +44,10 @@ const GetEnrolledCourseListAdapter_1 = require("@infrastructure/adapter/usecase/
 const HttpRestApiModelEditCompletedCourseBody_1 = require("./documentation/course/HttpRestApiModelEditCompletedCourseBody");
 const HttpRestApiModelCompletedChapterQuery_1 = require("./documentation/course/HttpRestApiModelCompletedChapterQuery");
 const CompletedChapterAdapter_1 = require("@infrastructure/adapter/usecase/course/CompletedChapterAdapter");
+const HttpRestApiResponseCompleteChapterList_1 = require("./documentation/course/HttpRestApiResponseCompleteChapterList");
+const GetCompleteChapterListAdapter_1 = require("@infrastructure/adapter/usecase/course/GetCompleteChapterListAdapter");
 let CourseController = class CourseController {
-    constructor(createCourseUseCase, uploadFileUseCase, editCourseUseCase, enrolledCourseUseCase, getEnrolledCourseListUseCase, getEditCompleteUseCase, getCourseListUseCase, getCourseUseCase, removeCourseUseCase) {
+    constructor(createCourseUseCase, uploadFileUseCase, editCourseUseCase, enrolledCourseUseCase, getEnrolledCourseListUseCase, getEditCompleteUseCase, getCourseListUseCase, getCourseUseCase, getCompleteChapterUseCase, removeCourseUseCase) {
         this.createCourseUseCase = createCourseUseCase;
         this.uploadFileUseCase = uploadFileUseCase;
         this.editCourseUseCase = editCourseUseCase;
@@ -54,6 +56,7 @@ let CourseController = class CourseController {
         this.getEditCompleteUseCase = getEditCompleteUseCase;
         this.getCourseListUseCase = getCourseListUseCase;
         this.getCourseUseCase = getCourseUseCase;
+        this.getCompleteChapterUseCase = getCompleteChapterUseCase;
         this.removeCourseUseCase = removeCourseUseCase;
     }
     async createCourse(request, query) {
@@ -128,6 +131,13 @@ let CourseController = class CourseController {
         const enrolled = await this.getEnrolledCourseListUseCase.execute(adapter);
         console.log("ADAPTER FROM GET ENROLLED ISS::", adapter);
         return CoreApiResponse_1.CoreApiResponse.success(enrolled);
+    }
+    async getCompleteChapterList(user) {
+        const adapter = await GetCompleteChapterListAdapter_1.GetCompleteChapterListAdapter.new({
+            executorId: user.id,
+        });
+        const completed = await this.getCompleteChapterUseCase.execute(adapter);
+        return CoreApiResponse_1.CoreApiResponse.success(completed);
     }
     async completedCourse(user, query) {
         const adapter = await CompletedChapterAdapter_1.CompletedChapterAdapter.new({
@@ -253,6 +263,20 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CourseController.prototype, "getEnrolledCourseList", null);
 __decorate([
+    (0, common_1.Get)("/enrolled/chapter"),
+    (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.STUDENT),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiResponse)({
+        status: common_1.HttpStatus.OK,
+        type: HttpRestApiResponseCompleteChapterList_1.HttpRestApiResponseCompleteChapterList,
+    }),
+    __param(0, (0, HttpUser_1.HttpUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], CourseController.prototype, "getCompleteChapterList", null);
+__decorate([
     (0, common_1.Put)("/enrolled/:id"),
     (0, HttpAuth_1.HttpAuth)(UserEnums_1.UserRole.ADMIN, UserEnums_1.UserRole.AUTHOR, UserEnums_1.UserRole.STUDENT),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
@@ -291,8 +315,9 @@ CourseController = __decorate([
     __param(5, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.EditCompleteUseCase)),
     __param(6, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseListUseCase)),
     __param(7, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCourseUseCase)),
-    __param(8, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.RemoveCourseUseCase)),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object])
+    __param(8, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.GetCompleteChapterListUseCase)),
+    __param(9, (0, common_1.Inject)(CourseDITokens_1.CourseDITokens.RemoveCourseUseCase)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object])
 ], CourseController);
 exports.CourseController = CourseController;
 //# sourceMappingURL=CourseController.js.map

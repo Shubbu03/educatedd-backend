@@ -8,6 +8,9 @@ export class HttpRestApiModelCourse {
 
   @ApiProperty({type: 'string'})
   public id: string;
+
+  // @ApiProperty({type: 'string'})
+  // public courseId: string;
   
   @ApiProperty({type: 'string'})
   public title: string;

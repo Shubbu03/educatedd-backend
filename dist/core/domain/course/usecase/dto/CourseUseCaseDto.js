@@ -25,6 +25,8 @@ let CourseUseCaseDto = CourseUseCaseDto_1 = class CourseUseCaseDto {
     }
     static newFromCompleteCourse(enroll) {
         const dto = (0, class_transformer_1.plainToClass)(CourseUseCaseDto_1, enroll);
+        dto.ownerId = enroll.getOwnerId();
+        dto.id = enroll.getCourseID();
         dto.chapter = enroll.getChapter();
         return dto;
     }

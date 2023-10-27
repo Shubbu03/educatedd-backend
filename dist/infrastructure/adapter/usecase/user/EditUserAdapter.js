@@ -23,7 +23,7 @@ let EditUserAdapter = EditUserAdapter_1 = class EditUserAdapter extends UseCaseV
 };
 __decorate([
     (0, class_transformer_1.Expose)(),
-    (0, class_validator_1.IsUUID)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], EditUserAdapter.prototype, "id", void 0);
 __decorate([
@@ -38,7 +38,7 @@ __decorate([
 ], EditUserAdapter.prototype, "lastName", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
-    (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], EditUserAdapter.prototype, "email", void 0);
 __decorate([

@@ -10,7 +10,7 @@ export class EditUserAdapter
   implements EditUserPort
 {
   @Expose()
-  @IsUUID()
+  @IsString()
   public id: string;
 
   @Expose()
@@ -22,7 +22,7 @@ export class EditUserAdapter
   public lastName: string;
 
   @Expose()
-  @IsEmail()
+  @IsString()
   public email: string;
 
   @Expose()

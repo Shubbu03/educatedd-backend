@@ -50,14 +50,15 @@ let UserController = class UserController {
         const user = await this.getUserUseCase.execute(adapter);
         return CoreApiResponse_1.CoreApiResponse.success(user);
     }
-    async editUser(body, userID) {
+    async editUser(user, body, userID) {
         const adapter = await EditUserAdapter_1.EditUserAdapter.new({
-            id: userID,
-            firstName: body.firstName,
-            lastName: body.lastName,
-            email: body.email,
-            password: body.password,
+            id: user.id,
+            firstName: String(body.firstName),
+            lastName: String(body.lastName),
+            email: String(body.email),
+            password: String(body.password),
         });
+        console.log("COMPLETE ADAPTER FROM PUT IS::", adapter);
         const edited = await this.editUserUseCase.execute(adapter);
         return CoreApiResponse_1.CoreApiResponse.success(edited);
     }
@@ -91,10 +92,11 @@ __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiBody)({ type: HttpRestApiEditUser_1.HttpRestApiEditUser }),
     (0, swagger_1.ApiResponse)({ status: common_1.HttpStatus.OK, type: HttpRestApiResponseUser_1.HttpRestApiResponseUser }),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Param)("userID")),
+    __param(0, (0, HttpUser_1.HttpUser)()),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Param)("userID")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [HttpRestApiEditUser_1.HttpRestApiEditUser, String]),
+    __metadata("design:paramtypes", [Object, HttpRestApiEditUser_1.HttpRestApiEditUser, String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "editUser", null);
 UserController = __decorate([

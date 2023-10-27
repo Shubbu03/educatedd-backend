@@ -15,7 +15,7 @@ export class EditUserService implements EditUserUseCase {
     ) {}
     
     public async execute(payload: EditUserPort): Promise<UserUseCaseDto> {
-      const user: User = CoreAssert.notEmpty( await this.userRepository.findUser({id: payload.id,email: payload.email,}),Exception.new({code: Code.ENTITY_NOT_FOUND_ERROR,overrideMessage:"User not found!!"}));
+      const user: User = CoreAssert.notEmpty( await this.userRepository.findUser({id: payload.id, email: payload.email,}),Exception.new({code: Code.ENTITY_NOT_FOUND_ERROR,overrideMessage:"User not found!!"}));
     //   CoreAssert.isFalse(doesUserExist, Exception.new({code: Code.ENTITY_ALREADY_EXISTS_ERROR, overrideMessage: 'User already exists.'}));
   
     //   const user: User = await User.new({

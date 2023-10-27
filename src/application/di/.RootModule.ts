@@ -12,8 +12,8 @@ import { Module } from '@nestjs/common';
     AuthModule,
     UserModule,
     CourseModule,
-    MediaModule,
-    PostModule,
+    // MediaModule,
+    // PostModule,
   ]
 })
 export class RootModule {}

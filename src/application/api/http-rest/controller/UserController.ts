@@ -23,6 +23,7 @@ import {
   Post,
   Put,
   Param,
+  Req,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { HttpRestApiEditUser } from "./documentation/user/HttpRestApiEditUser";
@@ -67,7 +68,7 @@ export class UserController {
   @Get("me")
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
-  @HttpAuth(UserRole.AUTHOR, UserRole.ADMIN, UserRole.GUEST,UserRole.STUDENT)
+  @HttpAuth(UserRole.AUTHOR, UserRole.ADMIN, UserRole.GUEST, UserRole.STUDENT)
   @ApiResponse({ status: HttpStatus.OK, type: HttpRestApiResponseUser })
   public async getMe(
     @HttpUser() httpUser: HttpUserPayload
@@ -81,25 +82,27 @@ export class UserController {
   }
 
   @Put("edit/:userId")
-  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR,UserRole.STUDENT)
+  @HttpAuth(UserRole.ADMIN, UserRole.AUTHOR, UserRole.STUDENT)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiBody({ type: HttpRestApiEditUser })
   @ApiResponse({ status: HttpStatus.OK, type: HttpRestApiResponseUser })
   public async editUser(
     // @HttpUser() user: HttpUserPayload,
+    @HttpUser() user: HttpUserPayload,
     @Body() body: HttpRestApiEditUser,
     @Param("userID") userID: string
   ): Promise<CoreApiResponse<UserUseCaseDto>> {
     const adapter: EditUserAdapter = await EditUserAdapter.new({
-      id: userID,
-      firstName: body.firstName,
-      lastName: body.lastName,
-      email: body.email,
-      password: body.password,
+      id: user.id,
+      firstName: String(body.firstName),
+      lastName: String(body.lastName),
+      email: String(body.email),
+      password: String(body.password),
     });
 
-    
+    console.log("COMPLETE ADAPTER FROM PUT IS::", adapter);
+
     const edited: UserUseCaseDto = await this.editUserUseCase.execute(adapter);
 
     return CoreApiResponse.success(edited);

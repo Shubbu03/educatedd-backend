@@ -73,6 +73,14 @@ class User extends Entity_1.Entity {
             this.lastName = payload.lastName;
             this.editedAt = currentDate;
         }
+        if (payload.email) {
+            this.email = payload.email;
+            this.editedAt = currentDate;
+        }
+        if (payload.password) {
+            this.password = payload.password;
+            this.editedAt = currentDate;
+        }
         await this.validate();
     }
     async remove() {
